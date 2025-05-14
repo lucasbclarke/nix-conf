@@ -107,7 +107,7 @@
   nixpkgs.config.allowUnfree = true;
 
   environment.systemPackages = with pkgs; [
-     ghostty gh sqlite tldr fzf thunar
+     ghostty gh sqlite tldr fzf
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
   ];
