@@ -107,7 +107,7 @@
   nixpkgs.config.allowUnfree = true;
 
   environment.systemPackages = with pkgs; [
-     ghostty gh sqlite tldr fzf
+     ghostty gh sqlite tldr fzf neovim
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
   ];
