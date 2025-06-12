@@ -98,16 +98,24 @@
   programs = {
     firefox.enable = true;
     zsh.enable = true;
-    vim.enable = true;
     git.enable = true;
     tmux.enable = true;
+
+    neovim = {
+      enable = true;
+      defaultEditor = true;
+      
+      plugins = with pkgs.vimPlugins; [
+	
+      ];
+    };
   };
   
 
   nixpkgs.config.allowUnfree = true;
 
   environment.systemPackages = with pkgs; [
-     ghostty gh sqlite tldr fzf neovim
+     ghostty gh sqlite tldr fzf
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
   ];
