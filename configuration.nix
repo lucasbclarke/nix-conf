@@ -114,6 +114,7 @@
      ghostty gh sqlite tldr fzf
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
+     (import ./ohmyzsh.nix {inherit pkgs;})
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
