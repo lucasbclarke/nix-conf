@@ -4,6 +4,7 @@ pkgs.writeShellScriptBin "git-repos"
 ''
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 export SHELL=$(which zsh)
+export ZSH=$HOME/.oh-my-zsh 
 ${pkgs.git}/bin/git clone https://github.com/lucasbclarke/dotfiles
 sudo cp dotfiles/.zshrc ~/
 sudo cp dotfiles/.tmux.conf ~/
