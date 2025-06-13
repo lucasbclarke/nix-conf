@@ -6,6 +6,7 @@ ${pkgs.git}/bin/git clone https://github.com/lucasbclarke/dotfiles
 sudo cp dotfiles/.zshrc ~/
 sudo cp dotfiles/.tmux.conf ~/
 sudo cp -r dotfiles/.tmux ~/
+tmux source .tmux.conf
 sudo cp dotfiles/i3/config ~/.config/i3/
 mkdir ~/.config/ghostty/
 sudo cp dotfiles/ghostty/config ~/.config/ghostty/config
