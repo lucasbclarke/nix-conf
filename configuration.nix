@@ -111,7 +111,7 @@
   nixpkgs.config.allowUnfree = true;
 
   environment.systemPackages = with pkgs; [
-     ghostty gh sqlite tldr fzf xdotool
+     ghostty gh sqlite tldr fzf xdotool brave
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
      (import ./ohmyzsh.nix {inherit pkgs;})
