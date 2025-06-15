@@ -112,7 +112,7 @@
   nixpkgs.config.allowUnfree = true;
 
   environment.systemPackages = with pkgs; [
-     ghostty gh sqlite tldr fzf xdotool brave
+     ghostty gh sqlite tldr fzf xdotool brave xfce.exo xfce.xfce4-settings
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
      (import ./ohmyzsh.nix {inherit pkgs;})
