@@ -118,6 +118,10 @@
      (import ./ohmyzsh.nix {inherit pkgs;})
   ];
 
+  services.gvfs = {
+    enable = true;
+    package = pkgs.gvfs;
+  };
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
