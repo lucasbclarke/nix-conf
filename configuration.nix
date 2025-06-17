@@ -113,7 +113,8 @@
 
   environment.systemPackages = with pkgs; [
      ghostty gh sqlite tldr fzf xdotool brave xfce.exo xfce.xfce4-settings
-     unzip arduino-ide discord thunderbird zls gcc
+     unzip arduino-ide discord thunderbird zls gcc cloudflare-warp neofetch
+     simple-scan pavucontrol screenkey vokoscreen-ng vlc
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
      (import ./ohmyzsh.nix {inherit pkgs;})
@@ -123,6 +124,9 @@
     enable = true;
     package = pkgs.gvfs;
   };
+
+  services.cloudflare-warp.enable = true;
+
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
@@ -138,6 +142,7 @@
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
+
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
