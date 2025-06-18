@@ -101,6 +101,7 @@
     git.enable = true;
     tmux.enable = true;
     thunar.enable = true;
+    thunderbird.enable = true;
 
     neovim = {
       enable = true;
@@ -112,8 +113,8 @@
   nixpkgs.config.allowUnfree = true;
 
   environment.systemPackages = with pkgs; [
-     ghostty gh sqlite tldr fzf xdotool brave xfce.exo xfce.xfce4-settings
-     unzip arduino-ide discord thunderbird zls gcc cloudflare-warp neofetch
+     ghostty sqlite tldr fzf xdotool brave xfce.exo xfce.xfce-settings
+     unzip arduino-ide discord zls gcc cloudflare-warp neofetch
      simple-scan pavucontrol screenkey vokoscreen-ng vlc
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
