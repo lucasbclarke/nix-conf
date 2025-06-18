@@ -113,7 +113,7 @@
   nixpkgs.config.allowUnfree = true;
 
   environment.systemPackages = with pkgs; [
-     ghostty sqlite tldr fzf xdotool brave xfce.exo xfce.xfce-settings
+     ghostty sqlite tldr fzf xdotool brave xfce.exo xfce.xfce4-settings
      unzip arduino-ide discord zls gcc cloudflare-warp neofetch
      simple-scan pavucontrol screenkey vokoscreen-ng vlc
      (import ./git-repos.nix {inherit pkgs;})
