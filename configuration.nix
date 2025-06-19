@@ -119,7 +119,7 @@
      ghostty sqlite tldr fzf xdotool brave xfce.exo xfce.xfce4-settings
      unzip arduino-ide discord zls gcc cloudflare-warp neofetch
      simple-scan pavucontrol screenkey vokoscreen-ng vlc usbutils
-     udiskie udisks
+     udiskie udisks samba
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
      (import ./ohmyzsh.nix {inherit pkgs;})
