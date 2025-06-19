@@ -67,6 +67,7 @@
   # Enable CUPS to print documents.
   services.printing.enable = true;
   programs.system-config-printer.enable = true;
+  services.samba.enable = true;
 
   # Enable sound with pipewire.
   hardware.pulseaudio.enable = false;
