@@ -40,20 +40,39 @@
     LC_TIME = "en_AU.UTF-8";
   };
 
+  #programs.sway = {
+  #    enable = true;
+  #    wrapperFeatures.gtk = true; # To support GTK apps under Wayland
+  #    extraPackages = with pkgs; [
+  #      swaylock
+  #      swayidle
+  #      wofi       # or bemenu, fuzzel — your choice
+  #      waybar     # for a status bar
+  #      mako       # Wayland-native notification daemon
+  #      wl-clipboard # for clipboard functionality
+  #      grim slurp # for screenshots
+  #      wf-recorder # for screen recording (optional)
+  #      brightnessctl # for brightness key support
+  #      playerctl  # for media control
+  #    ];
+
+  #};
+
+
   services.xserver = {
     enable = true;
 
     displayManager = {
-      defaultSession = "none+i3";
+      defaultSession = "sway";
     };
 
     windowManager.i3 = {
       enable = true;
       extraPackages = with pkgs; [
-	dmenu #application launcher most people use
-	i3status # gives you the default i3 status bar
-	i3lock #default i3 screen locker
-	i3blocks #if you are planning on using i3blocks over i3status
+        dmenu #application launcher most people use
+        i3status # gives you the default i3 status bar
+        i3lock #default i3 screen locker
+        i3blocks #if you are planning on using i3blocks over i3status
       ];
     };
   };
@@ -96,6 +115,13 @@
     #  thunderbird
     ];
     shell = pkgs.zsh;
+
+
+    #home.file.".bash_profile".text = ''
+    #  if [ -z "$DISPLAY" ] && [ "$(tty)" = "/dev/tty1" ]; then
+    #    exec sway
+    #  fi
+    #'';
   };
 
   programs = {
@@ -119,7 +145,7 @@
      ghostty sqlite tldr fzf xdotool brave xfce.exo xfce.xfce4-settings
      unzip arduino-ide discord zls gcc cloudflare-warp neofetch
      simple-scan pavucontrol screenkey vokoscreen-ng vlc usbutils
-     udiskie udisks samba
+     udiskie udisks samba wayland wayland-scanner 
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
      (import ./ohmyzsh.nix {inherit pkgs;})
