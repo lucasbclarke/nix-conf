@@ -130,7 +130,6 @@
     tmux.enable = true;
     thunar.enable = true;
     thunderbird.enable = true;
-    sway.enable = true;
 
     neovim = {
       enable = true;
