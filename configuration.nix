@@ -78,10 +78,10 @@
   #};
 
 
-  services.displayManager = {
-      enable = true;
-      defaultSession = "sway";
-  };
+#  services.displayManager = {
+#      enable = true;
+#      defaultSession = "sway";
+#  };
 
   # Configure keymap in X11
   services.xserver.xkb = {
