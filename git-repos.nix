@@ -6,7 +6,7 @@ ${pkgs.git}/bin/git clone https://github.com/lucasbclarke/dotfiles
 sudo cp dotfiles/.zshrc ~/
 sudo cp dotfiles/.tmux.conf ~/
 sudo cp -r dotfiles/.tmux ~/
-sudo cp dotfiles/sway/config ~/.config/sway/config
+sudo cp dotfiles/sway/config ~/.config/sway/
 mkdir ~/.config/ghostty/
 sudo cp dotfiles/ghostty/config ~/.config/ghostty/config
 ${pkgs.git}/bin/git clone https://github.com/lucasbclarke/code
