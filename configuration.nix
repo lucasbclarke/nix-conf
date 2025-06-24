@@ -55,6 +55,7 @@
         brightnessctl # for brightness key support
         playerctl  # for media control
         wmenu
+        i3status
       ];
       #config = {
       #  modifier = "Mod4";
