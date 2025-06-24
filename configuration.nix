@@ -54,17 +54,24 @@
         wf-recorder # for screen recording (optional)
         brightnessctl # for brightness key support
         playerctl  # for media control
+        wmenu
       ];
-
+      #config = {
+      #  modifier = "Mod4";
+      #  terminal = "ghostty";
+      #  startup = [{
+      #    command = "brave"; 
+      #  }];
+      #};
   };
 
 
-  #services.xserver = {
-  #  enable = true;
+  services.xserver = {
+    enable = true;
 
-  #  displayManager = {
-  #    defaultSession = "none+i3";
-  #  };
+    displayManager = {
+      lightdm.enable = true;
+    };
 
   #  windowManager.i3 = {
   #    enable = true;
@@ -75,7 +82,7 @@
   #      i3blocks #if you are planning on using i3blocks over i3status
   #    ];
   #  };
-  #};
+  };
 
 
 #  services.displayManager = {
@@ -143,9 +150,6 @@
     wantedBy = [ "graphical-session.target" ];
   };
 
-  services.xserver.enable = false;
-  services.xserver.displayManager.autoLogin.enable = true;
-  services.xserver.displayManager.autoLogin.user = "lucas";
 
   nixpkgs.config.allowUnfree = true;
 
@@ -153,7 +157,7 @@
      ghostty sqlite tldr fzf xdotool brave xfce.exo xfce.xfce4-settings
      unzip arduino-ide discord zls gcc cloudflare-warp neofetch
      simple-scan pavucontrol screenkey vokoscreen-ng vlc usbutils
-     udiskie udisks samba sway #wayland wayland-scanner 
+     udiskie udisks samba sway wayland-scanner libGL libGLU
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
      (import ./ohmyzsh.nix {inherit pkgs;})
