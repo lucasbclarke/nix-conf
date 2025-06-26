@@ -66,7 +66,9 @@
     displayManager = {
       lightdm.enable = true;
     };
+
   };
+
 
   # Configure keymap in X11
   services.xserver.xkb = {
@@ -136,7 +138,7 @@
      unzip arduino-ide discord zls gcc cloudflare-warp neofetch
      simple-scan pavucontrol screenkey vokoscreen-ng vlc usbutils
      udiskie udisks samba sway wayland-scanner libGL libGLU
-     powersupply
+     powersupply blueman
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
      (import ./ohmyzsh.nix {inherit pkgs;})
