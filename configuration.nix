@@ -57,13 +57,6 @@
         wmenu
         i3status
       ];
-      #config = {
-      #  modifier = "Mod4";
-      #  terminal = "ghostty";
-      #  startup = [{
-      #    command = "brave"; 
-      #  }];
-      #};
   };
 
 
@@ -74,22 +67,8 @@
       lightdm.enable = true;
     };
 
-  #  windowManager.i3 = {
-  #    enable = true;
-  #    extraPackages = with pkgs; [
-  #      dmenu #application launcher most people use
-  #      i3status # gives you the default i3 status bar
-  #      i3lock #default i3 screen locker
-  #      i3blocks #if you are planning on using i3blocks over i3status
-  #    ];
-  #  };
   };
 
-
-#  services.displayManager = {
-#      enable = true;
-#      defaultSession = "sway";
-#  };
 
   # Configure keymap in X11
   services.xserver.xkb = {
@@ -159,6 +138,7 @@
      unzip arduino-ide discord zls gcc cloudflare-warp neofetch
      simple-scan pavucontrol screenkey vokoscreen-ng vlc usbutils
      udiskie udisks samba sway wayland-scanner libGL libGLU
+     powersupply
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
      (import ./ohmyzsh.nix {inherit pkgs;})
