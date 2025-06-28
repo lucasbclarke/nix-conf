@@ -145,7 +145,7 @@
      unzip arduino-ide discord zls gcc cloudflare-warp neofetch
      simple-scan pavucontrol vokoscreen-ng vlc usbutils
      udiskie udisks samba sway wayland-scanner libGL libGLU
-     powersupply pulseaudio lunar-client
+     powersupply pulseaudio lunar-client feh
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
      (import ./ohmyzsh.nix {inherit pkgs;})
