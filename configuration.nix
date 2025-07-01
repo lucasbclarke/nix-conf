@@ -15,6 +15,8 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  time.hardwareClockInLocalTime = true;
+
   networking.hostName = "nixos";
   #networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
@@ -143,9 +145,9 @@
   environment.systemPackages = with pkgs; [
      ghostty sqlite tldr fzf xdotool brave xfce.exo xfce.xfce4-settings
      unzip arduino-ide discord zls gcc cloudflare-warp neofetch
-     pavucontrol vokoscreen-ng vlc usbutils udiskie udisks samba
+     pavucontrol vlc usbutils udiskie udisks samba gpu-screen-recorder
      sway wayland-scanner libGL libGLU powersupply pulseaudio
-     lunar-client feh file-roller 
+     lunar-client feh file-roller flameshot
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
      (import ./ohmyzsh.nix {inherit pkgs;})
