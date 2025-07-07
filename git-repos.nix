@@ -16,8 +16,9 @@ ${pkgs.git}/bin/git clone https://github.com/lucasbclarke/nvim ~/.config/nvim
 ${pkgs.git}/bin/git clone https://github.com/lucasbclarke/raylib-repo
 sudo mv raylib-repo/raylib .
 sudo mv raylib-repo/raylib-zig .
-curl https://ziglang.org/download/0.14.1/zig-x86_64-linux-0.14.1.tar.xz -o zig-x86_64-linux-0.14.1.tar.xz
-tar -xf zig-x86_64-linux-0.14.1.tar.xz
-sudo ln -s ~/zig-x86_64-linux-0.14.1/zig /usr/bin/zig
-reboot
+curl -L -o "zig-latest-linux-x86_64.tar.xz" "$(curl -s https://ziglang.org/download/index.json | jq -r '.master."x86_64-linux".tarball')"
+mkdir zig-latest-linux-x86_64
+tar -xf zig-latest-linux-x86_64.tar.xz --strip-components=1 -C zig-latest-linux-x86_64
+sudo rm -rf /usr/bin/zig
+sudo ln -s ~/zig-latest-linux-x86_64/zig /usr/bin/zig
 ''
