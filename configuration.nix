@@ -145,9 +145,9 @@
   environment.systemPackages = with pkgs; [
      ghostty sqlite tldr fzf xdotool brave xfce.exo xfce.xfce4-settings
      unzip arduino-cli discord zls gcc cloudflare-warp neofetch
-     pavucontrol vlc usbutils udiskie udisks samba gpu-screen-recorder
+     pavucontrol vlc usbutils udiskie udisks samba wf-recorder
      sway wayland-scanner libGL libGLU powersupply lunar-client
-     feh file-roller flameshot jq pulseaudio lua-language-server
+     feh file-roller jq pulseaudio lua-language-server xfce.xfce4-screenshooter
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
      (import ./ohmyzsh.nix {inherit pkgs;})
