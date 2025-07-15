@@ -77,7 +77,6 @@
 
   };
 
-
   # Configure keymap in X11
   services.xserver.xkb = {
     layout = "au";
@@ -123,7 +122,18 @@
     zsh.enable = true;
     git.enable = true;
     tmux.enable = true;
-    thunar.enable = true;
+
+    thunar = {
+      enable = true;
+      plugins = with pkgs.xfce; [
+        thunar-archive-plugin
+        thunar-volman
+        thunar-vcs-plugin
+      ];
+    };
+
+    xfconf.enable = true;
+
     thunderbird.enable = true;
     wshowkeys.enable = true;
 
@@ -144,7 +154,7 @@
 
   environment.systemPackages = with pkgs; [
      ghostty sqlite tldr fzf xdotool brave xfce.exo xfce.xfce4-settings
-     unzip arduino-cli discord zls gcc cloudflare-warp neofetch
+     unzip arduino-cli discord gcc cloudflare-warp neofetch
      pavucontrol vlc usbutils udiskie udisks samba wf-recorder
      sway wayland-scanner libGL libGLU powersupply lunar-client
      feh file-roller jq pulseaudio lua-language-server xfce.xfce4-screenshooter
