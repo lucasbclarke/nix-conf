@@ -22,6 +22,7 @@ tar -xf zig-latest-linux-x86_64.tar.xz --strip-components=1 -C zig-latest-linux-
 sudo rm -rf /usr/bin/zig
 sudo ln -s ~/zig-latest-linux-x86_64/zig /usr/bin/zig
 
+
 if [ -d "$HOME/zls_source_temp" ]; then
     rm -rf "$HOME/zls_source_temp"
 fi
