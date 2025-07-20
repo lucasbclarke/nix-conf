@@ -164,7 +164,7 @@
      pavucontrol vlc usbutils udiskie udisks samba wf-recorder
      sway wayland-scanner libGL libGLU powersupply lunar-client
      feh file-roller jq pulseaudio lua-language-server xfce.xfce4-screenshooter
-     gh
+     gh cargo
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
      (import ./ohmyzsh.nix {inherit pkgs;})
