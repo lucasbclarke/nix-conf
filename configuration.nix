@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   nix.extraOptions = ''
@@ -12,14 +12,30 @@
       ./hardware-configuration.nix
     ];
 
-  #boot configuration for newer devices
-  #boot.loader.systemd-boot.enable = true;
-  #boot.loader.efi.canTouchEfiVariables = true;
   
-  #boot configuration for older devices
-  boot.loader.grub.enable = true;
-  boot.loader.grub.device = "/dev/sda/";
-  boot.loader.grub.useOSProber = true;
+  #Default boot configuraiton
+  boot.loader.grub.enable = lib.mkDefault true;
+  boot.loader.grub.devices = lib.mkDefault ["/dev/sda/"];
+  boot.loader.grub.useOSProber = lib.mkDefault true;
+  boot.loader.systemd-boot.enable = lib.mkDefault false;
+
+  specialisation = {
+    # Boot configuration for newer devices (using systemd-boot)
+    systemd-boot.configuration = {
+      boot.loader.systemd-boot.enable = lib.mkForce true;
+      boot.loader.efi.canTouchEfiVariables = true;
+      boot.loader.grub.enable = lib.mkForce false;
+    };
+
+    # Boot configuration for older devices (using GRUB)
+    grub.configuration = {
+      boot.loader.grub.enable = lib.mkForce true;
+      boot.loader.grub.devices = ["/dev/sda"];
+      boot.loader.grub.useOSProber = true;
+      boot.loader.systemd-boot.enable = lib.mkForce false;
+    };
+
+  };
 
   time.hardwareClockInLocalTime = true;
 
