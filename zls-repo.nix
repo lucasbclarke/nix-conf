@@ -1,6 +1,6 @@
 { pkgs }:
 
-pkgs.writeShellScriptBin "git-repos"
+pkgs.writeShellScriptBin "zls-repo"
 ''
 if [ -d "$HOME/zls_source_temp" ]; then
     rm -rf "$HOME/zls_source_temp"
