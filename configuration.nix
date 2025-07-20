@@ -168,6 +168,7 @@
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
      (import ./ohmyzsh.nix {inherit pkgs;})
+     (import ./zls-repo.nix {inherit pkgs;})
   ];
 
   services.gvfs = {
