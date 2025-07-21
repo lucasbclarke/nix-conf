@@ -11,7 +11,6 @@ sudo cp dotfiles/sway/config ~/.config/sway/
 mkdir ~/.config/ghostty/
 sudo cp dotfiles/ghostty/config ~/.config/ghostty/config
 ${pkgs.git}/bin/git clone https://github.com/lucasbclarke/code
-${pkgs.git}/bin/git clone https://github.com/lucasbclarke/game-project ~/code/projects/zig/game-project/
 ${pkgs.git}/bin/git clone https://github.com/lucasbclarke/nvim ~/.config/nvim
 ${pkgs.git}/bin/git clone https://github.com/lucasbclarke/raylib-repo
 sudo mv raylib-repo/raylib .
