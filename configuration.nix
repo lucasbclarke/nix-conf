@@ -14,46 +14,30 @@
       ./hardware-configuration.nix
     ];
 
-  # Universal boot configuration that works on any machine
-  # Note: If you have a hardware-configuration.nix file, add it to the imports list above
-  # and it can override these defaults for your specific hardware
-  #
-  # For GRUB devices configuration:
-  # - The hardware-configuration.nix file should set the correct devices automatically
-  # - If no hardware-configuration.nix: you may need to manually set boot.loader.grub.devices
-  #   Examples:
-  #   - For UEFI: boot.loader.grub.devices = [ "nodev" ];
-  #   - For legacy BIOS: boot.loader.grub.devices = [ "/dev/sda" ]; (adjust device name as needed)
-  boot.loader = {
-    # Enable EFI support if available
-    efi.canTouchEfiVariables = lib.mkDefault true;
-    
-    # Use systemd-boot for UEFI systems (modern approach)
-    # Only enable if we're actually on a UEFI system
-    systemd-boot = {
-      enable = lib.mkDefault false; # Start with false, let hardware-configuration.nix override
-      configurationLimit = 10;
-      editor = false; # Disable editor for security
-    };
-    
-    # Fallback to GRUB for legacy BIOS systems or when systemd-boot is not available
-    grub = {
-      # Enable GRUB by default for maximum compatibility
-      enable = lib.mkDefault true;
-      # For legacy BIOS systems, you need to specify the boot device
-      # Change this to your actual boot device (e.g., "/dev/sda", "/dev/nvme0n1", etc.)
-      devices = [ "/dev/sda" ];
-      useOSProber = lib.mkDefault true;
-      # Additional GRUB settings for better compatibility
-      # Note: version option is deprecated, removed it
-      efiSupport = lib.mkDefault true;
-      # Disable efiInstallAsRemovable when canTouchEfiVariables is true
-      efiInstallAsRemovable = lib.mkDefault false;
-    };
-  };
+  
+  #Default boot configuraiton
+  boot.loader.grub.enable = lib.mkDefault true;
+  boot.loader.grub.devices = lib.mkDefault ["/dev/sda/"];
+  boot.loader.grub.useOSProber = lib.mkDefault true;
+  boot.loader.systemd-boot.enable = lib.mkDefault false;
 
-  # Remove the specialisation section as it's no longer needed
-  # The configuration above will automatically adapt to the system
+  specialisation = {
+    # Boot configuration for newer devices (using systemd-boot)
+    systemd-boot.configuration = {
+      boot.loader.systemd-boot.enable = lib.mkForce true;
+      boot.loader.efi.canTouchEfiVariables = true;
+      boot.loader.grub.enable = lib.mkForce false;
+    };
+
+    # Boot configuration for older devices (using GRUB)
+    grub.configuration = {
+      boot.loader.grub.enable = lib.mkForce true;
+      boot.loader.grub.devices = ["/dev/sda"];
+      boot.loader.grub.useOSProber = true;
+      boot.loader.systemd-boot.enable = lib.mkForce false;
+    };
+
+  };
 
   time.hardwareClockInLocalTime = true;
 
