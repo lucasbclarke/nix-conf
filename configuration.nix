@@ -17,6 +17,13 @@
   # Universal boot configuration that works on any machine
   # Note: If you have a hardware-configuration.nix file, add it to the imports list above
   # and it can override these defaults for your specific hardware
+  #
+  # For GRUB devices configuration:
+  # - If using hardware-configuration.nix: it will automatically set the correct devices
+  # - If not using hardware-configuration.nix: you may need to manually set boot.loader.grub.devices
+  #   Examples:
+  #   - For UEFI: boot.loader.grub.devices = [ "nodev" ];
+  #   - For legacy BIOS: boot.loader.grub.devices = [ "/dev/sda" ]; (adjust device name as needed)
   boot.loader = {
     # Enable EFI support if available
     efi.canTouchEfiVariables = lib.mkDefault true;
@@ -33,8 +40,9 @@
     grub = {
       # Enable GRUB by default for maximum compatibility
       enable = lib.mkDefault true;
-      # Use mirroredBoots for automatic device detection (works on any system)
-      mirroredBoots = lib.mkDefault [ "/" ];
+      # Let hardware-configuration.nix or manual configuration set the devices
+      # This avoids filesystem access during evaluation
+      devices = lib.mkDefault [];
       useOSProber = lib.mkDefault true;
       # Additional GRUB settings for better compatibility
       version = 2;
