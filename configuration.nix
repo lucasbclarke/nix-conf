@@ -14,30 +14,31 @@
       ./hardware-configuration.nix
     ];
 
-  
-  #Default boot configuraiton
-  boot.loader.grub.enable = lib.mkDefault true;
-  boot.loader.grub.devices = lib.mkDefault ["/dev/sda/"];
-  boot.loader.grub.useOSProber = lib.mkDefault true;
-  boot.loader.systemd-boot.enable = lib.mkDefault false;
-
-  specialisation = {
-    # Boot configuration for newer devices (using systemd-boot)
-    systemd-boot.configuration = {
-      boot.loader.systemd-boot.enable = lib.mkForce true;
-      boot.loader.efi.canTouchEfiVariables = true;
-      boot.loader.grub.enable = lib.mkForce false;
+  # Universal boot configuration that works on any machine
+  boot.loader = {
+    # Enable EFI support if available
+    efi.canTouchEfiVariables = lib.mkDefault true;
+    
+    # Use systemd-boot for UEFI systems (modern approach)
+    systemd-boot = {
+      enable = lib.mkDefault true;
+      configurationLimit = 10;
+      editor = false; # Disable editor for security
     };
-
-    # Boot configuration for older devices (using GRUB)
-    grub.configuration = {
-      boot.loader.grub.enable = lib.mkForce true;
-      boot.loader.grub.devices = ["/dev/sda"];
-      boot.loader.grub.useOSProber = true;
-      boot.loader.systemd-boot.enable = lib.mkForce false;
+    
+    # Fallback to GRUB for legacy BIOS systems or when systemd-boot is not available
+    grub = {
+      enable = lib.mkDefault false;
+      # Automatically detect devices - no hardcoded paths
+      devices = lib.mkDefault [];
+      useOSProber = lib.mkDefault true;
+      # Enable GRUB if systemd-boot is not available
+      enable = lib.mkIf (!config.boot.loader.systemd-boot.enable) true;
     };
-
   };
+
+  # Remove the specialisation section as it's no longer needed
+  # The configuration above will automatically adapt to the system
 
   time.hardwareClockInLocalTime = true;
 
