@@ -45,15 +45,12 @@ in {
     # Sensor support for laptops
     sensor.iio.enable = lib.mkDefault isLaptop;
     
-    # TPM support
-    tpm2.enable = lib.mkDefault (!isVM);
+    # TPM support (only if available)
+    # tpm2.enable = lib.mkDefault (!isVM);
   };
   
   # Virtualization support
   virtualisation = {
-    # Enable KVM for better VM performance
-    kvmgt.enable = lib.mkDefault (!isVM);
-    
     # Enable libvirtd for VM management
     libvirtd = {
       enable = lib.mkDefault (!isVM);
@@ -72,19 +69,21 @@ in {
   };
   
   # Services that should only run on physical hardware
-  services = {
-    # Hardware monitoring
-    lm_sensors.enable = lib.mkDefault (!isVM);
-    
-    # Automatic suspend for laptops
-    logind = {
-      lidSwitch = lib.mkIf isLaptop "suspend";
-      lidSwitchExternalPower = lib.mkIf isLaptop "suspend";
-    };
-    
-    # Thermal management
-    thermald.enable = lib.mkDefault isLaptop;
-  };
+  # services = {
+  #   # Hardware monitoring
+  #   lm_sensors = {
+  #     enable = lib.mkDefault (!isVM);
+  #   };
+  #   
+  #   # Automatic suspend for laptops
+  #   logind = {
+  #     lidSwitch = lib.mkIf isLaptop "suspend";
+  #     lidSwitchExternalPower = lib.mkIf isLaptop "suspend";
+  #   };
+  #   
+  #   # Thermal management
+  #   thermald.enable = lib.mkDefault isLaptop;
+  # };
   
   # Kernel modules for better hardware support
   boot = {

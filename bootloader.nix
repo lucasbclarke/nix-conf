@@ -7,20 +7,12 @@ let
   # Detect if we have UEFI by checking for EFI partition
   hasUEFI = lib.any (fs: fs.fsType == "vfat" && lib.hasPrefix "/boot" fs.mountPoint) config.fileSystems;
   
-  # Detect if we're on a system with secure boot
-  hasSecureBoot = lib.any (fs: fs.fsType == "vfat" && lib.hasPrefix "/boot" fs.mountPoint) config.fileSystems;
-  
-  # Get the boot device from hardware-configuration.nix
-  bootDevice = lib.head (lib.attrNames (lib.filterAttrs (name: value: value.device == "/dev/disk/by-label/nixos") config.fileSystems));
-  
 in {
   boot.loader = {
     # Use systemd-boot for UEFI systems (modern hardware)
     systemd-boot = {
       enable = lib.mkDefault (hasUEFI && !isVM);
       configurationLimit = 10;
-      # Enable secure boot support if available
-      secureBoot = lib.mkDefault hasSecureBoot;
     };
     
     # Use GRUB for legacy BIOS systems, VMs, or as fallback

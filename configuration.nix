@@ -11,9 +11,10 @@
 
   imports =
     [ 
-      ./hardware-configuration.nix
       ./bootloader.nix
       ./hardware-detection.nix
+    ] ++ lib.optionals (builtins.pathExists ./hardware-configuration.nix) [
+      ./hardware-configuration.nix
     ];
 
   time.hardwareClockInLocalTime = true;
