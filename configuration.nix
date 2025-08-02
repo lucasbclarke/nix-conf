@@ -11,7 +11,8 @@
 
   imports =
     [ 
-      ./hardware-configuration.nix
+      # Import hardware configuration if it exists
+      (lib.mkIf (builtins.pathExists ./hardware-configuration.nix) ./hardware-configuration.nix)
     ];
 
   # Universal boot configuration that works on any machine
@@ -20,19 +21,24 @@
     efi.canTouchEfiVariables = lib.mkDefault true;
     
     # Use systemd-boot for UEFI systems (modern approach)
+    # Only enable if we're actually on a UEFI system
     systemd-boot = {
-      enable = lib.mkDefault true;
+      enable = lib.mkDefault false; # Start with false, let hardware-configuration.nix override
       configurationLimit = 10;
       editor = false; # Disable editor for security
     };
     
     # Fallback to GRUB for legacy BIOS systems or when systemd-boot is not available
     grub = {
-      # Enable GRUB if systemd-boot is not available, otherwise disable
-      enable = lib.mkIf (!config.boot.loader.systemd-boot.enable) true;
+      # Enable GRUB by default for maximum compatibility
+      enable = lib.mkDefault true;
       # Automatically detect devices - no hardcoded paths
       devices = lib.mkDefault [];
       useOSProber = lib.mkDefault true;
+      # Additional GRUB settings for better compatibility
+      version = 2;
+      efiSupport = lib.mkDefault true;
+      efiInstallAsRemovable = lib.mkDefault true;
     };
   };
 
