@@ -5,7 +5,7 @@ let
   isVM = config.virtualisation.vmVariant.enable or false;
   
   # Detect if we have UEFI by checking for EFI partition
-  hasUEFI = lib.any (fs: fs.fsType == "vfat" && lib.hasPrefix "/boot" fs.mountPoint) config.fileSystems;
+  hasUEFI = lib.any (fs: fs.fsType == "vfat" && lib.hasPrefix "/boot" fs.mountPoint) (lib.attrValues config.fileSystems);
   
 in {
   boot.loader = {
@@ -19,8 +19,8 @@ in {
     grub = {
       enable = lib.mkDefault (!hasUEFI || isVM);
       useOSProber = true;
-      # Let hardware-configuration.nix set the devices
-      devices = lib.mkDefault [];
+      # Default devices - will be overridden by hardware-configuration.nix if it exists
+      devices = lib.mkDefault [ "/dev/sda" "/dev/vda" ];
       # Enable EFI support in GRUB if we have UEFI
       efiSupport = lib.mkDefault hasUEFI;
       # Enable secure boot support if available
@@ -39,15 +39,6 @@ in {
   boot = {
     # Enable kernel modules for better hardware support
     kernelModules = [ "kvm-intel" "kvm-amd" ] ++ lib.optionals isVM [ "virtio" "virtio_pci" "virtio_net" ];
-    
-    # Kernel parameters for better compatibility
-    kernelParams = lib.mkDefault [
-      "quiet"
-      "splash"
-    ] ++ lib.optionals isVM [
-      "console=ttyS0"
-      "nokaslr"
-    ];
     
     # Enable plymouth for better boot experience
     plymouth = {

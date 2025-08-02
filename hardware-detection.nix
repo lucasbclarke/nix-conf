@@ -3,7 +3,7 @@
 let
   # Detect system type
   isVM = config.virtualisation.vmVariant.enable or false;
-  isLaptop = lib.any (fs: fs.fsType == "vfat" && lib.hasPrefix "/boot" fs.mountPoint) config.fileSystems;
+  isLaptop = lib.any (fs: fs.fsType == "vfat" && lib.hasPrefix "/boot" fs.mountPoint) (lib.attrValues config.fileSystems);
   
   # Detect CPU architecture
   isIntel = lib.hasPrefix "x86_64" config.nixpkgs.hostPlatform.system;
@@ -22,7 +22,6 @@ in {
     # Graphics support
     opengl = {
       enable = true;
-      driSupport = true;
       driSupport32Bit = true;
       extraPackages = with pkgs; [
         vaapiVdpau
@@ -30,11 +29,11 @@ in {
       ];
     };
     
-    # Sound support
-    pulseaudio = {
-      enable = lib.mkDefault (!config.services.pipewire.enable);
-      support32Bit = true;
-    };
+    # Sound support (handled in main configuration)
+    # pulseaudio = {
+    #   enable = lib.mkDefault (!config.services.pipewire.enable);
+    #   support32Bit = true;
+    # };
     
     # Bluetooth support (only on physical hardware)
     bluetooth = {
