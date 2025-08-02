@@ -11,11 +11,12 @@
 
   imports =
     [ 
-      # Import hardware configuration if it exists
-      (lib.mkIf (builtins.pathExists ./hardware-configuration.nix) ./hardware-configuration.nix)
+      ./hardware-configuration.nix
     ];
 
   # Universal boot configuration that works on any machine
+  # Note: If you have a hardware-configuration.nix file, add it to the imports list above
+  # and it can override these defaults for your specific hardware
   boot.loader = {
     # Enable EFI support if available
     efi.canTouchEfiVariables = lib.mkDefault true;
