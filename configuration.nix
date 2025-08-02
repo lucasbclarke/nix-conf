@@ -28,12 +28,11 @@
     
     # Fallback to GRUB for legacy BIOS systems or when systemd-boot is not available
     grub = {
-      enable = lib.mkDefault false;
+      # Enable GRUB if systemd-boot is not available, otherwise disable
+      enable = lib.mkIf (!config.boot.loader.systemd-boot.enable) true;
       # Automatically detect devices - no hardcoded paths
       devices = lib.mkDefault [];
       useOSProber = lib.mkDefault true;
-      # Enable GRUB if systemd-boot is not available
-      enable = lib.mkIf (!config.boot.loader.systemd-boot.enable) true;
     };
   };
 
@@ -78,7 +77,7 @@
       wrapperFeatures.gtk = true; # To support GTK apps under Wayland
       extraPackages = with pkgs; [
         swaylock
-        swayidle
+        swayidle!1
         wofi       # or bemenu, fuzzel — your choice
         waybar     # for a status bar
         mako       # Wayland-native notification daemon
