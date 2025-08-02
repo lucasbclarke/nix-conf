@@ -19,9 +19,11 @@
   # and it can override these defaults for your specific hardware
   #
   # For GRUB devices configuration:
-  # - Default: Uses "nodev" which works for UEFI systems (installs to EFI partition)
-  # - For legacy BIOS systems: Override with boot.loader.grub.devices = [ "/dev/sda" ]; (adjust device name)
-  # - If using hardware-configuration.nix: it will automatically override these defaults
+  # - The hardware-configuration.nix file should set the correct devices automatically
+  # - If no hardware-configuration.nix: you may need to manually set boot.loader.grub.devices
+  #   Examples:
+  #   - For UEFI: boot.loader.grub.devices = [ "nodev" ];
+  #   - For legacy BIOS: boot.loader.grub.devices = [ "/dev/sda" ]; (adjust device name as needed)
   boot.loader = {
     # Enable EFI support if available
     efi.canTouchEfiVariables = lib.mkDefault true;
@@ -38,12 +40,12 @@
     grub = {
       # Enable GRUB by default for maximum compatibility
       enable = lib.mkDefault true;
-      # Use "nodev" for UEFI systems - this tells GRUB to install to the EFI partition
-      # This works universally without needing to specify specific device paths
-      devices = lib.mkDefault [ "nodev" ];
+      # For legacy BIOS systems, you need to specify the boot device
+      # Change this to your actual boot device (e.g., "/dev/sda", "/dev/nvme0n1", etc.)
+      devices = [ "/dev/sda" ];
       useOSProber = lib.mkDefault true;
       # Additional GRUB settings for better compatibility
-      version = 2;
+      # Note: version option is deprecated, removed it
       efiSupport = lib.mkDefault true;
       # Disable efiInstallAsRemovable when canTouchEfiVariables is true
       efiInstallAsRemovable = lib.mkDefault false;
