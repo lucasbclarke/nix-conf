@@ -19,11 +19,9 @@
   # and it can override these defaults for your specific hardware
   #
   # For GRUB devices configuration:
-  # - If using hardware-configuration.nix: it will automatically set the correct devices
-  # - If not using hardware-configuration.nix: you may need to manually set boot.loader.grub.devices
-  #   Examples:
-  #   - For UEFI: boot.loader.grub.devices = [ "nodev" ];
-  #   - For legacy BIOS: boot.loader.grub.devices = [ "/dev/sda" ]; (adjust device name as needed)
+  # - Default: Uses "nodev" which works for UEFI systems (installs to EFI partition)
+  # - For legacy BIOS systems: Override with boot.loader.grub.devices = [ "/dev/sda" ]; (adjust device name)
+  # - If using hardware-configuration.nix: it will automatically override these defaults
   boot.loader = {
     # Enable EFI support if available
     efi.canTouchEfiVariables = lib.mkDefault true;
@@ -40,9 +38,9 @@
     grub = {
       # Enable GRUB by default for maximum compatibility
       enable = lib.mkDefault true;
-      # Let hardware-configuration.nix or manual configuration set the devices
-      # This avoids filesystem access during evaluation
-      devices = lib.mkDefault [];
+      # Use "nodev" for UEFI systems - this tells GRUB to install to the EFI partition
+      # This works universally without needing to specify specific device paths
+      devices = lib.mkDefault [ "nodev" ];
       useOSProber = lib.mkDefault true;
       # Additional GRUB settings for better compatibility
       version = 2;
