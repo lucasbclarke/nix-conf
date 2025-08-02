@@ -77,7 +77,7 @@
       wrapperFeatures.gtk = true; # To support GTK apps under Wayland
       extraPackages = with pkgs; [
         swaylock
-        swayidle1
+        swayidle
         wofi       # or bemenu, fuzzel — your choice
         waybar     # for a status bar
         mako       # Wayland-native notification daemon
