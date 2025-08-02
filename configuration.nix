@@ -12,32 +12,9 @@
   imports =
     [ 
       ./hardware-configuration.nix
+      ./bootloader.nix
+      ./hardware-detection.nix
     ];
-
-  
-  #Default boot configuraiton
-  boot.loader.grub.enable = lib.mkDefault true;
-  boot.loader.grub.devices = lib.mkDefault ["/dev/sda/"];
-  boot.loader.grub.useOSProber = lib.mkDefault true;
-  boot.loader.systemd-boot.enable = lib.mkDefault false;
-
-  specialisation = {
-    # Boot configuration for newer devices (using systemd-boot)
-    systemd-boot.configuration = {
-      boot.loader.systemd-boot.enable = lib.mkForce true;
-      boot.loader.efi.canTouchEfiVariables = true;
-      boot.loader.grub.enable = lib.mkForce false;
-    };
-
-    # Boot configuration for older devices (using GRUB)
-    grub.configuration = {
-      boot.loader.grub.enable = lib.mkForce true;
-      boot.loader.grub.devices = ["/dev/sda"];
-      boot.loader.grub.useOSProber = true;
-      boot.loader.systemd-boot.enable = lib.mkForce false;
-    };
-
-  };
 
   time.hardwareClockInLocalTime = true;
 
@@ -54,8 +31,7 @@
   networking.wireless.iwd.enable = true;
   networking.networkmanager.wifi.backend = "iwd";
 
-  hardware.bluetooth.enable = true;
-  hardware.bluetooth.powerOnBoot = true;
+  # Bluetooth configuration (handled by hardware-detection.nix)
   services.blueman.enable = true;
 
   time.timeZone = "Australia/Sydney";
@@ -202,9 +178,9 @@
 
   services.cloudflare-warp.enable = true;
 
+  # Virtualization support (handled by hardware-detection.nix)
   programs.virt-manager.enable = true;
-  users.groups.libvirtd.members = ["your_username"];
-  virtualisation.libvirtd.enable = true;
+  users.groups.libvirtd.members = ["lucas"];
   virtualisation.spiceUSBRedirection.enable = true;
 
   # Some programs need SUID wrappers, can be configured further or are
