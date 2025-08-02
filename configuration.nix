@@ -33,13 +33,14 @@
     grub = {
       # Enable GRUB by default for maximum compatibility
       enable = lib.mkDefault true;
-      # Automatically detect devices - no hardcoded paths
-      devices = lib.mkDefault [];
+      # Use mirroredBoots for automatic device detection (works on any system)
+      mirroredBoots = lib.mkDefault [ "/" ];
       useOSProber = lib.mkDefault true;
       # Additional GRUB settings for better compatibility
       version = 2;
       efiSupport = lib.mkDefault true;
-      efiInstallAsRemovable = lib.mkDefault true;
+      # Disable efiInstallAsRemovable when canTouchEfiVariables is true
+      efiInstallAsRemovable = lib.mkDefault false;
     };
   };
 
