@@ -1,6 +1,8 @@
 { config, pkgs, lib, ... }:
 
 {
+  nixpkgs.config.allowUnsupportedSystem = true;
+
   nix.extraOptions = ''
     experimental-features = nix-command flakes 
   '';
@@ -132,7 +134,7 @@
   users.users.lucas = {
     isNormalUser = true;
     description = "lucas";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "libvirtd" ];
     packages = with pkgs; [
     #  thunderbird
     ];
@@ -174,13 +176,18 @@
 
   nixpkgs.config.allowUnfree = true;
 
+  nixpkgs.config.permittedInsecurePackages = [
+    "python-2.7.18.8"
+  ];
+
   environment.systemPackages = with pkgs; [
      ghostty sqlite tldr fzf xdotool brave xfce.exo xfce.xfce4-settings
      unzip arduino-cli discord gcc cloudflare-warp neofetch
      pavucontrol vlc usbutils udiskie udisks samba wf-recorder
      sway wayland-scanner libGL libGLU powersupply lunar-client
      feh file-roller jq pulseaudio lua-language-server xfce.xfce4-screenshooter
-     gh cargo
+     gh cargo gnumake gcc-arm-embedded python2 python2Packages.pip
+     swig file
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
      (import ./ohmyzsh.nix {inherit pkgs;})
@@ -195,9 +202,8 @@
 
   services.cloudflare-warp.enable = true;
 
-
   programs.virt-manager.enable = true;
-  users.groups.libvirtd.members = ["lucas"];
+  users.groups.libvirtd.members = ["your_username"];
   virtualisation.libvirtd.enable = true;
   virtualisation.spiceUSBRedirection.enable = true;
 
@@ -211,14 +217,14 @@
 
   # List services that you want to enable:
 
-  # services.openssh.enable = true;
+  services.openssh.enable = true;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
 
   # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
+  networking.firewall.enable = false;
 
   system.stateVersion = "24.11";
 
