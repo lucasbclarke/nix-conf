@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, system ? pkgs.system, ... }:
 
 {
   nixpkgs.config.allowUnsupportedSystem = true;
@@ -57,6 +57,12 @@
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
   services.blueman.enable = true;
+  #hardware.bluetooth.settings = {
+  #  General = {
+  #    Experimental = true;
+  #  };
+  #};
+
 
   time.timeZone = "Australia/Sydney";
   i18n.defaultLocale = "en_AU.UTF-8";
@@ -80,7 +86,6 @@
         swayidle
         wofi       # or bemenu, fuzzel — your choice
         waybar     # for a status bar
-        mako       # Wayland-native notification daemon
         wl-clipboard # for clipboard functionality
         grim slurp # for screenshots
         wf-recorder # for screen recording (optional)
@@ -88,6 +93,7 @@
         playerctl  # for media control
         wmenu
         i3status
+        swaynotificationcenter
       ];
   };
 
@@ -134,7 +140,7 @@
   users.users.lucas = {
     isNormalUser = true;
     description = "lucas";
-    extraGroups = [ "networkmanager" "wheel" "libvirtd" ];
+    extraGroups = [ "networkmanager" "wheel" "libvirtd" "docker" ];
     packages = with pkgs; [
     #  thunderbird
     ];
@@ -183,15 +189,19 @@
   environment.systemPackages = with pkgs; [
      ghostty sqlite tldr fzf xdotool brave xfce.exo xfce.xfce4-settings
      unzip arduino-cli discord gcc cloudflare-warp neofetch
-     pavucontrol vlc usbutils udiskie udisks samba wf-recorder
-     sway wayland-scanner libGL libGLU powersupply lunar-client
-     feh file-roller jq pulseaudio lua-language-server xfce.xfce4-screenshooter
-     gh cargo gnumake gcc-arm-embedded python2 python2Packages.pip
-     swig file
+     pavucontrol vlc usbutils udiskie udisks samba sway wayland-scanner
+     libGL libGLU powersupply lunar-client feh file-roller jq pulseaudio
+     lua-language-server xfce.xfce4-screenshooter gh cargo gnumake
+     gcc-arm-embedded python2 python3Packages.pip swig file clang-tools
+     net-tools iproute2 blueman networkmanager bluez bluez-tools dnsmasq
+     swaysettings sway-launcher-desktop jetbrains-mono dive podman-tui
+     docker-compose freerdp dialog libnotify podman podman-compose
+     xwayland
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
      (import ./ohmyzsh.nix {inherit pkgs;})
      (import ./zls-repo.nix {inherit pkgs;})
+     (import ./win.nix {inherit pkgs;})
   ];
 
   services.gvfs = {
@@ -206,6 +216,32 @@
   users.groups.libvirtd.members = ["your_username"];
   virtualisation.libvirtd.enable = true;
   virtualisation.spiceUSBRedirection.enable = true;
+
+  nix.settings = {
+    substituters = [ "https://winapps.cachix.org/" ];
+    trusted-public-keys = [ "winapps.cachix.org-1:HI82jWrXZsQRar/PChgIx1unmuEsiQMQq+zt05CD36g=" ];
+    trusted-users = [ "lucas" ]; # replace with your username
+  };
+
+  fonts = {
+    fontconfig.enable = true;
+      packages = with pkgs; [
+        nerd-fonts.jetbrains-mono
+      ];
+  };
+
+  virtualisation.containers.enable = true;
+  virtualisation = {
+    podman = {
+      enable = true;
+
+      # Create a `docker` alias for podman, to use it as a drop-in replacement
+      dockerCompat = true;
+
+       # Required for containers under podman-compose to be able to talk to each other.
+      defaultNetwork.settings.dns_enabled = true;
+    };
+  };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
