@@ -202,6 +202,8 @@
      (import ./ohmyzsh.nix {inherit pkgs;})
      (import ./zls-repo.nix {inherit pkgs;})
      (import ./win.nix {inherit pkgs;})
+     (import ./winapps.nix {inherit pkgs;})
+     (import ./winapps-test.nix {inherit pkgs;})
   ];
 
   services.gvfs = {
