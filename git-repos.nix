@@ -8,6 +8,7 @@ sudo cp dotfiles/.tmux.conf ~/
 sudo cp -r dotfiles/.tmux ~/
 mkdir ~/.config/sway/
 sudo cp -r dotfiles/sway/. ~/.config/sway/
+sudo cp dotfiles/wofi/config ~/.config/wofi/config
 mkdir ~/.config/ghostty/
 sudo cp dotfiles/ghostty/config ~/.config/ghostty/config
 ${pkgs.git}/bin/git clone https://github.com/lucasbclarke/code
