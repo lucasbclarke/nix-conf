@@ -1,4 +1,4 @@
-{ config, pkgs, lib, system ? pkgs.system, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 {
   nixpkgs.config.allowUnsupportedSystem = true;
@@ -140,7 +140,7 @@
   users.users.lucas = {
     isNormalUser = true;
     description = "lucas";
-    extraGroups = [ "networkmanager" "wheel" "libvirtd" "docker" ];
+    extraGroups = [ "networkmanager" "wheel" "libvirtd" "docker" "kvm" ];
     packages = with pkgs; [
     #  thunderbird
     ];
@@ -148,7 +148,6 @@
   };
 
   programs = {
-    firefox.enable = true;
     zsh.enable = true;
     git.enable = true;
     tmux.enable = true;
@@ -196,14 +195,15 @@
      net-tools iproute2 blueman networkmanager bluez bluez-tools dnsmasq
      swaysettings sway-launcher-desktop jetbrains-mono dive podman-tui
      docker-compose freerdp dialog libnotify podman podman-compose
-     xwayland
+     xwayland ncdu
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
      (import ./ohmyzsh.nix {inherit pkgs;})
      (import ./zls-repo.nix {inherit pkgs;})
-     (import ./win.nix {inherit pkgs;})
-     (import ./winapps.nix {inherit pkgs;})
-     (import ./winapps-test.nix {inherit pkgs;})
+     (import ./winapps-setup.nix {inherit pkgs;})
+     # WinApps packages
+     inputs.winapps.packages."${pkgs.system}".winapps
+     inputs.winapps.packages."${pkgs.system}".winapps-launcher # optional
   ];
 
   services.gvfs = {
