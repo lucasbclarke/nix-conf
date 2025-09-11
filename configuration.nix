@@ -140,7 +140,7 @@
   users.users.lucas = {
     isNormalUser = true;
     description = "lucas";
-    extraGroups = [ "networkmanager" "wheel" "libvirtd" "docker" "kvm" ];
+    extraGroups = [ "networkmanager" "wheel" "docker" "kvm" "vboxusers" ];
     packages = with pkgs; [
     #  thunderbird
     ];
@@ -195,7 +195,8 @@
      net-tools iproute2 blueman networkmanager bluez bluez-tools dnsmasq
      swaysettings sway-launcher-desktop jetbrains-mono dive podman-tui
      docker-compose freerdp dialog libnotify podman podman-compose
-     xwayland ncdu
+     xwayland ncdu gtk3 libnotify nss xorg.libXtst xdg-utils dpkg
+     brasero
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
      (import ./ohmyzsh.nix {inherit pkgs;})
@@ -214,10 +215,9 @@
 
   services.cloudflare-warp.enable = true;
 
-  programs.virt-manager.enable = true;
-  users.groups.libvirtd.members = ["your_username"];
-  virtualisation.libvirtd.enable = true;
-  virtualisation.spiceUSBRedirection.enable = true;
+  virtualisation.virtualbox.host.enable = true;
+  users.extraGroups.vboxusers.members = [ "lucas" ];
+  virtualisation.virtualbox.host.enableExtensionPack = true;
 
   nix.settings = {
     substituters = [ "https://winapps.cachix.org/" ];
