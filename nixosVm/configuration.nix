@@ -16,7 +16,7 @@
 
   
   boot.loader.grub.enable = lib.mkDefault true;
-  boot.loader.grub.devices = lib.mkDefault ["/dev/vda/"];
+  boot.loader.grub.devices = lib.mkDefault ["/dev/sda/"];
   boot.loader.grub.useOSProber = lib.mkDefault true;
   boot.loader.systemd-boot.enable = lib.mkDefault false;
 
@@ -174,18 +174,12 @@
      lua-language-server xfce.xfce4-screenshooter gh cargo gnumake
      gcc-arm-embedded python2 python3Packages.pip swig file clang-tools
      net-tools iproute2 blueman networkmanager bluez bluez-tools dnsmasq
-     swaysettings sway-launcher-desktop jetbrains-mono dive podman-tui
-     docker-compose freerdp dialog libnotify podman podman-compose
-     xwayland ncdu gtk3 libnotify nss xorg.libXtst xdg-utils dpkg
-     brasero
+     swaysettings sway-launcher-desktop jetbrains-mono dialog libnotify 
+     xwayland gtk3 libnotify nss xorg.libXtst xdg-utils dpkg brasero
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
      (import ./ohmyzsh.nix {inherit pkgs;})
      (import ./zls-repo.nix {inherit pkgs;})
-     (import ./winapps-setup.nix {inherit pkgs;})
-     # WinApps packages
-     inputs.winapps.packages."${pkgs.system}".winapps
-     inputs.winapps.packages."${pkgs.system}".winapps-launcher # optional
   ];
 
   services.gvfs = {
@@ -196,34 +190,11 @@
 
   services.cloudflare-warp.enable = true;
 
-  virtualisation.virtualbox.host.enable = true;
-  users.extraGroups.vboxusers.members = [ "lucas" ];
-  virtualisation.virtualbox.host.enableExtensionPack = true;
-
-  nix.settings = {
-    substituters = [ "https://winapps.cachix.org/" ];
-    trusted-public-keys = [ "winapps.cachix.org-1:HI82jWrXZsQRar/PChgIx1unmuEsiQMQq+zt05CD36g=" ];
-    trusted-users = [ "lucas" ]; # replace with your username
-  };
-
   fonts = {
     fontconfig.enable = true;
       packages = with pkgs; [
         nerd-fonts.jetbrains-mono
       ];
-  };
-
-  virtualisation.containers.enable = true;
-  virtualisation = {
-    podman = {
-      enable = true;
-
-      # Create a `docker` alias for podman, to use it as a drop-in replacement
-      dockerCompat = true;
-
-       # Required for containers under podman-compose to be able to talk to each other.
-      defaultNetwork.settings.dns_enabled = true;
-    };
   };
 
   # Some programs need SUID wrappers, can be configured further or are
