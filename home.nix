@@ -85,7 +85,7 @@
           nix-shell = "nix-shell --run $SHELL";
       };
       initContent = ''
-        if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
+        if command -v tmux &> /dev/null && [ -n "$PS2" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
           exec tmux
         fi
         export PATH="$PATH:/opt/nvim-linux64/bin:/usr/lib:$HOME/.local/bin:/usr/bin:$HOME/zig-latest-linux-x86_64"
@@ -95,6 +95,21 @@
         command xdotool key super+shift+1
         command xdotool key super+1
         command xdotool key ctrl+"+"
+
+        # Force steady block cursor in zsh (vi-mode aware)
+        function _cursor_block { print -n '\e[2 q' }
+        function zle-line-init { _cursor_block }
+        function zle-line-finish { _cursor_block }
+        function zle-keymap-select {
+          case $KEYMAP in
+            vicmd) _cursor_block ;;
+            viins|main) _cursor_block ;;
+          esac
+        }
+        function preexec { _cursor_block }
+        zle -N zle-line-init
+        zle -N zle-line-finish
+        zle -N zle-keymap-select
       '';
       
   };
@@ -117,6 +132,7 @@
         set -g base-index 1
         setw -g pane-base-index 1
         set -g status-right ' #{?client_prefix,#[reverse]🗸#[noreverse] ,}"#{=21:pane_title}" %H:%M %d-%b-%y'
+        set -ga terminal-overrides ',*:Ss=\E[%p1%d q:Se=\E[2 q'
       '';
 
   };
@@ -127,13 +143,13 @@
         gtk-titlebar = false;
         window-decoration = false;
         font-family = "JetBrainsMono NF Medium";
+        cursor-style = "block";
         keybind = [
             "ctrl+x=copy_to_clipboard"
             "ctrl+shift+v=unbind"
             "ctrl+v=paste_from_clipboard"
             "ctrl+shift+a=select_all"
         ];
-
         confirm-close-surface = false;
 
       };
