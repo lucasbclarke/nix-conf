@@ -223,6 +223,18 @@
       defaultNetwork.settings.dns_enabled = true;
     };
   };
+  # Undo any external blacklists that disable KVM
+  boot.blacklistedKernelModules = lib.mkForce [ ];
+  boot.extraModprobeConfig = ''
+    blacklist # cleared by NixOS config
+  '';
+
+  # Ensure any non-Nix-managed blacklist file is removed on activation
+  system.activationScripts.removeKvmBlacklist.text = ''
+    rm -f /etc/modprobe.d/blacklist-kvm.conf
+  '';
+  # Ensure KVM is available on AMD CPUs. The correct module name is kvm_amd.
+  boot.kernelModules = [ "kvm" "kvm_amd" ];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

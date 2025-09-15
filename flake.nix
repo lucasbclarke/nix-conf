@@ -5,27 +5,38 @@
       url = "github:winapps-org/winapps";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    home-manager.url = "github:nix-community/home-manager/master";
+    home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, nixpkgs, ... }@inputs:
+  outputs = { self, nixpkgs, home-manager, ... }@inputs:
   let
     lib = nixpkgs.lib;
+    system = "x86_64-linux";
+    pkgs = nixpkgs.legacyPackages.${system};
   in {
       nixosConfigurations = {
           nixosSystemD = lib.nixosSystem {
-            system = "x86_64-linux";
+            inherit system;
             modules = [./nixosSystemD/configuration.nix];
             specialArgs = { inherit inputs; };
           };
           nixosGrub = lib.nixosSystem {
-            system = "x86_64-linux";
+            inherit system;
             modules = [./nixosGrub/configuration.nix];
             specialArgs = { inherit inputs; };
           };
           nixosVm = lib.nixosSystem {
-            system = "x86_64-linux";
+            inherit system;
             modules = [./nixosVm/configuration.nix];
             specialArgs = { inherit inputs; };
+          };
+      };
+
+      homeConfigurations = {
+          lucas = home-manager.lib.homeManagerConfiguration {
+              inherit pkgs;
+              modules = [ ./home.nix ];
           };
       };
   };
