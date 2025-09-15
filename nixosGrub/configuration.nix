@@ -13,15 +13,14 @@
     [ 
       ./hardware-configuration.nix
     ];
-
-  boot.loader.grub.enable = lib.mkDefault true;
-  boot.loader.grub.devices = lib.mkDefault ["/dev/sda/"];
-  boot.loader.grub.useOSProber = lib.mkDefault true;
-  boot.loader.systemd-boot.enable = lib.mkDefault false;
+  
+  boot.loader.systemd-boot.enable = lib.mkForce true;
+  boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.grub.enable = lib.mkForce false;
 
   time.hardwareClockInLocalTime = true;
 
-  networking.hostName = "nixosGrub";
+  networking.hostName = "nixosSystemD";
   #networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -64,7 +63,6 @@
       extraPackages = with pkgs; [
         swaylock
         swayidle
-        wofi       # or bemenu, fuzzel — your choice
         waybar     # for a status bar
         wl-clipboard # for clipboard functionality
         grim slurp # for screenshots
@@ -130,7 +128,6 @@
   programs = {
     zsh.enable = true;
     git.enable = true;
-    tmux.enable = true;
 
     thunar = {
       enable = true;
@@ -166,7 +163,7 @@
   ];
 
   environment.systemPackages = with pkgs; [
-     ghostty sqlite tldr fzf xdotool brave xfce.exo xfce.xfce4-settings
+     sqlite tldr fzf xdotool brave xfce.exo xfce.xfce4-settings
      unzip arduino-cli discord gcc cloudflare-warp neofetch
      pavucontrol vlc usbutils udiskie udisks samba sway wayland-scanner
      libGL libGLU powersupply lunar-client feh file-roller jq pulseaudio
@@ -224,6 +221,18 @@
       defaultNetwork.settings.dns_enabled = true;
     };
   };
+  # Undo any external blacklists that disable KVM
+  boot.blacklistedKernelModules = lib.mkForce [ ];
+  boot.extraModprobeConfig = ''
+    blacklist # cleared by NixOS config
+  '';
+
+  # Ensure any non-Nix-managed blacklist file is removed on activation
+  system.activationScripts.removeKvmBlacklist.text = ''
+    rm -f /etc/modprobe.d/blacklist-kvm.conf
+  '';
+  # Ensure KVM is available on AMD CPUs. The correct module name is kvm_amd.
+  boot.kernelModules = [ "kvm" "kvm_amd" ];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

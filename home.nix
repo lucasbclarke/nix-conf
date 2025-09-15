@@ -155,6 +155,14 @@
       };
   };
 
+  programs.wofi = {
+      enable = true;
+      settings = {
+        key_forward = "Ctrl-n";
+        key_backward = "Ctrl-p";
+      };
+  };
+
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 }
