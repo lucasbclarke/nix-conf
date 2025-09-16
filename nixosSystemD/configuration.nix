@@ -74,6 +74,7 @@
         swaynotificationcenter
       ];
   };
+  security.polkit.enable = true;
 
 
   services.xserver = {

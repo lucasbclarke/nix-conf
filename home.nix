@@ -163,6 +163,19 @@
       };
   };
 
+  wayland.windowManager.sway = {
+    enable = true;
+    wrapperFeatures.gtk = true; # Fixes common issues with GTK 3 apps
+      config = rec {
+        modifier = "Mod4";
+        terminal = "ghostty"; 
+        startup = [{
+          command = "ghostty";
+        }];
+        menu = "sway/launcher.sh";
+      };
+  };
+
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 }
