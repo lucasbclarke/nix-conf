@@ -1,6 +1,11 @@
 { config, pkgs, lib, ... }:
 
 {
+
+  imports = [
+    ./user/zsh.nix
+  ];
+
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
   home.username = "lucas";
@@ -71,48 +76,45 @@
     # EDITOR = "emacs";
   };
 
-  programs.zsh = {
-      enable = true;
-      oh-my-zsh = {
-        enable = true;
-        theme = "robbyrussell";
-        custom = "$HOME/.oh-my-zsh";
-        plugins = [ "git" ];
-      };
+  #programs.zsh = {
+  #    enable = true;
+  #    oh-my-zsh = {
+  #      enable = true;
+  #      theme = "robbyrussell";
+  #      custom = "$HOME/.oh-my-zsh";
+  #      plugins = [ "git" ];
+  #    };
 
-      shellAliases = {
-          sd = "cd /home && cd \$(find * -type d | fzf) && clear";
-          nix-shell = "nix-shell --run $SHELL";
-      };
-      initContent = ''
-        if command -v tmux &> /dev/null && [ -n "$PS2" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
-          exec tmux
-        fi
-        export PATH="$PATH:/opt/nvim-linux64/bin:/usr/lib:$HOME/.local/bin:/usr/bin:$HOME/zig-latest-linux-x86_64"
-        export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
-        export MANPAGER='nvim +Man!'
-        export NIXPKGS_ALLOW_UNFREE=1
-        command xdotool key super+shift+1
-        command xdotool key super+1
-        command xdotool key ctrl+"+"
+  #    shellAliases = {
+  #        sd = "cd /home && cd \$(find * -type d | fzf) && clear";
+  #        nix-shell = "nix-shell --run $SHELL";
+  #    };
+  #    initContent = ''
+  #      if command -v tmux &> /dev/null && [ -n "$PS2" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
+  #        exec tmux
+  #      fi
+  #      export PATH="$PATH:/opt/nvim-linux64/bin:/usr/lib:$HOME/.local/bin:/usr/bin:$HOME/zig-latest-linux-x86_64"
+  #      export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
+  #      export MANPAGER='nvim +Man!'
+  #      export NIXPKGS_ALLOW_UNFREE=1
 
-        # Force steady block cursor in zsh (vi-mode aware)
-        function _cursor_block { print -n '\e[2 q' }
-        function zle-line-init { _cursor_block }
-        function zle-line-finish { _cursor_block }
-        function zle-keymap-select {
-          case $KEYMAP in
-            vicmd) _cursor_block ;;
-            viins|main) _cursor_block ;;
-          esac
-        }
-        function preexec { _cursor_block }
-        zle -N zle-line-init
-        zle -N zle-line-finish
-        zle -N zle-keymap-select
-      '';
-      
-  };
+  #      # Force steady block cursor in zsh (vi-mode aware)
+  #      function _cursor_block { print -n '\e[2 q' }
+  #      function zle-line-init { _cursor_block }
+  #      function zle-line-finish { _cursor_block }
+  #      function zle-keymap-select {
+  #        case $KEYMAP in
+  #          vicmd) _cursor_block ;;
+  #          viins|main) _cursor_block ;;
+  #        esac
+  #      }
+  #      function preexec { _cursor_block }
+  #      zle -N zle-line-init
+  #      zle -N zle-line-finish
+  #      zle -N zle-keymap-select
+  #    '';
+  #    
+  #};
 
   programs.tmux = {
       enable = true;
@@ -173,10 +175,16 @@
 
         # Startup commands (including previous exec_always and exec)
         startup = [
-          { command = "~/.config/sway/setup-displays.sh"; always = true; }
-          { command = "/usr/bin/win"; always = true; }
+          { command = "~/nix-conf/sway/setup-displays.sh"; always = true; }
+          { command = "/usr/bin/win &"; always = true; }
           { command = "ghostty"; }
+          { command = "swaymsg workspace number 1"; }
         ];
+
+        # Assign Ghostty windows to workspace 1
+        assigns = {
+          "1" = [ { app_id = "ghostty"; } ];
+        };
 
         # Workspaces and window management keybindings
         keybindings = {
