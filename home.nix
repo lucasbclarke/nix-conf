@@ -11,12 +11,26 @@
   home.homeDirectory = "/home/lucas";
   home.stateVersion = "25.05"; 
 
-  home.packages = [
+  home.packages = with pkgs; [
     # # It is sometimes useful to fine-tune packages, for example, by applying
     # # overrides. You can do that directly here, just don't forget the
     # # parentheses. Maybe you want to install Nerd Fonts with a limited number of
     # # fonts?
     # (pkgs.nerdfonts.override { fonts = [ "FantasqueSansMono" ]; })
+
+    #sway packages
+    swaylock
+    swayidle
+    waybar
+    wl-clipboard
+    grim slurp
+    wf-recorder
+    brightnessctl
+    playerctl
+    wmenu
+    i3status
+    swaynotificationcenter
+
   ];
 
   home.file = {
