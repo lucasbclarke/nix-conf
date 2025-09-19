@@ -18,19 +18,19 @@
     # # fonts?
     # (pkgs.nerdfonts.override { fonts = [ "FantasqueSansMono" ]; })
 
-    #sway packages
-    swaylock
-    swayidle
-    waybar
-    wl-clipboard
-    grim slurp
-    wf-recorder
-    brightnessctl
-    playerctl
-    wmenu
-    i3status
-    swaynotificationcenter
-
+    # Sway packages
+    #swaylock
+    #swayidle
+    #waybar
+    #wl-clipboard
+    #grim
+    #slurp
+    #wf-recorder
+    #brightnessctl
+    #playerctl
+    #wmenu
+    #i3status
+    #swaynotificationcenter
   ];
 
   home.file = {
