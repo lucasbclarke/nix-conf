@@ -36,12 +36,6 @@
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
   services.blueman.enable = true;
-  #hardware.bluetooth.settings = {
-  #  General = {
-  #    Experimental = true;
-  #  };
-  #};
-
 
   time.timeZone = "Australia/Sydney";
   i18n.defaultLocale = "en_AU.UTF-8";
@@ -57,23 +51,23 @@
     LC_TIME = "en_AU.UTF-8";
   };
 
-  programs.sway = {
-      enable = true;
-      wrapperFeatures.gtk = true; # To support GTK apps under Wayland
-      extraPackages = with pkgs; [
-        swaylock
-        swayidle
-        waybar     # for a status bar
-        wl-clipboard # for clipboard functionality
-        grim slurp # for screenshots
-        wf-recorder # for screen recording (optional)
-        brightnessctl # for brightness key support
-        playerctl  # for media control
-        wmenu
-        i3status
-        swaynotificationcenter
-      ];
-  };
+  #programs.sway = {
+  #    enable = true;
+  #    wrapperFeatures.gtk = true; # To support GTK apps under Wayland
+  #    extraPackages = with pkgs; [
+  #      swaylock
+  #      swayidle
+  #      waybar     # for a status bar
+  #      wl-clipboard # for clipboard functionality
+  #      grim slurp # for screenshots
+  #      wf-recorder # for screen recording (optional)
+  #      brightnessctl # for brightness key support
+  #      playerctl  # for media control
+  #      wmenu
+  #      i3status
+  #      swaynotificationcenter
+  #    ];
+  #};
   security.polkit.enable = true;
 
 
