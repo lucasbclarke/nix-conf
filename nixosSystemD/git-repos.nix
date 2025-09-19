@@ -3,15 +3,6 @@
 pkgs.writeShellScriptBin "git-repos"
 ''
 ${pkgs.git}/bin/git clone https://github.com/lucasbclarke/dotfiles
-sudo cp dotfiles/.zshrc ~/
-sudo cp dotfiles/.tmux.conf ~/
-sudo cp -r dotfiles/.tmux ~/
-mkdir ~/.config/sway/
-sudo cp -r dotfiles/sway/. ~/.config/sway/
-mkdir ~/.config/wofi
-sudo cp dotfiles/wofi/config ~/.config/wofi/
-mkdir ~/.config/ghostty/
-sudo cp dotfiles/ghostty/config ~/.config/ghostty/config
 ${pkgs.git}/bin/git clone https://github.com/lucasbclarke/code
 ${pkgs.git}/bin/git clone https://github.com/lucasbclarke/nvim ~/.config/nvim
 curl -L -o "zig-latest-linux-x86_64.tar.xz" "$(curl -s https://ziglang.org/download/index.json | jq -r '.master."x86_64-linux".tarball')"
