@@ -11,7 +11,7 @@
 
   imports =
     [ 
-      ./hardware-configuration.nix
+      /etc/hardware-configuration.nix
     ];
   
   boot.loader.grub.enable = true;
