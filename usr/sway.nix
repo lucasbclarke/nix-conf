@@ -14,7 +14,7 @@
           { command = "~/nix-conf/sway/setup-displays.sh"; always = true; }
           { command = "/usr/bin/win &"; always = true; }
           { command = "ghostty"; }
-          { command = "swaymsg workspace number 1"; }
+          { command = "sleep 0.5 && swaymsg workspace number 1"; }
         ];
 
         # Assign Ghostty windows to workspace 1

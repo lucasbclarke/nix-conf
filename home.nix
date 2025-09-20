@@ -2,9 +2,10 @@
 
 {
   imports = [
-    ./user/zsh.nix
-    ./user/sway.nix
-    ./user/terminal.nix
+    ./usr/zsh.nix
+    ./usr/sway.nix
+    ./usr/terminal.nix
+    ./usr/nvim.nix
   ];
 
   home.username = "lucas";
@@ -17,20 +18,6 @@
     # # parentheses. Maybe you want to install Nerd Fonts with a limited number of
     # # fonts?
     # (pkgs.nerdfonts.override { fonts = [ "FantasqueSansMono" ]; })
-
-    # Sway packages
-    #swaylock
-    #swayidle
-    #waybar
-    #wl-clipboard
-    #grim
-    #slurp
-    #wf-recorder
-    #brightnessctl
-    #playerctl
-    #wmenu
-    #i3status
-    #swaynotificationcenter
   ];
 
   home.file = {
