@@ -160,7 +160,7 @@
      blueman networkmanager bluez bluez-tools dnsmasq swaysettings
      sway-launcher-desktop jetbrains-mono dive podman-tui freerdp dialog
      libnotify xwayland ncdu gtk3 libnotify nss xorg.libXtst xdg-utils dpkg
-     brasero
+     brasero ghostty
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
      (import ./zls-repo.nix {inherit pkgs;})
