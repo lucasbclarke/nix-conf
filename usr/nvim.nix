@@ -10,6 +10,7 @@
 
     plugins = [
       pkgs.vimPlugins.vim-fugitive
+      pkgs.vimPlugins.lazy-nvim
 
       {
         plugin = pkgs.vimPlugins.mason-nvim;
