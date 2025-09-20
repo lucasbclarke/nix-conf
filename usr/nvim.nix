@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 {
-  environment.variables.EDITOR = "nvim";
+  home.sessionVariables.EDITOR = "nvim";
 
   programs.neovim = {
     viAlias = true;
