@@ -173,10 +173,6 @@
      (import ./sud.nix {inherit pkgs;})
      (import ./ohmyzsh.nix {inherit pkgs;})
      (import ./zls-repo.nix {inherit pkgs;})
-     (import ./winapps-setup.nix {inherit pkgs;})
-     # WinApps packages
-     inputs.winapps.packages."${pkgs.system}".winapps
-     inputs.winapps.packages."${pkgs.system}".winapps-launcher # optional
   ];
 
   services.gvfs = {
@@ -190,12 +186,6 @@
   virtualisation.virtualbox.host.enable = true;
   users.extraGroups.vboxusers.members = [ "lucas" ];
   virtualisation.virtualbox.host.enableExtensionPack = true;
-
-  nix.settings = {
-    substituters = [ "https://winapps.cachix.org/" ];
-    trusted-public-keys = [ "winapps.cachix.org-1:HI82jWrXZsQRar/PChgIx1unmuEsiQMQq+zt05CD36g=" ];
-    trusted-users = [ "lucas" ]; # replace with your username
-  };
 
   fonts = {
     fontconfig.enable = true;
