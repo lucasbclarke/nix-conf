@@ -70,7 +70,6 @@
   };
   security.polkit.enable = true;
 
-
   services.xserver = {
     enable = true;
 
@@ -85,11 +84,6 @@
     layout = "au";
     variant = "";
   };
-
-  # Enable CUPS to print documents.
-  services.printing.enable = true;
-  programs.system-config-printer.enable = true;
-  services.samba.enable = true;
 
   # Enable sound with pipewire.
   services.pulseaudio.enable = false;
@@ -113,7 +107,7 @@
   users.users.lucas = {
     isNormalUser = true;
     description = "lucas";
-    extraGroups = [ "networkmanager" "wheel" "docker" "kvm" "vboxusers" ];
+    extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
     #  thunderbird
     ];
@@ -150,7 +144,6 @@
     wantedBy = [ "graphical-session.target" ];
   };
 
-
   nixpkgs.config.allowUnfree = true;
 
   nixpkgs.config.permittedInsecurePackages = [
@@ -163,15 +156,13 @@
      pavucontrol vlc usbutils udiskie udisks samba sway wayland-scanner
      libGL libGLU powersupply lunar-client feh file-roller jq pulseaudio
      lua-language-server xfce.xfce4-screenshooter gh cargo gnumake
-     gcc-arm-embedded python2 python3Packages.pip swig file clang-tools
-     net-tools iproute2 blueman networkmanager bluez bluez-tools dnsmasq
-     swaysettings sway-launcher-desktop jetbrains-mono dive podman-tui
-     docker-compose freerdp dialog libnotify podman podman-compose
-     xwayland ncdu gtk3 libnotify nss xorg.libXtst xdg-utils dpkg
+     python2 python3Packages.pip swig file clang-tools net-tools iproute2
+     blueman networkmanager bluez bluez-tools dnsmasq swaysettings
+     sway-launcher-desktop jetbrains-mono dive podman-tui freerdp dialog
+     libnotify xwayland ncdu gtk3 libnotify nss xorg.libXtst xdg-utils dpkg
      brasero
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
-     (import ./ohmyzsh.nix {inherit pkgs;})
      (import ./zls-repo.nix {inherit pkgs;})
   ];
 
@@ -181,43 +172,12 @@
   };
   services.udisks2.enable = true;
 
-  services.cloudflare-warp.enable = true;
-
-  virtualisation.virtualbox.host.enable = true;
-  users.extraGroups.vboxusers.members = [ "lucas" ];
-  virtualisation.virtualbox.host.enableExtensionPack = true;
-
   fonts = {
     fontconfig.enable = true;
       packages = with pkgs; [
         nerd-fonts.jetbrains-mono
       ];
   };
-
-  virtualisation.containers.enable = true;
-  virtualisation = {
-    podman = {
-      enable = true;
-
-      # Create a `docker` alias for podman, to use it as a drop-in replacement
-      dockerCompat = true;
-
-       # Required for containers under podman-compose to be able to talk to each other.
-      defaultNetwork.settings.dns_enabled = true;
-    };
-  };
-  # Undo any external blacklists that disable KVM
-  boot.blacklistedKernelModules = lib.mkForce [ ];
-  boot.extraModprobeConfig = ''
-    blacklist # cleared by NixOS config
-  '';
-
-  # Ensure any non-Nix-managed blacklist file is removed on activation
-  system.activationScripts.removeKvmBlacklist.text = ''
-    rm -f /etc/modprobe.d/blacklist-kvm.conf
-  '';
-  # Ensure KVM is available on AMD CPUs. The correct module name is kvm_amd.
-  boot.kernelModules = [ "kvm" "kvm_amd" ];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
