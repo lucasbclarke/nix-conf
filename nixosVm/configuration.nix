@@ -14,13 +14,13 @@
       ./hardware-configuration.nix
     ];
   
-  boot.loader.systemd-boot.enable = lib.mkForce true;
-  boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.grub.enable = lib.mkForce false;
+  boot.loader.grub.enable = true;
+  boot.loader.grub.device = "/dev/vda";
+  boot.loader.grub.useOSProber = true;
 
   time.hardwareClockInLocalTime = true;
 
-  networking.hostName = "nixosSystemD";
+  networking.hostName = "nixosVm";
   #networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -36,12 +36,6 @@
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
   services.blueman.enable = true;
-  #hardware.bluetooth.settings = {
-  #  General = {
-  #    Experimental = true;
-  #  };
-  #};
-
 
   time.timeZone = "Australia/Sydney";
   i18n.defaultLocale = "en_AU.UTF-8";

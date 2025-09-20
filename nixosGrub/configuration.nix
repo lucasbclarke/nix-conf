@@ -14,13 +14,13 @@
       ./hardware-configuration.nix
     ];
   
-  boot.loader.systemd-boot.enable = lib.mkForce true;
-  boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.grub.enable = lib.mkForce false;
+  boot.loader.grub.enable = true;
+  boot.loader.grub.device = "/dev/sda";
+  boot.loader.grub.useOSProber = true;
 
   time.hardwareClockInLocalTime = true;
 
-  networking.hostName = "nixosSystemD";
+  networking.hostName = "nixosGrub";
   #networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
