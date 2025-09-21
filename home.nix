@@ -6,6 +6,7 @@
     ./usr/sway.nix
     ./usr/terminal.nix
     ./usr/nvim.nix
+    inputs.nixvim.homeModules.nixvim
   ];
 
   home.username = "lucas";
@@ -34,7 +35,7 @@
   };
 
   home.sessionVariables = {
-    # EDITOR = "emacs";
+    EDITOR = "nvim";
   };
 
   programs.wofi = {
@@ -44,7 +45,7 @@
         key_backward = "Ctrl-p";
       };
   };
-
+  programs.nixvim.enable = true;
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 }

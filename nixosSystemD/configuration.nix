@@ -1,6 +1,7 @@
 { config, pkgs, lib, inputs, ... }:
 
 {
+  environment.variables.EDITOR = "nvim";
   nixpkgs.config.allowUnsupportedSystem = true;
 
   nix.extraOptions = ''
@@ -8,6 +9,10 @@
   '';
   system.autoUpgrade.enable = true;
   system.autoUpgrade.allowReboot = true;
+
+  nix = {
+    settings.experimental-features = [ "nix-command" "flakes" ];
+  };
 
   imports =
     [ 

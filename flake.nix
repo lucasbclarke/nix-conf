@@ -15,13 +15,15 @@
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }@inputs:
+  outputs = { self, nixpkgs, home-manager, nixvim, ... }@inputs:
   let
     lib = nixpkgs.lib;
     system = "x86_64-linux";
     pkgs = nixpkgs.legacyPackages.${system};
+
   in {
       nixosConfigurations = {
           nixosSystemD = lib.nixosSystem {
@@ -48,6 +50,6 @@
               extraSpecialArgs = { inherit inputs; };
           };
       };
+      home-manager.extraSpecialArgs = { inherit inputs; };
   };
-  
 }
