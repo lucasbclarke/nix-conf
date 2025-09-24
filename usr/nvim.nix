@@ -3,12 +3,11 @@
 {
   programs.nixvim = {
     extraPlugins = [
-	pkgs.vimPlugins.rose-pine
-	pkgs.vimPlugins.tokyonight-nvim
-	pkgs.vimPlugins.mason-nvim
-	pkgs.vimPlugins.mason-lspconfig-nvim
-	pkgs.vimPlugins.lsp-zero-nvim
-	pkgs.nixd
+	 pkgs.vimPlugins.rose-pine
+	 pkgs.vimPlugins.tokyonight-nvim
+	 pkgs.vimPlugins.lsp-zero-nvim
+	 pkgs.vimPlugins.lazy-lsp-nvim
+	 pkgs.nixd
     ];
 
     extraConfigLua = ''
@@ -16,23 +15,18 @@
 	--zls = {},
 	rnix = {},
 
-	--lua_ls = {
-	  --  Lua = {
-	    --    workspace = { checkThirdParty = false },
-	    --    telemetry = { enable = false },
-	    --  },
-	  --},
+	lua_ls = {
+	    Lua = {
+	        workspace = { checkThirdParty = false },
+	        telemetry = { enable = false },
+	      },
+	  },
       }
 
     local capabilities = vim.lsp.protocol.make_client_capabilities()
-      capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
+    capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
-      local mason_lspconfig = require 'mason-lspconfig'
-      local lspconfig = require('lspconfig')
-
-      mason_lspconfig.setup {
-	ensure_installed = vim.tbl_keys(servers),
-      }
+    local lspconfig = require('lspconfig')
 
     for server_name, server_config in pairs(servers) do
       lspconfig[server_name].setup {
@@ -103,13 +97,19 @@
 		},
 	      },
     }
-      require("mason").setup()
+      config = function()
+	local lsp_zero = require("lsp-zero")
 
-      require("mason-lspconfig").setup({
-	  ensure_installed = { "rnix" }, 
-	  automatic_installation = false,
-	  automatic_enable = false,    
-	  })
+	lsp_zero.on_attach(function(client, bufnr)
+	    -- see :help lsp-zero-keybindings to learn the available actions
+	    lsp_zero.default_keymaps({
+	      buffer = bufnr,
+	      preserve_mappings = false
+	      })
+	    end)
+
+	require("lazy-lsp").setup {}
+      end
       '';
 
         colorschemes.rose-pine = {
