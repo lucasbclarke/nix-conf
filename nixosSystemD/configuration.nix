@@ -181,7 +181,9 @@
      (import ./hm-setup.nix {inherit pkgs;})
      # WinApps packages
      inputs.winapps.packages."${pkgs.system}".winapps
-     inputs.winapps.packages."${pkgs.system}".winapps-launcher # optional
+     inputs.winapps.packages."${pkgs.system}".winapps-launcher
+     inputs.nixd.packages."${pkgs.system}".nixd
+     inputs.nil.packages."${pkgs.system}".nil
   ];
 
   services.gvfs = {
