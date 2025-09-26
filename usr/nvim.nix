@@ -62,12 +62,7 @@
 	      },
     }
       config = function()
-	local l        add.text = "+";
-        change.text = "~";
-        changedelete.text = "~";
-        delete.text = "_";
-        topdelete.text = "‾";
-        untracked.text = "┆";sp_zero = require("lsp-zero")
+	local lsp_zero = require("lsp-zero")
 
 	lsp_zero.on_attach(function(client, bufnr)
 	    -- see :help lsp-zero-keybindings to learn the available actions
@@ -96,31 +91,35 @@
 		  "<C-d>" = "cmp.mapping.scroll_docs(-4)";
 		  "<C-u>" = "cmp.mapping.scroll_docs(4)";
 		  "<C-Space>" = "cmp.mapping.complete({})";
-		  "<CR>" = ''
-		    cmp.mapping.confirm({ select = true, behavior = cmp.ConfirmBehavior.Insert }, {"i", "c"})
-		  '';
-		  "<tab>" = ''
-		    cmp.mapping(function(fallback)
-		    if cmp.visible() then
-		      cmp.select_next_item()
-		    elseif luasnip.expand_or_locally_jumpable() then
-		      luasnip.expand_or_jump()
-		    else
-		      fallback()
-		    end
-		  end, { 'i', 's' }),
-		  '';
-
-		"<S-Tab>" = '' cmp.mapping(function(fallback)
-		    if cmp.visible() then
-		      cmp.select_prev_item()
-		    elseif luasnip.locally_jumpable(-1) then
-		      luasnip.jump(-1)
-		    else
-		      fallback()
-		    end
-		  end, { 'i', 's' })
+		  "<CR>" = "cmp.mapping.confirm({ select = true, behavior = cmp.ConfirmBehavior.Insert })";
+		  "<Tab>" = {
+		    __raw = ''
+		      function(fallback)
+		        if cmp.visible() then
+		          cmp.select_next_item()
+		        elseif luasnip.expand_or_locally_jumpable() then
+		          luasnip.expand_or_jump()
+		        else
+		          fallback()
+		        end
+		      end
 		    '';
+		    modes = [ "i" "s" ];
+		  };
+		  "<S-Tab>" = {
+		    __raw = ''
+		      function(fallback)
+		        if cmp.visible() then
+		          cmp.select_prev_item()
+		        elseif luasnip.locally_jumpable(-1) then
+		          luasnip.jump(-1)
+		        else
+		          fallback()
+		        end
+		      end
+		    '';
+		    modes = [ "i" "s" ];
+		  };
 		};
 
 		snippet = {
@@ -146,6 +145,7 @@
 	cmp_luasnip.enable = true;
 	cmp-nvim-lsp.enable = true;
 	cmp-path.enable = true;
+	cmp-buffer.enable = true;
 	friendly-snippets.enable = true;
 	fugitive.enable = true;
 	lspconfig.enable = true;
