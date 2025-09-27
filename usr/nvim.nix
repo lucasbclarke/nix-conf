@@ -172,7 +172,6 @@
 	gitsigns = {
 	  enable = true;
 	  settings = {
-	    current_line_blame = true;
 	      signs = {
 		add.text = "+";
 		change.text = "~";
@@ -192,10 +191,11 @@
     };
 
     keymaps = [
+    ##WORKS
     {
       mode = [
 	"n"
-	  "v"
+	"v"
       ];
 
       key = "]c";
@@ -205,7 +205,7 @@
 	desc = "next hunk";
       };
     }
-
+    ##WORKS
     {
       key = "[c";
       action = ":Gitsigns prev_hunk<CR>";
@@ -218,9 +218,8 @@
     {
       mode = "v";
       key = "<leader>hs";
-      action = "<cmd>lua function() Gitsigns stage_hunk {vim.fn.line('.'), vim.fn.line('v')} end<CR>";
+      action = "<cmd>lua require('gitsigns').stage_hunk({vim.fn.line('.'), vim.fn.line('v')})<CR>";
       options = {
-	silent = true;
 	desc = "Stage Hunk";
       };
     }
@@ -230,7 +229,6 @@
       key = "<leader>hr";
       action = "function() gs.reset_hunk {vim.fn.line('.'), vim.fn.line('v')} end";
       options = {
-	silent = true;
 	desc = "Reset Hunk";
       };
     }
