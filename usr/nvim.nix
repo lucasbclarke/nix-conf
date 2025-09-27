@@ -3,11 +3,13 @@
 {
   programs.nixvim = {
     extraPlugins = [
-	 pkgs.vimPlugins.rose-pine
-	 pkgs.vimPlugins.tokyonight-nvim
-	 pkgs.vimPlugins.lsp-zero-nvim
-	 pkgs.vimPlugins.lazy-lsp-nvim
-	 pkgs.vimPlugins.clangd_extensions-nvim
+	pkgs.vimPlugins.rose-pine
+	pkgs.vimPlugins.tokyonight-nvim
+	pkgs.vimPlugins.lsp-zero-nvim
+	pkgs.vimPlugins.lazy-lsp-nvim
+	pkgs.vimPlugins.clangd_extensions-nvim
+	pkgs.vimPlugins.vim-sleuth
+	pkgs.vimPlugins.sqlite-lua
     ];
 
     extraConfigLua = ''
@@ -168,6 +170,15 @@
 	fugitive.enable = true;
 	lspconfig.enable = true;
 	lazydev.enable = true;
+	web-devicons.enable = true;
+	telescope = {
+	  enable = true;
+	  extensions = {
+	    fzf-native = {
+	      enable = true;
+	    };
+	  };
+	};
 
 	gitsigns = {
 	  enable = true;
@@ -191,7 +202,7 @@
     };
 
     keymaps = [
-    ##WORKS
+  
     {
       mode = [
 	"n"
@@ -205,8 +216,13 @@
 	desc = "next hunk";
       };
     }
-    ##WORKS
+   
     {
+      mode = [
+	"n"
+	"v"
+      ];
+
       key = "[c";
       action = ":Gitsigns prev_hunk<CR>";
       options = {
@@ -214,22 +230,22 @@
 	desc = "prev hunk";
       };
     }
-
+    
     {
       mode = "v";
       key = "<leader>hs";
       action = "<cmd>lua require('gitsigns').stage_hunk({vim.fn.line('.'), vim.fn.line('v')})<CR>";
       options = {
-	desc = "Stage Hunk";
+	desc = "stage git hunk";
       };
     }
-
+    
     {
       mode = "v";
       key = "<leader>hr";
       action = "function() gs.reset_hunk {vim.fn.line('.'), vim.fn.line('v')} end";
       options = {
-	desc = "Reset Hunk";
+	desc = "reset git hunk";
       };
     }
 
@@ -239,7 +255,7 @@
       action = "<cmd>Gitsigns stage_hunk<CR>";
       options = {
 	silent = true;
-	desc = "Stage Hunk";
+	desc = "git stage hunk";
       };
     }
 
@@ -249,7 +265,7 @@
       action = "<cmd>Gitsigns reset_hunk<CR>";
       options = {
 	silent = true;
-	desc = "Reset Hunk";
+	desc = "git reset hunk";
       };
     }
 
@@ -259,7 +275,7 @@
       action = "<cmd>Gitsigns stage_buffer<CR>";
       options = {
         silent = true;
-        desc = "Stage Buffer";
+        desc = "git stage buffer";
       };
     }
 
@@ -269,7 +285,7 @@
       action = "<cmd>Gitsigns undo_stage_hunk<CR>";
       options = {
         silent = true;
-        desc = "Undo Stage Hunk";
+        desc = "undo stage hunk";
       };
     }
 
@@ -279,7 +295,7 @@
       action = "<cmd> Gitsigns reset_buffer<CR>";
       options = {
         silent = true;
-        desc = "Reset Buffer";
+        desc = "git reset buffer";
       };
     }
 
@@ -289,7 +305,61 @@
       action = "<cmd> Gitsigns preview_hunk<CR>";
       options = {
         silent = true;
-        desc = "Preview Hunk";
+        desc = "preview git hunk";
+      };
+    }
+
+    {
+      mode = "n";
+      key = "<leader>hd";
+      action = "<cmd> Gitsigns diffthis<CR>";
+      options = {
+	silent = true;
+	desc = "git diff against index";
+      };
+    }
+
+    {
+      mode = "n";
+      key = "<leader>hD";
+      action = "<cmd> Gitsigns diffthis ~<CR>";
+      options = {
+	silent = true;
+	desc = "git diff against last commit";
+      };
+    }
+
+    {
+      mode = "n";
+      key = "<leader>tb";
+      action = "<cmd> Gitsigns toggle_current_line_blame<CR>";
+      options = {
+	silent = true;
+	desc = "toggle git blame line";
+      };
+    }
+
+    {
+      mode = "n";
+      key = "<leader>gd";
+      action = "<cmd> Gitsigns toggle_deleted<CR>";
+      options = {
+        silent = true;
+        desc = "toggle git show deleted";
+      };
+    }
+
+    {
+      mode = [
+	"o"
+	"x"
+      ];
+
+      key = "ih";
+      action = ":<C-U>Gitsigns select_hunk<CR>";
+      options = {
+        silent = true;
+        desc = "select git hunk";
       };
     }
 
