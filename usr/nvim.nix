@@ -7,6 +7,7 @@
 	 pkgs.vimPlugins.tokyonight-nvim
 	 pkgs.vimPlugins.lsp-zero-nvim
 	 pkgs.vimPlugins.lazy-lsp-nvim
+	 pkgs.vimPlugins.clangd_extensions-nvim
     ];
 
     extraConfigLua = ''
@@ -38,11 +39,13 @@
     end
       
 
+      --------  LUASNIP  --------
+      local luasnip = require 'luasnip'
+      require('luasnip.loaders.from_vscode').lazy_load()
+      luasnip.config.setup {}
+
       --------  CMP  --------
       local cmp = require 'cmp'
-      local luasnip = require 'luasnip'
-      require('luasnip.loaders.from_vscode')
-      luasnip.config.setup {}
 
     cmp.setup {
 	      completion = {
@@ -54,6 +57,7 @@
 		  cmp.config.compare.offset,
 		  cmp.config.compare.exact,
 		  cmp.config.compare.recently_used,
+		  require("clangd_extensions.cmp_scores"),
 		  cmp.config.compare.kind,
 		  cmp.config.compare.sort_text,
 		  cmp.config.compare.length,
@@ -83,24 +87,35 @@
     plugins = {
 	treesitter.enable = true;
 	treesitter-textobjects.enable = true;
-
+    
 	cmp = {
 	    enable = true;
 	    settings = {
 		mapping = {
-		  "<C-d>" = "cmp.mapping.scroll_docs(-4)";
-		  "<C-u>" = "cmp.mapping.scroll_docs(4)";
-		  "<C-Space>" = "cmp.mapping.complete({})";
-		  "<CR>" = "cmp.mapping.confirm({ select = true, behavior = cmp.ConfirmBehavior.Insert })";
+		  "<C-d>" = {
+		    __raw = "cmp.mapping.scroll_docs(-4)";
+		  };
+		  "<C-u>" = {
+		    __raw = "cmp.mapping.scroll_docs(4)";
+		  };
+		  "<C-Space>" = {
+		    __raw = "cmp.mapping.complete()";
+		  };
+		  "<CR>" = {
+		    __raw = "cmp.mapping.confirm({ select = true, behavior = cmp.ConfirmBehavior.Insert })";
+		  };
 		  "<Tab>" = {
 		    __raw = ''
 		      function(fallback)
 		        if cmp.visible() then
 		          cmp.select_next_item()
-		        elseif luasnip.expand_or_locally_jumpable() then
-		          luasnip.expand_or_jump()
 		        else
-		          fallback()
+		          local luasnip = require("luasnip")
+		          if luasnip and luasnip.expand_or_locally_jumpable() then
+		            luasnip.expand_or_jump()
+		          else
+		            fallback()
+		          end
 		        end
 		      end
 		    '';
@@ -111,10 +126,13 @@
 		      function(fallback)
 		        if cmp.visible() then
 		          cmp.select_prev_item()
-		        elseif luasnip.locally_jumpable(-1) then
-		          luasnip.jump(-1)
 		        else
-		          fallback()
+		          local luasnip = require("luasnip")
+		          if luasnip and luasnip.locally_jumpable(-1) then
+		            luasnip.jump(-1)
+		          else
+		            fallback()
+		          end
 		        end
 		      end
 		    '';
@@ -154,6 +172,7 @@
 	gitsigns = {
 	  enable = true;
 	  settings = {
+	    current_line_blame = true;
 	      signs = {
 		add.text = "+";
 		change.text = "~";
@@ -164,13 +183,118 @@
 	      };
 	  };
 	};
-    };
-    
+	};
     
     opts = {
       number = true;         
       relativenumber = true;
       shiftwidth = 2;        
     };
+
+    keymaps = [
+    {
+      mode = [
+	"n"
+	  "v"
+      ];
+
+      key = "]c";
+      action = ":Gitsigns next_hunk<CR>";
+      options = {
+	silent = true;
+	desc = "next hunk";
+      };
+    }
+
+    {
+      key = "[c";
+      action = ":Gitsigns prev_hunk<CR>";
+      options = {
+	silent = true;
+	desc = "prev hunk";
+      };
+    }
+
+    {
+      mode = "v";
+      key = "<leader>hs";
+      action = "<cmd>lua function() Gitsigns stage_hunk {vim.fn.line('.'), vim.fn.line('v')} end<CR>";
+      options = {
+	silent = true;
+	desc = "Stage Hunk";
+      };
+    }
+
+    {
+      mode = "v";
+      key = "<leader>hr";
+      action = "function() gs.reset_hunk {vim.fn.line('.'), vim.fn.line('v')} end";
+      options = {
+	silent = true;
+	desc = "Reset Hunk";
+      };
+    }
+
+    {
+      mode = "n";
+      key = "<leader>hs";
+      action = "<cmd>Gitsigns stage_hunk<CR>";
+      options = {
+	silent = true;
+	desc = "Stage Hunk";
+      };
+    }
+
+    {
+      mode = "n";
+      key = "<leader>hr";
+      action = "<cmd>Gitsigns reset_hunk<CR>";
+      options = {
+	silent = true;
+	desc = "Reset Hunk";
+      };
+    }
+
+    {
+      mode = "n";
+      key = "<leader>hS";
+      action = "<cmd>Gitsigns stage_buffer<CR>";
+      options = {
+        silent = true;
+        desc = "Stage Buffer";
+      };
+    }
+
+    {
+      mode = "n";
+      key = "<leader>hu";
+      action = "<cmd>Gitsigns undo_stage_hunk<CR>";
+      options = {
+        silent = true;
+        desc = "Undo Stage Hunk";
+      };
+    }
+
+    {
+      mode = "n";
+      key = "<leader>hR";
+      action = "<cmd> Gitsigns reset_buffer<CR>";
+      options = {
+        silent = true;
+        desc = "Reset Buffer";
+      };
+    }
+
+    {
+      mode = "n";
+      key = "<leader>hp";
+      action = "<cmd> Gitsigns preview_hunk<CR>";
+      options = {
+        silent = true;
+        desc = "Preview Hunk";
+      };
+    }
+
+    ];
   };
 }
