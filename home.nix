@@ -5,7 +5,10 @@
     ./usr/zsh.nix
     ./usr/sway.nix
     ./usr/terminal.nix
-    ./usr/nvim.nix
+    ./usr/nvim/nvim.nix
+    ./usr/nvim/keymaps.nix
+    ./usr/nvim/cmp.nix
+    ./usr/nvim/extraConfig.nix
     inputs.nixvim.homeModules.nixvim
   ];
 
