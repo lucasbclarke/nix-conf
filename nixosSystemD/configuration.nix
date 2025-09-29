@@ -16,8 +16,17 @@
 
   imports =
     [ 
-      ./hardware-configuration.nix
+      /etc/nixos/hardware-configuration.nix
+      inputs.sops-nix.nixosModules.sops
     ];
+
+  sops.defaultSopsFile = ../secrets/secrets.yaml;
+  sops.defaultSopsFormat = "yaml";
+  sops.age.keyFile = "/home/lucas/.config/sops/age/keys.txt";
+  sops.secrets.example-key = { };
+  sops.secrets."my-service/my_subdir/my_secret" = {
+      owner = "lucas";
+  };
   
   boot.loader.systemd-boot.enable = lib.mkForce true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -58,16 +67,16 @@
 
   programs.sway = {
       enable = true;
-      wrapperFeatures.gtk = true; # To support GTK apps under Wayland
+      wrapperFeatures.gtk = true; 
       extraPackages = with pkgs; [
         swaylock
         swayidle
-        waybar     # for a status bar
-        wl-clipboard # for clipboard functionality
-        grim slurp # for screenshots
-        wf-recorder # for screen recording (optional)
-        brightnessctl # for brightness key support
-        playerctl  # for media control
+        waybar     
+        wl-clipboard 
+        grim slurp 
+        wf-recorder 
+        brightnessctl 
+        playerctl  
         wmenu
         i3status
         swaynotificationcenter
@@ -85,13 +94,11 @@
 
   };
 
-  # Configure keymap in X11
   services.xserver.xkb = {
     layout = "au";
     variant = "";
   };
 
-  # Enable CUPS to print documents.
   services.printing.enable = true;
   programs.system-config-printer.enable = true;
   services.samba.enable = true;
@@ -106,7 +113,6 @@
     nssmdns4 = true;
   };
 
-  # Enable sound with pipewire.
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
@@ -122,16 +128,10 @@
     #media-session.enable = true;
   };
 
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
-
   users.users.lucas = {
     isNormalUser = true;
     description = "lucas";
     extraGroups = [ "networkmanager" "wheel" "docker" "kvm" "vboxusers" ];
-    packages = with pkgs; [
-    #  thunderbird
-    ];
     shell = pkgs.zsh;
   };
 
@@ -183,7 +183,7 @@
      swaysettings sway-launcher-desktop jetbrains-mono dive podman-tui
      docker-compose freerdp dialog libnotify podman podman-compose
      xwayland ncdu gtk3 libnotify nss xorg.libXtst xdg-utils dpkg
-     brasero ghostty networkmanagerapplet ripgrep inetutils
+     brasero ghostty networkmanagerapplet ripgrep inetutils sops
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
      (import ./zls-repo.nix {inherit pkgs;})
@@ -211,7 +211,7 @@
   nix.settings = {
     substituters = [ "https://winapps.cachix.org/" ];
     trusted-public-keys = [ "winapps.cachix.org-1:HI82jWrXZsQRar/PChgIx1unmuEsiQMQq+zt05CD36g=" ];
-    trusted-users = [ "lucas" ]; # replace with your username
+    trusted-users = [ "lucas" ]; 
   };
 
   fonts = {
@@ -225,25 +225,19 @@
   virtualisation = {
     podman = {
       enable = true;
-
-      # Create a `docker` alias for podman, to use it as a drop-in replacement
       dockerCompat = true;
-
-       # Required for containers under podman-compose to be able to talk to each other.
       defaultNetwork.settings.dns_enabled = true;
     };
   };
-  # Undo any external blacklists that disable KVM
+
   boot.blacklistedKernelModules = lib.mkForce [ ];
   boot.extraModprobeConfig = ''
     blacklist # cleared by NixOS config
   '';
 
-  # Ensure any non-Nix-managed blacklist file is removed on activation
   system.activationScripts.removeKvmBlacklist.text = ''
     rm -f /etc/modprobe.d/blacklist-kvm.conf
   '';
-  # Ensure KVM is available on AMD CPUs. The correct module name is kvm_amd.
   boot.kernelModules = [ "kvm" "kvm_amd" ];
 
   # Some programs need SUID wrappers, can be configured further or are
