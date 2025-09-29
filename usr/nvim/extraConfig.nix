@@ -123,5 +123,7 @@
       mason = false,
       cmd = { "nil" },
     })
+
+    pcall(require('telescope').load_extension, 'fzf')
   '';
 }

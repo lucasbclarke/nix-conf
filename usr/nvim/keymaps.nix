@@ -10,7 +10,7 @@
      ];
 
      key = "]c";
-     action = ":Gitsigns next_hunk<CR>";
+     action = ":Gitsigns next_hunk<Enter>";
      options = {
        silent = true;
        desc = "next hunk";
@@ -24,7 +24,7 @@
      ];
 
      key = "[c";
-     action = ":Gitsigns prev_hunk<CR>";
+     action = ":Gitsigns prev_hunk<Enter>";
      options = {
        silent = true;
        desc = "prev hunk";
@@ -34,7 +34,7 @@
    {
      mode = "v";
      key = "<leader>hs";
-     action = "<cmd>lua require('gitsigns').stage_hunk({vim.fn.line('.'), vim.fn.line('v')})<CR>";
+     action = "<cmd>lua require('gitsigns').stage_hunk({vim.fn.line('.'), vim.fn.line('v')})<Enter>";
      options = {
        desc = "stage git hunk";
      };
@@ -52,7 +52,7 @@
    {
      mode = "n";
      key = "<leader>hs";
-     action = "<cmd>Gitsigns stage_hunk<CR>";
+     action = "<cmd>Gitsigns stage_hunk<Enter>";
      options = {
        silent = true;
        desc = "git stage hunk";
@@ -62,7 +62,7 @@
    {
      mode = "n";
      key = "<leader>hr";
-     action = "<cmd>Gitsigns reset_hunk<CR>";
+     action = "<cmd>Gitsigns reset_hunk<Enter>";
      options = {
        silent = true;
        desc = "git reset hunk";
@@ -72,7 +72,7 @@
    {
      mode = "n";
      key = "<leader>hS";
-     action = "<cmd>Gitsigns stage_buffer<CR>";
+     action = "<cmd>Gitsigns stage_buffer<Enter>";
      options = {
        silent = true;
        desc = "git stage buffer";
@@ -82,7 +82,7 @@
    {
      mode = "n";
      key = "<leader>hu";
-     action = "<cmd>Gitsigns undo_stage_hunk<CR>";
+     action = "<cmd>Gitsigns undo_stage_hunk<Enter>";
      options = {
        silent = true;
        desc = "undo stage hunk";
@@ -92,7 +92,7 @@
    {
      mode = "n";
      key = "<leader>hR";
-     action = "<cmd> Gitsigns reset_buffer<CR>";
+     action = "<cmd> Gitsigns reset_buffer<Enter>";
      options = {
        silent = true;
        desc = "git reset buffer";
@@ -102,7 +102,7 @@
    {
      mode = "n";
      key = "<leader>hp";
-     action = "<cmd> Gitsigns preview_hunk<CR>";
+     action = "<cmd> Gitsigns preview_hunk<Enter>";
      options = {
        silent = true;
        desc = "preview git hunk";
@@ -112,7 +112,7 @@
    {
      mode = "n";
      key = "<leader>hd";
-     action = "<cmd> Gitsigns diffthis<CR>";
+     action = "<cmd> Gitsigns diffthis<Enter>";
      options = {
        silent = true;
        desc = "git diff against index";
@@ -122,7 +122,7 @@
    {
      mode = "n";
      key = "<leader>hD";
-     action = "<cmd> Gitsigns diffthis ~<CR>";
+     action = "<cmd> Gitsigns diffthis ~<Enter>";
      options = {
        silent = true;
        desc = "git diff against last commit";
@@ -132,7 +132,7 @@
    {
      mode = "n";
      key = "<leader>tb";
-     action = "<cmd> Gitsigns toggle_current_line_blame<CR>";
+     action = "<cmd> Gitsigns toggle_current_line_blame<Enter>";
      options = {
        silent = true;
        desc = "toggle git blame line";
@@ -142,7 +142,7 @@
    {
      mode = "n";
      key = "<leader>gd";
-     action = "<cmd> Gitsigns toggle_deleted<CR>";
+     action = "<cmd> Gitsigns toggle_deleted<Enter>";
      options = {
        silent = true;
        desc = "toggle git show deleted";
@@ -155,7 +155,7 @@
        "x"
      ];
      key = "ih";
-     action = ":<C-U>Gitsigns select_hunk<CR>";
+     action = ":<C-U>Gitsigns select_hunk<Enter>";
      options = {
        silent = true;
        desc = "select git hunk";
@@ -164,8 +164,8 @@
 
    {
      mode = "n";
-     key = "<leader>tt";
-     action = ":TimeTracker<cr>";
+     key = "<leader>t";
+     action = ":TimeTracker<Enter>";
      options = {
        silent = true;
        desc = "open time tracker";
@@ -268,6 +268,78 @@
      mode = "n";
      key = "<leader>dl";
      action = ":Ex<Enter>";
+     options = {
+       silent = true;
+     };
+   }
+
+   {
+     mode = "n";
+     key = "<leader>ff";
+     action = ":Telescope find_files<Enter>";
+     options = {
+       silent = true;
+     };
+   }
+
+   {
+     mode = "n";
+     key = "<leader>fg";
+     action = ":Telescope live_grep<Enter>";
+     options = {
+       silent = true;
+     };
+   }
+
+   {
+     mode = "n";
+     key = "<leader>fb";
+     action = ":Telescope buffers<Enter>";
+     options = {
+       silent = true;
+     };
+   }
+
+   {
+     mode = "n";
+     key = "<leader>fh";
+     action = ":Telescope help_tags<Enter>";
+     options = {
+       silent = true;
+     };
+   }
+
+   {
+     mode = "n";
+     key = "<leader>gf";
+     action = ":Telescope git_files<Enter>";
+     options = {
+       silent = true;
+     };
+   }
+
+   {
+     mode = "n";
+     key = "<leader>gc";
+     action = ":Telescope git_commits<Enter>";
+     options = {
+       silent = true;
+     };
+   }
+
+   {
+     mode = "n";
+     key = "<leader>cs";
+     action = ":Telescope colorscheme<Enter>";
+     options = {
+       silent = true;
+     };
+   }
+
+   {
+     mode = "n";
+     key = "<leader>r";
+     action = ":Telescope registers<Enter>";
      options = {
        silent = true;
      };
