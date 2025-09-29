@@ -97,6 +97,17 @@
   programs.system-config-printer.enable = true;
   services.samba.enable = true;
 
+  services.printing.drivers = [
+    pkgs.cnijfilter2
+    pkgs.gutenprint
+    pkgs.cups-bjnp
+  ];
+
+  services.avahi = {
+    enable = true; 
+    nssmdns4 = true;
+  };
+
   # Enable sound with pipewire.
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
@@ -174,7 +185,7 @@
      swaysettings sway-launcher-desktop jetbrains-mono dive podman-tui
      docker-compose freerdp dialog libnotify podman podman-compose
      xwayland ncdu gtk3 libnotify nss xorg.libXtst xdg-utils dpkg
-     brasero
+     brasero inetutils
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
      (import ./ohmyzsh.nix {inherit pkgs;})
