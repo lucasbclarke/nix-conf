@@ -9,6 +9,10 @@
   system.autoUpgrade.enable = true;
   system.autoUpgrade.allowReboot = true;
 
+  nix = {
+    settings.experimental-features = [ "nix-command" "flakes" ];
+  };
+
   imports =
     [ 
       /etc/nixos/hardware-configuration.nix
@@ -45,12 +49,6 @@
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
   services.blueman.enable = true;
-  #hardware.bluetooth.settings = {
-  #  General = {
-  #    Experimental = true;
-  #  };
-  #};
-
 
   time.timeZone = "Australia/Sydney";
   i18n.defaultLocale = "en_AU.UTF-8";
@@ -66,23 +64,23 @@
     LC_TIME = "en_AU.UTF-8";
   };
 
-  #programs.sway = {
-  #    enable = true;
-  #    wrapperFeatures.gtk = true; # To support GTK apps under Wayland
-  #    extraPackages = with pkgs; [
-  #      swaylock
-  #      swayidle
-  #      waybar     # for a status bar
-  #      wl-clipboard # for clipboard functionality
-  #      grim slurp # for screenshots
-  #      wf-recorder # for screen recording (optional)
-  #      brightnessctl # for brightness key support
-  #      playerctl  # for media control
-  #      wmenu
-  #      i3status
-  #      swaynotificationcenter
-  #    ];
-  #};
+  programs.sway = {
+      enable = true;
+      wrapperFeatures.gtk = true; # To support GTK apps under Wayland
+      extraPackages = with pkgs; [
+        swaylock
+        swayidle
+        waybar     
+        wl-clipboard 
+        grim slurp 
+        wf-recorder 
+        brightnessctl 
+        playerctl  
+        wmenu
+        i3status
+        swaynotificationcenter
+      ];
+  };
   security.polkit.enable = true;
 
 
@@ -105,7 +103,6 @@
   services.printing.enable = true;
   programs.system-config-printer.enable = true;
   services.samba.enable = true;
-
   services.printing.drivers = [
     pkgs.cnijfilter2
     pkgs.gutenprint
@@ -140,9 +137,6 @@
     isNormalUser = true;
     description = "lucas";
     extraGroups = [ "networkmanager" "wheel" "docker" "kvm" "vboxusers" ];
-    packages = with pkgs; [
-    #  thunderbird
-    ];
     shell = pkgs.zsh;
   };
 
@@ -194,15 +188,16 @@
      swaysettings sway-launcher-desktop jetbrains-mono dive podman-tui
      docker-compose freerdp dialog libnotify podman podman-compose
      xwayland ncdu gtk3 libnotify nss xorg.libXtst xdg-utils dpkg
-     brasero inetutils
+     brasero inetutils sops
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
      (import ./ohmyzsh.nix {inherit pkgs;})
      (import ./zls-repo.nix {inherit pkgs;})
      (import ./winapps-setup.nix {inherit pkgs;})
-     # WinApps packages
      inputs.winapps.packages."${pkgs.system}".winapps
-     inputs.winapps.packages."${pkgs.system}".winapps-launcher # optional
+     inputs.winapps.packages."${pkgs.system}".winapps-launcher
+     inputs.nixd.packages."${pkgs.system}".nixd
+     inputs.nil.packages."${pkgs.system}".nil
   ];
 
   services.gvfs = {
@@ -234,25 +229,19 @@
   virtualisation = {
     podman = {
       enable = true;
-
-      # Create a `docker` alias for podman, to use it as a drop-in replacement
       dockerCompat = true;
-
-       # Required for containers under podman-compose to be able to talk to each other.
       defaultNetwork.settings.dns_enabled = true;
     };
   };
-  # Undo any external blacklists that disable KVM
+
   boot.blacklistedKernelModules = lib.mkForce [ ];
   boot.extraModprobeConfig = ''
     blacklist # cleared by NixOS config
   '';
 
-  # Ensure any non-Nix-managed blacklist file is removed on activation
   system.activationScripts.removeKvmBlacklist.text = ''
     rm -f /etc/modprobe.d/blacklist-kvm.conf
   '';
-  # Ensure KVM is available on AMD CPUs. The correct module name is kvm_amd.
   boot.kernelModules = [ "kvm" "kvm_amd" ];
 
   # Some programs need SUID wrappers, can be configured further or are
