@@ -191,7 +191,6 @@
      brasero inetutils sops
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
-     (import ./ohmyzsh.nix {inherit pkgs;})
      (import ./zls-repo.nix {inherit pkgs;})
      (import ./winapps-setup.nix {inherit pkgs;})
      inputs.winapps.packages."${pkgs.system}".winapps
