@@ -1,6 +1,7 @@
 { config, pkgs, lib, inputs, ... }:
 
 {
+  environment.variables.EDITOR = "nvim";
   nixpkgs.config.allowUnsupportedSystem = true;
 
   nix.extraOptions = ''
@@ -19,6 +20,18 @@
       inputs.sops-nix.nixosModules.sops
     ];
   
+  hardware.graphics = {
+      enable = true;
+  };
+
+  hardware.nvidia = {
+    modesetting = true;
+    open = false;
+    nvidiaSettings = true;
+    package = config.boot.kernelPackages.nvidiaPackages.legacy_340;
+  };
+
+
   sops.defaultSopsFile = ../secrets/secrets.yaml;
   sops.defaultSopsFormat = "yaml";
   sops.age.keyFile = "/home/lucas/.config/sops/age/keys.txt";
@@ -86,7 +99,7 @@
 
   services.xserver = {
     enable = true;
-
+    videoDrivers = ["nvidia"];
     displayManager = {
       lightdm.enable = true;
     };

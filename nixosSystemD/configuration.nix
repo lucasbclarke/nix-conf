@@ -20,6 +20,10 @@
       inputs.sops-nix.nixosModules.sops
     ];
 
+  hardware.graphics = {
+      enable = true;
+  };
+
   sops.defaultSopsFile = ../secrets/secrets.yaml;
   sops.defaultSopsFormat = "yaml";
   sops.age.keyFile = "/home/lucas/.config/sops/age/keys.txt";
