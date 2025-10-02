@@ -186,7 +186,7 @@
 
 
   nixpkgs.config.allowUnfree = true;
-  nixpkgs.config.nvidia.acceptLiscence = true;
+  nixpkgs.config.nvidia.acceptLicense = true;
 
   nixpkgs.config.permittedInsecurePackages = [
     "python-2.7.18.8"
