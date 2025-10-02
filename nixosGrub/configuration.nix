@@ -24,9 +24,6 @@
   sops.defaultSopsFormat = "yaml";
   sops.age.keyFile = "/home/lucas/.config/sops/age/keys.txt";
   sops.secrets.example-key = { };
-  sops.secrets."my-service/my_subdir/my_secret" = {
-      owner = "lucas";
-  };
 
   boot.loader.grub.enable = true;
   boot.loader.grub.device = "/dev/sda";
