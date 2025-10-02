@@ -3,6 +3,7 @@
 {
   environment.variables.EDITOR = "nvim";
   nixpkgs.config.allowUnsupportedSystem = true;
+  nixpkgs.config.allowBroken = true;
 
   nix.extraOptions = ''
     experimental-features = nix-command flakes 
