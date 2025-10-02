@@ -47,17 +47,38 @@
       nixosConfigurations = {
           nixosSystemD = lib.nixosSystem {
             inherit system;
-            modules = [./nixosSystemD/configuration.nix];
+            modules = [
+              ./nixosSystemD/configuration.nix
+              ({ pkgs, ... }: {
+                environment.systemPackages = [
+                  ghostty.packages.${pkgs.stdenv.hostPlatform.system}.default
+                ];
+              })  
+            ];
             specialArgs = { inherit inputs; };
           };
           nixosGrub = lib.nixosSystem {
             inherit system;
-            modules = [./nixosGrub/configuration.nix];
+            modules = [
+              ./nixosGrub/configuration.nix
+              ({ pkgs, ... }: {
+                environment.systemPackages = [
+                  ghostty.packages.${pkgs.stdenv.hostPlatform.system}.default
+                ];
+              })  
+            ];
             specialArgs = { inherit inputs; };
           };
           nixosVm = lib.nixosSystem {
             inherit system;
-            modules = [./nixosVm/configuration.nix];
+            modules = [
+              ./nixosVm/configuration.nix
+              ({ pkgs, ... }: {
+                environment.systemPackages = [
+                  ghostty.packages.${pkgs.stdenv.hostPlatform.system}.default
+                ];
+              })  
+            ];
             specialArgs = { inherit inputs; };
           };
       };
