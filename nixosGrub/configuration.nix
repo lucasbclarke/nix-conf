@@ -262,12 +262,7 @@
   networking.firewall.enable = false;
 
   system.stateVersion = "24.11";
-  hardware.opengl.enable = true;
-  services.xserver.videoDrivers = [ "nvidia" ];
-  hardware.nvidia = {
-    modesetting.enable = true;
-    open = true;  # or false for proprietary driver
-    nvidiaSettings = true;
-  };
 
+  hardware.opengl.enable = true;
+  services.xserver.videoDrivers = [ "nouveau" ];
 }
