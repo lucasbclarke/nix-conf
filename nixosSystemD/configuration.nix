@@ -28,9 +28,6 @@
   sops.defaultSopsFormat = "yaml";
   sops.age.keyFile = "/home/lucas/.config/sops/age/keys.txt";
   sops.secrets.example-key = { };
-  sops.secrets."my-service/my_subdir/my_secret" = {
-      owner = "lucas";
-  };
   
   boot.loader.systemd-boot.enable = lib.mkForce true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -187,7 +184,7 @@
      swaysettings sway-launcher-desktop jetbrains-mono dive podman-tui
      docker-compose freerdp dialog libnotify podman podman-compose
      xwayland ncdu gtk3 libnotify nss xorg.libXtst xdg-utils dpkg
-     brasero ghostty networkmanagerapplet ripgrep inetutils sops
+     brasero networkmanagerapplet ripgrep inetutils sops
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
      (import ./zls-repo.nix {inherit pkgs;})
