@@ -193,6 +193,7 @@
      (import ./sud.nix {inherit pkgs;})
      (import ./zls-repo.nix {inherit pkgs;})
      (import ./winapps-setup.nix {inherit pkgs;})
+     (import ./hm-setup.nix {inherit pkgs;})
      inputs.winapps.packages."${pkgs.system}".winapps
      inputs.winapps.packages."${pkgs.system}".winapps-launcher
      inputs.nixd.packages."${pkgs.system}".nixd
