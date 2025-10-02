@@ -3,7 +3,6 @@
 {
   environment.variables.EDITOR = "nvim";
   nixpkgs.config.allowUnsupportedSystem = true;
-  nixpkgs.config.allowBroken = true;
 
   nix.extraOptions = ''
     experimental-features = nix-command flakes 
@@ -21,18 +20,6 @@
       inputs.sops-nix.nixosModules.sops
     ];
   
-  hardware.graphics = {
-      enable = true;
-  };
-
-  hardware.nvidia = {
-    modesetting.enable = true;
-    open = false;
-    nvidiaSettings = true;
-    package = config.boot.kernelPackages.nvidiaPackages.legacy_340;
-  };
-
-
   sops.defaultSopsFile = ../secrets/secrets.yaml;
   sops.defaultSopsFormat = "yaml";
   sops.age.keyFile = "/home/lucas/.config/sops/age/keys.txt";
@@ -100,7 +87,6 @@
 
   services.xserver = {
     enable = true;
-    videoDrivers = ["nvidia"];
     displayManager = {
       lightdm.enable = true;
     };
@@ -186,7 +172,6 @@
 
 
   nixpkgs.config.allowUnfree = true;
-  nixpkgs.config.nvidia.acceptLicense = true;
 
   nixpkgs.config.permittedInsecurePackages = [
     "python-2.7.18.8"
@@ -203,7 +188,7 @@
      swaysettings sway-launcher-desktop jetbrains-mono dive podman-tui
      docker-compose freerdp dialog libnotify podman podman-compose
      xwayland ncdu gtk3 libnotify nss xorg.libXtst xdg-utils dpkg
-     brasero inetutils sops
+     brasero inetutils sops ghostty
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
      (import ./zls-repo.nix {inherit pkgs;})
@@ -223,9 +208,10 @@
 
   services.cloudflare-warp.enable = true;
 
-  virtualisation.virtualbox.host.enable = true;
-  users.extraGroups.vboxusers.members = [ "lucas" ];
-  virtualisation.virtualbox.host.enableExtensionPack = true;
+  programs.virt-manager.enable = true;
+  users.groups.libvirtd.members = ["lucas"];
+  virtualisation.libvirtd.enable = true;
+  virtualisation.spiceUSBRedirection.enable = true;
 
   nix.settings = {
     substituters = [ "https://winapps.cachix.org/" ];
