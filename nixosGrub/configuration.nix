@@ -1,7 +1,52 @@
 { config, pkgs, lib, inputs, ... }:
+let
+  swayConfig = pkgs.writeText "greetd-sway-config" ''
+    # `-l` activates layer-shell mode. Notice that `swaymsg exit` will run after gtkgreet.
+    exec "${pkgs.greetd.gtkgreet}/bin/gtkgreet -l ; swaymsg exit"
+    bindsym Mod4+shift+e exec swaynag \
+      -t warning \
+      -m 'What do you want to do?' \
+      -b 'Poweroff' 'systemctl poweroff' \
+      -b 'Reboot' 'systemctl reboot'
+  '';
 
+  username = config.sops.secrets.fileshare_username.path;
+  password = config.sops.secrets.fileshare_password.path;
+
+in
 {
-  environment.variables.EDITOR = "nvim";
+  services.greetd = {
+    enable = true;
+    settings = {
+      default_session = {
+        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --remember --time --cmd sway";
+        user = "lucas";
+      };
+    };
+  };
+
+  environment.etc."greetd/environments".text = ''
+    sway
+    zsh
+  '';
+
+
+  environment.variables = {
+    EDITOR = "nvim";
+    # Force dark mode for GTK applications
+    GTK_THEME = "Adwaita-dark";
+    # Force dark mode for Qt applications
+    QT_STYLE_OVERRIDE = "gtk2";
+    # Set color scheme preference to dark
+    COLORTERM = "truecolor";
+    # Additional dark mode environment variables
+    GTK_APPLICATION_PREFER_DARK_THEME = "1";
+    QT_QPA_PLATFORMTHEME = "gtk2";
+    # Additional dark mode settings
+    QT_AUTO_SCREEN_SCALE_FACTOR = "1";
+    QT_SCALE_FACTOR = "1";
+  };
+
   nixpkgs.config.allowUnsupportedSystem = true;
 
   nix.extraOptions = ''
@@ -20,10 +65,22 @@
       inputs.sops-nix.nixosModules.sops
     ];
   
-  sops.defaultSopsFile = ../secrets/secrets.yaml;
+  sops.defaultSopsFile = /home/lucas/nix-conf/secrets/secrets.yaml;
   sops.defaultSopsFormat = "yaml";
   sops.age.keyFile = "/home/lucas/.config/sops/age/keys.txt";
   sops.secrets.example-key = { };
+
+  sops.secrets.fileshare_username = {
+    sopsFile = /home/lucas/nix-conf/secrets/secrets.yaml;
+    key = "fileshare_username";
+    owner = "lucas";
+  };
+
+  sops.secrets.fileshare_password = {
+    sopsFile = /home/lucas/nix-conf/secrets/secrets.yaml;
+    key = "fileshare_password";
+    owner = "lucas";
+  };
 
   boot.loader.grub.enable = true;
   boot.loader.grub.device = "/dev/sda";
@@ -185,7 +242,7 @@
      swaysettings sway-launcher-desktop jetbrains-mono dive podman-tui
      docker-compose freerdp dialog libnotify podman podman-compose
      xwayland ncdu gtk3 libnotify nss xorg.libXtst xdg-utils dpkg
-     brasero inetutils sops 
+     brasero inetutils sops cifs-utils curlftpfs fuse3 lftp     
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
      (import ./zls-repo.nix {inherit pkgs;})
@@ -241,6 +298,55 @@
     rm -f /etc/modprobe.d/blacklist-kvm.conf
   '';
   boot.kernelModules = [ "kvm" "kvm_amd" ];
+
+  services.udev.extraRules = ''
+    KERNEL=="fuse", MODE="0666"
+  '';
+
+  fileSystems."/mnt/network-repo" = {
+    device = "//192.168.0.1/g";
+    fsType = "cifs";
+    options = [
+      "credentials=/etc/cifs-credentials"  
+        "uid=1000"
+        "gid=100"  
+        "iocharset=utf8"
+        "file_mode=0777"
+        "dir_mode=0777"
+        "vers=2.0"
+        "_netdev"
+        "x-systemd.automount"
+    ];
+  };
+
+  systemd.services.ftpSync = {
+    description = "Sync FTP server contents to local directory";
+    before = [ "greetd.service" ];
+    after = [ "network-online.target" ];
+    wants = [ "network-online.target" ];
+    wantedBy = [ "default.target" ];
+
+    serviceConfig = {
+      Type = "oneshot";
+      User = "lucas";
+      Group = "users";
+      ExecStartPre = "/run/current-system/sw/bin/mkdir -p /mnt/network-remote-repo";
+      ExecStart = ''
+ /run/current-system/sw/bin/lftp ftp://${username}:${password}@143.238.166.55:21 . /mnt/network-remote-repo; quit"
+      '';
+      RemainAfterExit = true;
+    };
+  };
+
+  systemd.timers.ftpSync = {
+    description = "Timer for FTP sync";
+    wantedBy = [ "timers.target" ];
+    timerConfig = {
+      OnBootSec = "5min";
+      OnUnitActiveSec = "1h";
+      Persistent = true;
+    };
+  };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
