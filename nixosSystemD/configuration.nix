@@ -223,8 +223,7 @@ in
      swaysettings sway-launcher-desktop jetbrains-mono dive podman-tui
      docker-compose freerdp dialog libnotify podman podman-compose
      xwayland ncdu gtk3 libnotify nss xorg.libXtst xdg-utils dpkg
-     brasero networkmanagerapplet ripgrep inetutils sops cifs-utils
-     curlftpfs fuse3 lftp
+     brasero networkmanagerapplet ripgrep inetutils sops
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
      (import ./zls-repo.nix {inherit pkgs;})
