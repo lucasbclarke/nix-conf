@@ -9,10 +9,6 @@ let
       -b 'Poweroff' 'systemctl poweroff' \
       -b 'Reboot' 'systemctl reboot'
   '';
-
-  username = config.sops.secrets.fileshare_username.path;
-  password = config.sops.secrets.fileshare_password.path;
-
 in
 {
   services.greetd = {
@@ -72,18 +68,6 @@ in
   sops.age.keyFile = "/home/lucas/.config/sops/age/keys.txt";
   sops.secrets.example-key = { };
 
-  sops.secrets.fileshare_username = {
-    sopsFile = /home/lucas/nix-conf/secrets/secrets.yaml;
-    key = "fileshare_username";
-    owner = "lucas";
-  };
-
-  sops.secrets.fileshare_password = {
-    sopsFile = /home/lucas/nix-conf/secrets/secrets.yaml;
-    key = "fileshare_password";
-    owner = "lucas";
-  };
-  
   boot.loader.systemd-boot.enable = lib.mkForce true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.grub.enable = lib.mkForce false;
@@ -297,55 +281,6 @@ in
   '';
 
   boot.kernelModules = [ "kvm" "kvm_amd" "fuse" ];
-
-  services.udev.extraRules = ''
-    KERNEL=="fuse", MODE="0666"
-  '';
-
-  fileSystems."/mnt/network-repo" = {
-    device = "//192.168.0.1/g";
-    fsType = "cifs";
-    options = [
-      "credentials=/etc/cifs-credentials"  
-        "uid=1000"
-        "gid=100"  
-        "iocharset=utf8"
-        "file_mode=0777"
-        "dir_mode=0777"
-        "vers=2.0"
-        "_netdev"
-        "x-systemd.automount"
-    ];
-  };
-
-  systemd.services.ftpSync = {
-    description = "Sync FTP server contents to local directory";
-    before = [ "greetd.service" ];
-    after = [ "network-online.target" ];
-    wants = [ "network-online.target" ];
-    wantedBy = [ "default.target" ];
-
-    serviceConfig = {
-      Type = "oneshot";
-      User = "lucas";
-      Group = "users";
-      ExecStartPre = "/run/current-system/sw/bin/mkdir -p /mnt/network-remote-repo";
-      ExecStart = ''
- /run/current-system/sw/bin/lftp ftp://${username}:${password}@143.238.166.55:21 . /mnt/network-remote-repo; quit"
-      '';
-      RemainAfterExit = true;
-    };
-  };
-
-  systemd.timers.ftpSync = {
-    description = "Timer for FTP sync";
-    wantedBy = [ "timers.target" ];
-    timerConfig = {
-      OnBootSec = "5min";
-      OnUnitActiveSec = "1h";
-      Persistent = true;
-    };
-  };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

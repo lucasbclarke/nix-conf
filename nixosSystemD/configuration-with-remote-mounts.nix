@@ -9,6 +9,10 @@ let
       -b 'Poweroff' 'systemctl poweroff' \
       -b 'Reboot' 'systemctl reboot'
   '';
+
+  username = config.sops.secrets.fileshare_username.path;
+  password = config.sops.secrets.fileshare_password.path;
+
 in
 {
   services.greetd = {
@@ -26,7 +30,6 @@ in
     zsh
   '';
 
-
   environment.variables = {
     EDITOR = "nvim";
     # Force dark mode for GTK applications
@@ -42,7 +45,6 @@ in
     QT_AUTO_SCREEN_SCALE_FACTOR = "1";
     QT_SCALE_FACTOR = "1";
   };
-
   nixpkgs.config.allowUnsupportedSystem = true;
 
   nix.extraOptions = ''
@@ -60,19 +62,35 @@ in
       /etc/nixos/hardware-configuration.nix
       inputs.sops-nix.nixosModules.sops
     ];
-  
+
+  hardware.graphics = {
+      enable = true;
+  };
+
   sops.defaultSopsFile = /home/lucas/nix-conf/secrets/secrets.yaml;
   sops.defaultSopsFormat = "yaml";
   sops.age.keyFile = "/home/lucas/.config/sops/age/keys.txt";
   sops.secrets.example-key = { };
 
-  boot.loader.grub.enable = true;
-  boot.loader.grub.device = "/dev/sda";
-  boot.loader.grub.useOSProber = true;
+  sops.secrets.fileshare_username = {
+    sopsFile = /home/lucas/nix-conf/secrets/secrets.yaml;
+    key = "fileshare_username";
+    owner = "lucas";
+  };
+
+  sops.secrets.fileshare_password = {
+    sopsFile = /home/lucas/nix-conf/secrets/secrets.yaml;
+    key = "fileshare_password";
+    owner = "lucas";
+  };
+  
+  boot.loader.systemd-boot.enable = lib.mkForce true;
+  boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.grub.enable = lib.mkForce false;
 
   time.hardwareClockInLocalTime = true;
 
-  networking.hostName = "nixosGrub";
+  networking.hostName = "nixosSystemD";
   #networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -105,7 +123,7 @@ in
 
   programs.sway = {
       enable = true;
-      wrapperFeatures.gtk = true; # To support GTK apps under Wayland
+      wrapperFeatures.gtk = true; 
       extraPackages = with pkgs; [
         swaylock
         swayidle
@@ -120,24 +138,23 @@ in
         swaynotificationcenter
       ];
   };
+  
   security.polkit.enable = true;
-
 
   services.xserver = {
     enable = true;
-    displayManager = {
-      lightdm.enable = true;
-    };
+
+    #displayManager = {
+    #  lightdm.enable = true;
+    #};
 
   };
 
-  # Configure keymap in X11
   services.xserver.xkb = {
     layout = "au";
     variant = "";
   };
 
-  # Enable CUPS to print documents.
   services.printing.enable = true;
   programs.system-config-printer.enable = true;
   services.samba.enable = true;
@@ -152,7 +169,6 @@ in
     nssmdns4 = true;
   };
 
-  # Enable sound with pipewire.
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
@@ -167,9 +183,6 @@ in
     # no need to redefine it in your config for now)
     #media-session.enable = true;
   };
-
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
 
   users.users.lucas = {
     isNormalUser = true;
@@ -226,7 +239,8 @@ in
      swaysettings sway-launcher-desktop jetbrains-mono dive podman-tui
      docker-compose freerdp dialog libnotify podman podman-compose
      xwayland ncdu gtk3 libnotify nss xorg.libXtst xdg-utils dpkg
-     brasero inetutils sops cifs-utils curlftpfs fuse3 lftp     
+     brasero networkmanagerapplet ripgrep inetutils sops cifs-utils
+     curlftpfs fuse3 lftp
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
      (import ./zls-repo.nix {inherit pkgs;})
@@ -254,7 +268,7 @@ in
   nix.settings = {
     substituters = [ "https://winapps.cachix.org/" ];
     trusted-public-keys = [ "winapps.cachix.org-1:HI82jWrXZsQRar/PChgIx1unmuEsiQMQq+zt05CD36g=" ];
-    trusted-users = [ "lucas" ]; # replace with your username
+    trusted-users = [ "lucas" ]; 
   };
 
   fonts = {
@@ -281,7 +295,57 @@ in
   system.activationScripts.removeKvmBlacklist.text = ''
     rm -f /etc/modprobe.d/blacklist-kvm.conf
   '';
-  boot.kernelModules = [ "kvm" "kvm_amd" ];
+
+  boot.kernelModules = [ "kvm" "kvm_amd" "fuse" ];
+
+  services.udev.extraRules = ''
+    KERNEL=="fuse", MODE="0666"
+  '';
+
+  fileSystems."/mnt/network-repo" = {
+    device = "//192.168.0.1/g";
+    fsType = "cifs";
+    options = [
+      "credentials=/etc/cifs-credentials"  
+        "uid=1000"
+        "gid=100"  
+        "iocharset=utf8"
+        "file_mode=0777"
+        "dir_mode=0777"
+        "vers=2.0"
+        "_netdev"
+        "x-systemd.automount"
+    ];
+  };
+
+  systemd.services.ftpSync = {
+    description = "Sync FTP server contents to local directory";
+    before = [ "greetd.service" ];
+    after = [ "network-online.target" ];
+    wants = [ "network-online.target" ];
+    wantedBy = [ "default.target" ];
+
+    serviceConfig = {
+      Type = "oneshot";
+      User = "lucas";
+      Group = "users";
+      ExecStartPre = "/run/current-system/sw/bin/mkdir -p /mnt/network-remote-repo";
+      ExecStart = ''
+ /run/current-system/sw/bin/lftp ftp://${username}:${password}@143.238.166.55:21 . /mnt/network-remote-repo; quit"
+      '';
+      RemainAfterExit = true;
+    };
+  };
+
+  systemd.timers.ftpSync = {
+    description = "Timer for FTP sync";
+    wantedBy = [ "timers.target" ];
+    timerConfig = {
+      OnBootSec = "5min";
+      OnUnitActiveSec = "1h";
+      Persistent = true;
+    };
+  };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -304,6 +368,4 @@ in
 
   system.stateVersion = "24.11";
 
-  hardware.opengl.enable = true;
-  services.xserver.videoDrivers = [ "nouveau" ];
 }
