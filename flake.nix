@@ -53,6 +53,7 @@
             inherit system;
             modules = [
               ./nixosSystemD/configuration.nix
+              sops-nix.nixosModules.sops
               ({ pkgs, ... }: {
                 environment.systemPackages = [
                   ghostty.packages.${pkgs.stdenv.hostPlatform.system}.default
@@ -65,6 +66,7 @@
             inherit system;
             modules = [
               ./nixosGrub/configuration.nix
+              sops-nix.nixosModules.sops
               ({ pkgs, ... }: {
                 environment.systemPackages = [
                   ghostty.packages.${pkgs.stdenv.hostPlatform.system}.default
@@ -77,6 +79,7 @@
             inherit system;
             modules = [
               ./nixosVm/configuration.nix
+              sops-nix.nixosModules.sops
               ({ pkgs, ... }: {
                 environment.systemPackages = [
                   ghostty.packages.${pkgs.stdenv.hostPlatform.system}.default

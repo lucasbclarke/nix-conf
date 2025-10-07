@@ -9,6 +9,10 @@ let
       -b 'Poweroff' 'systemctl poweroff' \
       -b 'Reboot' 'systemctl reboot'
   '';
+
+  username = config.sops.secrets.fileshare_username.path;
+  password = config.sops.secrets.fileshare_password.path;
+
 in
 {
   services.greetd = {
@@ -63,10 +67,22 @@ in
       enable = true;
   };
 
-  sops.defaultSopsFile = ../secrets/secrets.yaml;
+  sops.defaultSopsFile = /home/lucas/nix-conf/secrets/secrets.yaml;
   sops.defaultSopsFormat = "yaml";
   sops.age.keyFile = "/home/lucas/.config/sops/age/keys.txt";
   sops.secrets.example-key = { };
+
+  sops.secrets.fileshare_username = {
+    sopsFile = /home/lucas/nix-conf/secrets/secrets.yaml;
+    key = "fileshare_username";
+    owner = "lucas";
+  };
+
+  sops.secrets.fileshare_password = {
+    sopsFile = /home/lucas/nix-conf/secrets/secrets.yaml;
+    key = "fileshare_password";
+    owner = "lucas";
+  };
   
   boot.loader.systemd-boot.enable = lib.mkForce true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -315,8 +331,8 @@ in
       Group = "users";
       ExecStartPre = "/run/current-system/sw/bin/mkdir -p /mnt/network-remote-repo";
       ExecStart = ''
-        /run/current-system/sw/bin/lftp -c "set ftp:list-options -a; open ftp://admin:4f6d1b5cd5@143.238.166.55:21; mirror --delete --verbose . /mnt/network-remote-repo; quit"
-        '';
+ /run/current-system/sw/bin/lftp ftp://${username}:${password}@143.238.166.55:21 . /mnt/network-remote-repo; quit"
+      '';
       RemainAfterExit = true;
     };
   };
