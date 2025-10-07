@@ -5,9 +5,6 @@
     local capabilities = vim.lsp.protocol.make_client_capabilities()
     capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
-    local lspconfig = require('lspconfig')
-
-
     --------  LUASNIP  --------
     local luasnip = require 'luasnip'
     require('luasnip.loaders.from_vscode').lazy_load()
@@ -79,7 +76,7 @@
     })
 
     -- Configure Lua LS separately to use your custom command
-    require('lspconfig').lua_ls.setup({
+    vim.lsp.config.lua_ls = {
       mason = false,  -- Disable Mason management
       cmd = { "lua-language-server" },  -- Use your NixOS version
       settings = {
@@ -95,10 +92,11 @@
           },
         },
       }
-    })
+    }
+    vim.lsp.enable('lua_ls')
 
 
-    require('lspconfig').zls.setup({
+    vim.lsp.config.zls = {
       mason = false,
       cmd = { "zls" },
       settings = {
@@ -106,23 +104,27 @@
           completion_label_details = false;
         }
       }
-    })
+    }
+    vim.lsp.enable('zls')
 
-    require('lspconfig').clangd.setup({
+    vim.lsp.config.clangd = {
       mason = false,
       cmd = { "clangd" },
-    })
+    }
+    vim.lsp.enable('clangd')
 
     -- Nix-related servers
-    require('lspconfig').nixd.setup({
+    vim.lsp.config.nixd = {
       mason = false,
       cmd = { "nixd" },
-    })
+    }
+    vim.lsp.enable('nixd')
 
-    require('lspconfig').nil_ls.setup({
+    vim.lsp.config.nil_ls = {
       mason = false,
       cmd = { "nil" },
-    })
+    }
+    vim.lsp.enable('nil_ls')
 
     pcall(require('telescope').load_extension, 'fzf')
   '';

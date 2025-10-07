@@ -1,7 +1,46 @@
 { config, pkgs, lib, inputs, ... }:
-
+let
+  swayConfig = pkgs.writeText "greetd-sway-config" ''
+    # `-l` activates layer-shell mode. Notice that `swaymsg exit` will run after gtkgreet.
+    exec "${pkgs.greetd.gtkgreet}/bin/gtkgreet -l ; swaymsg exit"
+    bindsym Mod4+shift+e exec swaynag \
+      -t warning \
+      -m 'What do you want to do?' \
+      -b 'Poweroff' 'systemctl poweroff' \
+      -b 'Reboot' 'systemctl reboot'
+  '';
+in
 {
-  environment.variables.EDITOR = "nvim";
+  services.greetd = {
+    enable = true;
+    settings = {
+      default_session = {
+        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --remember --time --cmd sway";
+        user = "lucas";
+      };
+    };
+  };
+
+  environment.etc."greetd/environments".text = ''
+    sway
+    zsh
+  '';
+
+  environment.variables = {
+    EDITOR = "nvim";
+    # Force dark mode for GTK applications
+    GTK_THEME = "Adwaita-dark";
+    # Force dark mode for Qt applications
+    QT_STYLE_OVERRIDE = "gtk2";
+    # Set color scheme preference to dark
+    COLORTERM = "truecolor";
+    # Additional dark mode environment variables
+    GTK_APPLICATION_PREFER_DARK_THEME = "1";
+    QT_QPA_PLATFORMTHEME = "gtk2";
+    # Additional dark mode settings
+    QT_AUTO_SCREEN_SCALE_FACTOR = "1";
+    QT_SCALE_FACTOR = "1";
+  };
   nixpkgs.config.allowUnsupportedSystem = true;
 
   nix.extraOptions = ''
@@ -83,15 +122,15 @@
         swaynotificationcenter
       ];
   };
-
+  
   security.polkit.enable = true;
 
   services.xserver = {
     enable = true;
 
-    displayManager = {
-      lightdm.enable = true;
-    };
+    #displayManager = {
+    #  lightdm.enable = true;
+    #};
 
   };
 
@@ -184,7 +223,8 @@
      swaysettings sway-launcher-desktop jetbrains-mono dive podman-tui
      docker-compose freerdp dialog libnotify podman podman-compose
      xwayland ncdu gtk3 libnotify nss xorg.libXtst xdg-utils dpkg
-     brasero networkmanagerapplet ripgrep inetutils sops
+     brasero networkmanagerapplet ripgrep inetutils sops gdb
+     cifs-utils curlftpfs fuse3 lftp     
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
      (import ./zls-repo.nix {inherit pkgs;})
@@ -239,7 +279,56 @@
   system.activationScripts.removeKvmBlacklist.text = ''
     rm -f /etc/modprobe.d/blacklist-kvm.conf
   '';
-  boot.kernelModules = [ "kvm" "kvm_amd" ];
+
+  boot.kernelModules = [ "kvm" "kvm_amd" "fuse" ];
+
+  services.udev.extraRules = ''
+    KERNEL=="fuse", MODE="0666"
+  '';
+
+  fileSystems."/mnt/network-repo" = {
+    device = "//192.168.0.1/g";
+    fsType = "cifs";
+    options = [
+      "credentials=/etc/cifs-credentials"  
+        "uid=1000"
+        "gid=100"  
+        "iocharset=utf8"
+        "file_mode=0777"
+        "dir_mode=0777"
+        "vers=2.0"
+        "_netdev"
+        "x-systemd.automount"
+    ];
+  };
+
+  systemd.services.ftpSync = {
+    description = "Sync FTP server contents to local directory";
+    after = [ "network-online.target" ];
+    wants = [ "network-online.target" ];
+    wantedBy = [ "multi-user.target" ];
+
+    serviceConfig = {
+      Type = "oneshot";
+      User = "lucas";
+      Group = "users";
+      ExecStartPre = "/run/current-system/sw/bin/mkdir -p /mnt/network-remote-repo";
+      ExecStart = ''
+        /run/current-system/sw/bin/lftp -c "set ftp:list-options -a; open ftp://admin:4f6d1b5cd5@143.238.166.55:21; mirror --delete --verbose . /mnt/network-remote-repo/G; quit"
+        '';
+      RemainAfterExit = true;
+    };
+  };
+
+  systemd.timers.ftpSync = {
+    description = "Timer for FTP sync";
+    wantedBy = [ "timers.target" ];
+    timerConfig = {
+      OnBootSec = "5min";
+      OnUnitActiveSec = "1h";
+      Persistent = true;
+    };
+  };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

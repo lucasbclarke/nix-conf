@@ -13,7 +13,7 @@
 
     nixvim = {
       url = "github:nix-community/nixvim";
-      inputs.nixpkgs.follows = "nixpkgs";
+      #inputs.nixpkgs.follows = "nixpkgs";
     };
     
     nixd = {
@@ -34,6 +34,10 @@
     ghostty = {
       url = "github:ghostty-org/ghostty";
       inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    zig = {
+      url = "github:mitchellh/zig-overlay";
     };
   };
 
