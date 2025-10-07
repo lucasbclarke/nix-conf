@@ -304,9 +304,10 @@ in
 
   systemd.services.ftpSync = {
     description = "Sync FTP server contents to local directory";
+    before = [ "greetd.service" ];
     after = [ "network-online.target" ];
     wants = [ "network-online.target" ];
-    wantedBy = [ "multi-user.target" ];
+    wantedBy = [ "default.target" ];
 
     serviceConfig = {
       Type = "oneshot";
@@ -314,7 +315,7 @@ in
       Group = "users";
       ExecStartPre = "/run/current-system/sw/bin/mkdir -p /mnt/network-remote-repo";
       ExecStart = ''
-        /run/current-system/sw/bin/lftp -c "set ftp:list-options -a; open ftp://admin:4f6d1b5cd5@143.238.166.55:21; mirror --delete --verbose . /mnt/network-remote-repo/G; quit"
+        /run/current-system/sw/bin/lftp -c "set ftp:list-options -a; open ftp://admin:4f6d1b5cd5@143.238.166.55:21; mirror --delete --verbose . /mnt/network-remote-repo; quit"
         '';
       RemainAfterExit = true;
     };
