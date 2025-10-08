@@ -237,14 +237,10 @@ in
 
   services.cloudflare-warp.enable = true;
 
-  #programs.virt-manager.enable = true;
-  #users.groups.libvirtd.members = ["lucas"];
-  #virtualisation.libvirtd.enable = true;
-  #virtualisation.spiceUSBRedirection.enable = true;
-
-  virtualisation.virtualbox.host.enable = true;
-  users.extraGroups.vboxusers.members = [ "user-with-access-to-virtualbox" ];
-  virtualisation.virtualbox.host.enableExtensionPack = true;
+  programs.virt-manager.enable = true;
+  users.groups.libvirtd.members = ["lucas"];
+  virtualisation.libvirtd.enable = true;
+  virtualisation.spiceUSBRedirection.enable = true;
 
   nix.settings = {
     substituters = [ "https://winapps.cachix.org/" ];

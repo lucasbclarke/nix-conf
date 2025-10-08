@@ -212,9 +212,6 @@ in
   };
   services.udisks2.enable = true;
 
-  virtualisation.virtualbox.guest.enable = true;
-  virtualisation.virtualbox.guest.dragAndDrop = true;
-
   fonts = {
     fontconfig.enable = true;
       packages = with pkgs; [
