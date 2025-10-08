@@ -7,6 +7,8 @@ in
   home.packages = [ pkgs.sqlite ];
   programs.nixvim = {  
 
+    lsp.servers.zls.enable = true;
+
     extraPlugins = [
 	pkgs.vimPlugins.rose-pine
 	pkgs.vimPlugins.tokyonight-nvim
