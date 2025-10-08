@@ -10,5 +10,4 @@ mkdir zig-latest-linux-x86_64
 tar -xf zig-latest-linux-x86_64.tar.xz --strip-components=1 -C zig-latest-linux-x86_64
 sudo rm -rf /usr/bin/zig
 sudo ln -s ~/zig-latest-linux-x86_64/zig /usr/bin/zig
-sudo cp /etc/nixos/hardware-configuration.nix ~/nix-conf/nixosVm/hardware-configuration.nix
 ''

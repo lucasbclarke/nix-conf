@@ -41,6 +41,7 @@ in
     QT_AUTO_SCREEN_SCALE_FACTOR = "1";
     QT_SCALE_FACTOR = "1";
   };
+
   nixpkgs.config.allowUnsupportedSystem = true;
 
   nix.extraOptions = ''
@@ -125,14 +126,7 @@ in
   
   security.polkit.enable = true;
 
-  services.xserver = {
-    enable = true;
-
-    #displayManager = {
-    #  lightdm.enable = true;
-    #};
-
-  };
+  services.xserver.enable = true;
 
   services.xserver.xkb = {
     layout = "au";
@@ -243,10 +237,14 @@ in
 
   services.cloudflare-warp.enable = true;
 
-  programs.virt-manager.enable = true;
-  users.groups.libvirtd.members = ["lucas"];
-  virtualisation.libvirtd.enable = true;
-  virtualisation.spiceUSBRedirection.enable = true;
+  #programs.virt-manager.enable = true;
+  #users.groups.libvirtd.members = ["lucas"];
+  #virtualisation.libvirtd.enable = true;
+  #virtualisation.spiceUSBRedirection.enable = true;
+
+  virtualisation.virtualbox.host.enable = true;
+  users.extraGroups.vboxusers.members = [ "user-with-access-to-virtualbox" ];
+  virtualisation.virtualbox.host.enableExtensionPack = true;
 
   nix.settings = {
     substituters = [ "https://winapps.cachix.org/" ];

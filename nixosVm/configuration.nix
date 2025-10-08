@@ -1,6 +1,47 @@
 { config, pkgs, lib, inputs, ... }:
-
+let
+  swayConfig = pkgs.writeText "greetd-sway-config" ''
+    # `-l` activates layer-shell mode. Notice that `swaymsg exit` will run after gtkgreet.
+    exec "${pkgs.greetd.gtkgreet}/bin/gtkgreet -l ; swaymsg exit"
+    bindsym Mod4+shift+e exec swaynag \
+      -t warning \
+      -m 'What do you want to do?' \
+      -b 'Poweroff' 'systemctl poweroff' \
+      -b 'Reboot' 'systemctl reboot'
+  '';
+in
 {
+  services.greetd = {
+    enable = true;
+    settings = {
+      default_session = {
+        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --remember --time --cmd sway";
+        user = "lucas";
+      };
+    };
+  };
+
+  environment.etc."greetd/environments".text = ''
+    sway
+    zsh
+  '';
+
+  environment.variables = {
+    EDITOR = "nvim";
+    # Force dark mode for GTK applications
+    GTK_THEME = "Adwaita-dark";
+    # Force dark mode for Qt applications
+    QT_STYLE_OVERRIDE = "gtk2";
+    # Set color scheme preference to dark
+    COLORTERM = "truecolor";
+    # Additional dark mode environment variables
+    GTK_APPLICATION_PREFER_DARK_THEME = "1";
+    QT_QPA_PLATFORMTHEME = "gtk2";
+    # Additional dark mode settings
+    QT_AUTO_SCREEN_SCALE_FACTOR = "1";
+    QT_SCALE_FACTOR = "1";
+  };
+
   nixpkgs.config.allowUnsupportedSystem = true;
 
   nix.extraOptions = ''
@@ -14,14 +55,11 @@
       /etc/nixos/hardware-configuration.nix
       inputs.sops-nix.nixosModules.sops
     ];
-  
-  sops.defaultSopsFile = ../secrets/secrets.yaml;
+
+  sops.defaultSopsFile = /home/lucas/nix-conf/secrets/secrets.yaml;
   sops.defaultSopsFormat = "yaml";
   sops.age.keyFile = "/home/lucas/.config/sops/age/keys.txt";
   sops.secrets.example-key = { };
-  sops.secrets."my-service/my_subdir/my_secret" = {
-      owner = "lucas";
-  };
 
   boot.loader.grub.enable = true;
   boot.loader.grub.device = "/dev/vda";
@@ -66,35 +104,27 @@
       extraPackages = with pkgs; [
         swaylock
         swayidle
-        waybar     # for a status bar
-        wl-clipboard # for clipboard functionality
-        grim slurp # for screenshots
-        wf-recorder # for screen recording (optional)
-        brightnessctl # for brightness key support
-        playerctl  # for media control
+        waybar
+        wl-clipboard
+        grim slurp
+        wf-recorder
+        brightnessctl
+        playerctl
         wmenu
         i3status
         swaynotificationcenter
       ];
   };
+
   security.polkit.enable = true;
 
-  services.xserver = {
-    enable = true;
+  services.xserver.enable = true;
 
-    displayManager = {
-      lightdm.enable = true;
-    };
-
-  };
-
-  # Configure keymap in X11
   services.xserver.xkb = {
     layout = "au";
     variant = "";
   };
 
-  # Enable sound with pipewire.
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
@@ -181,6 +211,9 @@
     package = pkgs.gvfs;
   };
   services.udisks2.enable = true;
+
+  virtualisation.virtualbox.guest.enable = true;
+  virtualisation.virtualbox.guest.dragAndDrop = true;
 
   fonts = {
     fontconfig.enable = true;

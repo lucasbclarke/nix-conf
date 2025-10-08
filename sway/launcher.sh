@@ -13,7 +13,7 @@ visual-studio
 vivi
 thunar
 blueman
-virt-manager
+virtualbox
 pavucontrol
 printer-settings
 nm-connection-editor
@@ -63,8 +63,8 @@ case "$selection" in
     "blueman")
         exec blueman-manager
         ;;
-    "virt-manager")
-        exec virt-manager
+    "virtualbox")
+        exec VirtualBox
         ;;
     "pavucontrol")
         exec pavucontrol
