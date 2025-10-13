@@ -294,6 +294,8 @@ in
   # Or disable the firewall altogether.
   networking.firewall.enable = false;
 
+  services.logind.lidSwitch = "ignore";
+
   system.stateVersion = "24.11";
 
 }
