@@ -296,6 +296,21 @@ in
 
   services.logind.lidSwitch = "ignore";
 
+  systemd.services.nixos-upgrade = {
+    description = lib.mkForce "NixOS Upgrade (Flake)";
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = [ 
+        "/run/current-system/sw/bin/nixos-rebuild"
+        "switch"
+        "--flake"
+        "/home/lucas/nix-conf#nixosSystemD/"
+        "--impure"
+      ];
+    };
+  };
+
   system.stateVersion = "24.11";
 
 }
