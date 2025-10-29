@@ -9,7 +9,6 @@ outlook
 explorer
 notepad
 onedrive
-visual-studio
 vivi
 thunar
 blueman
@@ -50,9 +49,6 @@ case "$selection" in
         ;;
     "onedrive")
         exec /usr/bin/onedrive
-        ;;
-    "visual-studio")
-        exec /usr/bin/visual-studio
         ;;
     "vivi")
         exec /usr/bin/vivi

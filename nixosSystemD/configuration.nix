@@ -212,7 +212,7 @@ in
      pavucontrol vlc usbutils udiskie udisks samba sway wayland-scanner
      libGL libGLU powersupply lunar-client feh file-roller jq pulseaudio
      lua-language-server xfce.xfce4-screenshooter gh cargo gnumake
-     gcc-arm-embedded python2 python3Packages.pip swig file clang-tools
+     gcc-arm-embedded python3Packages.pip swig file clang-tools
      net-tools iproute2 blueman networkmanager bluez bluez-tools dnsmasq
      swaysettings sway-launcher-desktop jetbrains-mono dive podman-tui
      docker-compose freerdp dialog libnotify podman podman-compose
@@ -310,6 +310,8 @@ in
       ];
     };
   };
+
+  networking.nameservers = [ "192.168.0.6" ];
 
   system.stateVersion = "24.11";
 
