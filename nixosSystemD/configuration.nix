@@ -15,7 +15,7 @@ in
     enable = true;
     settings = {
       default_session = {
-        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --remember --time --cmd sway";
+        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --remember --time --cmd 'sway --unsupported-gpu'";
         user = "lucas";
       };
     };
@@ -133,6 +133,37 @@ in
     variant = "";
   };
 
+  #services.xserver.videoDrivers = [ "modesetting" "nvidia" ];
+
+  hardware.nvidia = {
+  #  modesetting.enable = true;
+  #  powerManagement.finegrained = false;
+  #  open = true;
+  #  nvidiaSettings = true;
+
+  #  # Optionally, you may need to select the appropriate driver version for your specific GPU.
+  #  package = config.boot.kernelPackages.nvidiaPackages.stable;
+
+  #  prime = {
+  #    intelBusId = "PCI:0:2:0";
+  #    nvidiaBusId = "PCI:01:0:0";
+
+  #    offload = {
+  #      enable = true;
+  #      enableOffloadCmd = true;
+  #    };
+  #  };
+
+    package = config.boot.kernelPackages.nvidiaPackages.mkDriver { #sets up previous driver version
+      version = "565.77";
+      sha256_64bit = "sha256-CnqnQsRrzzTXZpgkAtF7PbH9s7wbiTRNcM0SPByzFHw=";
+      sha256_aarch64 = "sha256-CnqnQsRrzzTXZpgkAtF7PbH9s7wbiTRNcM0SPByzFHw=";
+      openSha256 = "sha256-VUetj3LlOSz/LB+DDfMCN34uA4bNTTpjDrb6C6Iwukk=";
+      settingsSha256 = "sha256-VUetj3LlOSz/LB+DDfMCN34uA4bNTTpjDrb6C6Iwukk=";
+      persistencedSha256 = lib.fakeSha256;
+    };
+  };
+
   services.printing.enable = true;
   programs.system-config-printer.enable = true;
   services.samba.enable = true;
@@ -217,7 +248,7 @@ in
      swaysettings sway-launcher-desktop jetbrains-mono dive podman-tui
      docker-compose freerdp dialog libnotify podman podman-compose
      xwayland ncdu gtk3 libnotify nss xorg.libXtst xdg-utils dpkg
-     brasero networkmanagerapplet ripgrep inetutils sops
+     brasero networkmanagerapplet ripgrep inetutils sops 
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
      (import ./zls-repo.nix {inherit pkgs;})
@@ -313,6 +344,5 @@ in
 
   networking.nameservers = [ "192.168.0.6" ];
 
-  system.stateVersion = "24.11";
-
+  system.stateVersion = "25.05";
 }

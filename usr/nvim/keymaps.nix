@@ -345,6 +345,81 @@
      };
    }
 
+   {
+     mode = "n";
+     key = "gd";
+     action = "<cmd>lua vim.lsp.buf.definition()<cr>";
+     options = {
+       silent = true;
+     };
+   }
+
+   {
+     mode = "n";
+     key = "gD";
+     action = "<cmd>lua vim.lsp.buf.declaration()<cr>";
+     options = {
+       silent = true;
+     };
+   }
+
+   {
+     mode = "n";
+     key = "K";
+     action = "<cmd>lua vim.lsp.buf.hover()<cr>";
+     options = {
+       silent = true;
+     };
+   }
+
+   {
+     mode = "n";
+     key = "gr";
+     action = "<cmd>lua vim.lsp.buf.references()<cr>";
+     options = {
+       silent = true;
+     };
+   }
+
+   {
+     mode = "n";
+     key = "gs";
+     action = "<cmd>lua vim.lsp.buf.signature_help()<cr>";
+     options = {
+       silent = true;
+     };
+   }
+
+   {
+     mode = "n";
+     key = "<F2>";
+     action = "<cmd>lua vim.lsp.buf.rename()<cr>";
+     options = {
+       silent = true;
+     };
+   }
+
+   {
+     mode = [
+        "n"
+        "x"
+     ];
+     key = "<F3>";
+     action = "<cmd>lua vim.lsp.buf.format({async = true})<cr>";
+     options = {
+       silent = true;
+     };
+   }
+
+   {
+     mode = "n";
+     key = "<F4>";
+     action = "<cmd>lua vim.lsp.buf.code_action()<cr>";
+     options = {
+       silent = true;
+     };
+   }
+
    ];
  };
 }
