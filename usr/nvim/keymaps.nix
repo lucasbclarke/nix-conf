@@ -420,6 +420,62 @@
      };
    }
 
+   {
+     mode = [
+        "n"
+        "v"
+        "x"
+        "i"
+     ];
+     key = "<Left>";
+     action = "<cmd>echo 'Use h to move!!'<CR>";
+     options = {
+       silent = true;
+     };
+   }
+
+   {
+     mode = [
+        "n"
+        "v"
+        "x"
+        "i"
+     ];
+     key = "<Up>";
+     action = "<cmd>echo 'Use k to move!!'<CR>";
+     options = {
+       silent = true;
+     };
+   }
+
+   {
+     mode = [
+        "n"
+        "v"
+        "x"
+        "i"
+     ];
+     key = "<Right>";
+     action = "<cmd>echo 'Use l to move!!'<CR>";
+     options = {
+       silent = true;
+     };
+   }
+
+   {
+     mode = [
+        "n"
+        "v"
+        "x"
+        "i"
+     ];
+     key = "<Down>";
+     action = "<cmd>echo 'Use j to move!!'<CR>";
+     options = {
+       silent = true;
+     };
+   }
+
    ];
  };
 }
