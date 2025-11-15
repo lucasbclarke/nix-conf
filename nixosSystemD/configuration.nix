@@ -304,8 +304,6 @@ in
     rm -f /etc/modprobe.d/blacklist-kvm.conf
   '';
 
-  boot.kernelModules = [ "kvm" "kvm_amd" "fuse" ];
-
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
