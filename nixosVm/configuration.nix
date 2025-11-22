@@ -201,7 +201,6 @@ in
      brasero ghostty inetutils
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
-     (import ./zls-repo.nix {inherit pkgs;})
      (import ./hm-setup.nix {inherit pkgs;})
   ];
 
