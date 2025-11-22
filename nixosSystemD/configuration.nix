@@ -246,7 +246,6 @@ in
      brasero networkmanagerapplet ripgrep inetutils sops ghostscript
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
-     (import ./zls-repo.nix {inherit pkgs;})
      (import ./winapps-setup.nix {inherit pkgs;})
      (import ./hm-setup.nix {inherit pkgs;})
      inputs.winapps.packages."${pkgs.system}".winapps
