@@ -106,21 +106,21 @@
         # Bar configuration
         bars = [
           {
-            position = "bottom";
+            position = "top";
             statusCommand = "i3status";
             fonts = {
               names = [ "JetBrainsMono Medium" ];
               size = 11.0;
             };
-            colors = {
-              statusline = "#ffffff";
-              background = "#323232";
-              inactiveWorkspace = {
-                border = "#32323200";
-                background = "#32323200";
-                text = "#5c5c5c";
-              };
-            };
+            #colors = {
+            #  statusline = "#ffffff";
+            #  background = "#323232";
+            #  inactiveWorkspace = {
+            #    border = "#32323200";
+            #    background = "#32323200";
+            #    text = "#5c5c5c";
+            #  };
+            #};
           }
         ];
 
@@ -191,5 +191,4 @@
         }
       '';
   };
-
 }

@@ -104,14 +104,13 @@ in
       extraPackages = with pkgs; [
         swaylock
         swayidle
-        waybar
+        i3status
         wl-clipboard
         grim slurp
         wf-recorder
         brightnessctl
         playerctl
         wmenu
-        i3status
         swaynotificationcenter
       ];
   };

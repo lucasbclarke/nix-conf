@@ -103,6 +103,13 @@
     };
   };
 
+  dconf.enable = true;
+  dconf.settings = {
+    "org/gnome/desktop/interface" = {
+      color-scheme = "prefer-dark";
+    };
+  };
+
   qt = {
     enable = true;
     platformTheme.name = "gtk";
@@ -110,6 +117,15 @@
       name = "adwaita-dark";
       package = pkgs.adwaita-qt;
     };
+  };
+
+  programs.foot = {
+      enable = true;
+      settings = {
+        main.font = "monospace:size=14";
+      };
+
+      
   };
 
   programs.nixvim.enable = true;

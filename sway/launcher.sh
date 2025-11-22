@@ -16,7 +16,6 @@ virt-manager
 pavucontrol
 printer-settings
 nm-connection-editor
-sway-settings
 file-roller
 vlc
 lunarclient"
@@ -71,9 +70,6 @@ case "$selection" in
         ;;
     "nm-connection-editor")
         exec nm-connection-editor
-        ;;
-    "sway-settings")
-        exec swaysettings
         ;;
     "file-roller")
         exec file-roller

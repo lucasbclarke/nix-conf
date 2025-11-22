@@ -61,7 +61,12 @@ in
     ];
 
   hardware.graphics = {
-      enable = true;
+    enable = true;
+    extraPackages = with pkgs; [
+      libva-vdpau-driver
+      nvidia-vaapi-driver
+      intel-media-driver
+    ];
   };
 
   sops.defaultSopsFile = /home/lucas/nix-conf/secrets/secrets.yaml;
@@ -112,13 +117,11 @@ in
       extraPackages = with pkgs; [
         swaylock
         swayidle
-        waybar     
         wl-clipboard 
         grim slurp 
         wf-recorder 
         brightnessctl 
         playerctl  
-        wmenu
         i3status
         swaynotificationcenter
       ];
@@ -136,32 +139,24 @@ in
   #services.xserver.videoDrivers = [ "modesetting" "nvidia" ];
 
   hardware.nvidia = {
-  #  modesetting.enable = true;
-  #  powerManagement.finegrained = false;
-  #  open = true;
-  #  nvidiaSettings = true;
+    modesetting.enable = true;
+    powerManagement.finegrained = false;
+    open = false;
+    nvidiaSettings = true;
 
-  #  # Optionally, you may need to select the appropriate driver version for your specific GPU.
-  #  package = config.boot.kernelPackages.nvidiaPackages.stable;
+    # Optionally, you may need to select the appropriate driver version for your specific GPU.
+    package = config.boot.kernelPackages.nvidiaPackages.stable;
 
-  #  prime = {
-  #    intelBusId = "PCI:0:2:0";
-  #    nvidiaBusId = "PCI:01:0:0";
+    prime = {
+      intelBusId = "PCI:0:2:0";
+      nvidiaBusId = "PCI:1:0:0";  # Fixed: removed leading zero (should be 1:0:0, not 01:0:0)
 
-  #    offload = {
-  #      enable = true;
-  #      enableOffloadCmd = true;
-  #    };
-  #  };
-
-    package = config.boot.kernelPackages.nvidiaPackages.mkDriver { #sets up previous driver version
-      version = "565.77";
-      sha256_64bit = "sha256-CnqnQsRrzzTXZpgkAtF7PbH9s7wbiTRNcM0SPByzFHw=";
-      sha256_aarch64 = "sha256-CnqnQsRrzzTXZpgkAtF7PbH9s7wbiTRNcM0SPByzFHw=";
-      openSha256 = "sha256-VUetj3LlOSz/LB+DDfMCN34uA4bNTTpjDrb6C6Iwukk=";
-      settingsSha256 = "sha256-VUetj3LlOSz/LB+DDfMCN34uA4bNTTpjDrb6C6Iwukk=";
-      persistencedSha256 = lib.fakeSha256;
+      offload = {
+        enable = true;
+        enableOffloadCmd = true;
+      };
     };
+
   };
 
   services.printing.enable = true;
@@ -239,16 +234,16 @@ in
 
   environment.systemPackages = with pkgs; [
      sqlite tldr fzf xdotool brave xfce.exo xfce.xfce4-settings
-     unzip arduino-cli discord gcc cloudflare-warp neofetch
+     unzip arduino-cli discord gcc cloudflare-warp fastfetch
      pavucontrol vlc usbutils udiskie udisks samba sway wayland-scanner
      libGL libGLU powersupply lunar-client feh file-roller jq pulseaudio
      lua-language-server xfce.xfce4-screenshooter gh cargo gnumake
      gcc-arm-embedded python3Packages.pip swig file clang-tools
      net-tools iproute2 blueman networkmanager bluez bluez-tools dnsmasq
-     swaysettings sway-launcher-desktop jetbrains-mono dive podman-tui
+     sway-launcher-desktop jetbrains-mono dive podman-tui
      docker-compose freerdp dialog libnotify podman podman-compose
      xwayland ncdu gtk3 libnotify nss xorg.libXtst xdg-utils dpkg
-     brasero networkmanagerapplet ripgrep inetutils sops 
+     brasero networkmanagerapplet ripgrep inetutils sops ghostscript
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
      (import ./zls-repo.nix {inherit pkgs;})
@@ -323,7 +318,7 @@ in
   # Or disable the firewall altogether.
   networking.firewall.enable = false;
 
-  services.logind.lidSwitch = "ignore";
+  services.logind.settings.Login.HandleLidSwitch = "ignore";
 
   systemd.services.nixos-upgrade = {
     description = lib.mkForce "NixOS Upgrade (Flake)";

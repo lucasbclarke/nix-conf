@@ -108,12 +108,22 @@
     vim.lsp.config.nixd = {
       mason = false,
       cmd = { "nixd" },
+      settings = {
+        nix = {
+          autoArchive = true;
+        }
+      }
     }
     vim.lsp.enable('nixd')
 
     vim.lsp.config.nil_ls = {
       mason = false,
       cmd = { "nil" },
+      settings = {
+        nix = {
+          autoArchive = true;
+        }
+      }
     }
     vim.lsp.enable('nil_ls')
 

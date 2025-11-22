@@ -109,7 +109,6 @@ in
       extraPackages = with pkgs; [
         swaylock
         swayidle
-        waybar     
         wl-clipboard 
         grim slurp 
         wf-recorder 

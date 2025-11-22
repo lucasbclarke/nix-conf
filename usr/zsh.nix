@@ -20,7 +20,6 @@
         exec tmux
           fi
           export PATH="$PATH:/opt/nvim-linux64/bin:/usr/lib:$HOME/.local/bin:/usr/bin:$HOME/zig-latest-linux-x86_64"
-          export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
           export MANPAGER='nvim +Man!'
           export NIXPKGS_ALLOW_UNFREE=1
 
