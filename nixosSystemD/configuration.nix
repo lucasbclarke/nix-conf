@@ -81,17 +81,11 @@ in
   time.hardwareClockInLocalTime = true;
 
   networking.hostName = "nixosSystemD";
-  #networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
   networking.networkmanager.enable = true;
   programs.nm-applet.enable = true;
-
   networking.wireless.iwd.enable = true;
   networking.networkmanager.wifi.backend = "iwd";
+  networking.firewall.enable = false;
 
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
@@ -136,20 +130,18 @@ in
     variant = "";
   };
 
-  #services.xserver.videoDrivers = [ "modesetting" "nvidia" ];
+  services.xserver.videoDrivers = [ "modesetting" "nvidia" ];
 
   hardware.nvidia = {
-    modesetting.enable = true;
+    modesetting.enable = false;
     powerManagement.finegrained = false;
     open = false;
-    nvidiaSettings = true;
 
-    # Optionally, you may need to select the appropriate driver version for your specific GPU.
     package = config.boot.kernelPackages.nvidiaPackages.stable;
 
     prime = {
-      intelBusId = "PCI:0:2:0";
-      nvidiaBusId = "PCI:1:0:0";  # Fixed: removed leading zero (should be 1:0:0, not 01:0:0)
+      intelBusId = "PCI:2@0:0:0";
+      nvidiaBusId = "PCI:0@1:0:0";  
 
       offload = {
         enable = true;
@@ -179,19 +171,12 @@ in
     enable = true;
     alsa.enable = true;
     alsa.support32Bit = true;
-    pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
-
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
   };
 
   users.users.lucas = {
     isNormalUser = true;
     description = "lucas";
-    extraGroups = [ "networkmanager" "wheel" "docker" "kvm" "vboxusers" ];
+    extraGroups = [ "networkmanager" "wheel" "docker" "kvm" ];
     shell = pkgs.zsh;
   };
 
@@ -212,11 +197,6 @@ in
 
     thunderbird.enable = true;
     wshowkeys.enable = true;
-
-    neovim = {
-      enable = true;
-      defaultEditor = true;
-    };
   };
 
   systemd.services.sway = {
@@ -224,7 +204,6 @@ in
     after = [ "graphical-session.target" ];
     wantedBy = [ "graphical-session.target" ];
   };
-
 
   nixpkgs.config.allowUnfree = true;
 
@@ -244,6 +223,7 @@ in
      docker-compose freerdp dialog libnotify podman podman-compose
      xwayland ncdu gtk3 libnotify nss xorg.libXtst xdg-utils dpkg
      brasero networkmanagerapplet ripgrep inetutils sops ghostscript
+     pciutils btop htop
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
      (import ./winapps-setup.nix {inherit pkgs;})
@@ -298,42 +278,8 @@ in
     rm -f /etc/modprobe.d/blacklist-kvm.conf
   '';
 
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
-
-  # List services that you want to enable:
-
   services.openssh.enable = true;
-
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-
-  # Or disable the firewall altogether.
-  networking.firewall.enable = false;
-
   services.logind.settings.Login.HandleLidSwitch = "ignore";
-
-  systemd.services.nixos-upgrade = {
-    description = lib.mkForce "NixOS Upgrade (Flake)";
-    wantedBy = [ "multi-user.target" ];
-    serviceConfig = {
-      Type = "oneshot";
-      ExecStart = [ 
-        "/run/current-system/sw/bin/nixos-rebuild"
-        "switch"
-        "--flake"
-        "/home/lucas/nix-conf#nixosSystemD/"
-        "--impure"
-      ];
-    };
-  };
-
 
   services.thermald.enable = true;
 
