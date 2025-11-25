@@ -183,7 +183,6 @@ in
   programs = {
     zsh.enable = true;
     git.enable = true;
-
     thunar = {
       enable = true;
       plugins = with pkgs.xfce; [
@@ -192,9 +191,7 @@ in
         thunar-vcs-plugin
       ];
     };
-
     xfconf.enable = true;
-
     thunderbird.enable = true;
     wshowkeys.enable = true;
   };
@@ -223,7 +220,7 @@ in
      docker-compose freerdp dialog libnotify podman podman-compose
      xwayland ncdu gtk3 libnotify nss xorg.libXtst xdg-utils dpkg
      brasero networkmanagerapplet ripgrep inetutils sops ghostscript
-     pciutils btop htop
+     pciutils btop 
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
      (import ./winapps-setup.nix {inherit pkgs;})
