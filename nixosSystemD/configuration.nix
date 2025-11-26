@@ -50,9 +50,7 @@ in
   system.autoUpgrade.enable = true;
   system.autoUpgrade.allowReboot = true;
 
-  nix = {
-    settings.experimental-features = [ "nix-command" "flakes" ];
-  };
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   imports =
     [ 
@@ -209,7 +207,7 @@ in
   ];
 
   environment.systemPackages = with pkgs; [
-     sqlite tldr fzf xdotool brave xfce.exo xfce.xfce4-settings
+     sqlite tealdeer fzf xdotool brave xfce.exo xfce.xfce4-settings
      unzip arduino-cli discord gcc cloudflare-warp fastfetch
      pavucontrol vlc usbutils udiskie udisks samba sway wayland-scanner
      libGL libGLU powersupply lunar-client feh file-roller jq pulseaudio
