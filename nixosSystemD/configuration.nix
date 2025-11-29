@@ -297,7 +297,7 @@ in
     };
   };
 
-  programs.ssh.askPassword = "";
+  programs.ssh.enableAskPassword = false;
 
   system.stateVersion = "25.05";
 }
