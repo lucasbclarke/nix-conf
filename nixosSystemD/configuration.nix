@@ -47,8 +47,6 @@ in
   nix.extraOptions = ''
     experimental-features = nix-command flakes 
   '';
-  system.autoUpgrade.enable = true;
-  system.autoUpgrade.allowReboot = true;
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 

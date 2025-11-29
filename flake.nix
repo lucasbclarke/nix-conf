@@ -13,7 +13,7 @@
 
     nixvim = {
       url = "github:nix-community/nixvim";
-      #inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     
     nixd = {
@@ -57,6 +57,15 @@
                   ghostty.packages.${pkgs.stdenv.hostPlatform.system}.default
                 ];
             })  
+            home-manager.nixosModules.home-manager
+            {
+              home-manager = {
+                  useGlobalPkgd = true;
+                  useUserPackages = true;
+                  users.nixosSystemD = import ./home.nix;
+                  backupFileExtension = "backup";
+              };
+            }
         ];
         specialArgs = { inherit inputs; };
       };
