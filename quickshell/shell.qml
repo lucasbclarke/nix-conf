@@ -22,7 +22,6 @@ ShellRoot {
     property int fontSize: 14
 
     // System info properties
-    property string kernelVersion: "Linux"
     property int cpuUsage: 0
     property int memUsage: 0
     property int diskUsage: 0
