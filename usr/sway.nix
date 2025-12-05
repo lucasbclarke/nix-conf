@@ -12,6 +12,7 @@
         # Startup commands (including previous exec_always and exec)
         startup = [
           { command = "~/nix-conf/sway/setup-displays.sh"; always = true; }
+          { command = "~/nix-conf/sway/setup-bar.sh"; always = true; }
           { command = "/usr/bin/win &"; always = true; }
           { command = "ghostty"; }
           { command = "sleep 0.5 && swaymsg workspace number 1"; }
@@ -104,25 +105,7 @@
         };
 
         # Bar configuration
-        bars = [
-          {
-            position = "top";
-            statusCommand = "i3status";
-            fonts = {
-              names = [ "JetBrainsMono Medium" ];
-              size = 11.0;
-            };
-            #colors = {
-            #  statusline = "#ffffff";
-            #  background = "#323232";
-            #  inactiveWorkspace = {
-            #    border = "#32323200";
-            #    background = "#32323200";
-            #    text = "#5c5c5c";
-            #  };
-            #};
-          }
-        ];
+        bars = [ ];
 
         # Outputs
         output = {

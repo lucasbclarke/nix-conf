@@ -100,6 +100,6 @@
       };
   };
 
-  programs.nixvim.enable = true;
+  xdg.configFile."quickshell/shell.qml".source = ./quickshell/shell.qml;
   programs.home-manager.enable = true;
 }

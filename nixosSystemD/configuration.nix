@@ -101,22 +101,6 @@ in
     LC_TIME = "en_AU.UTF-8";
   };
 
-  programs.sway = {
-      enable = true;
-      wrapperFeatures.gtk = true; 
-      extraPackages = with pkgs; [
-        swaylock
-        swayidle
-        wl-clipboard 
-        grim slurp 
-        wf-recorder 
-        brightnessctl 
-        playerctl  
-        i3status
-        swaynotificationcenter
-      ];
-  };
-  
   security.polkit.enable = true;
 
   services.xserver.enable = true;
@@ -216,7 +200,8 @@ in
      docker-compose freerdp dialog libnotify podman podman-compose
      xwayland ncdu gtk3 libnotify nss xorg.libXtst xdg-utils dpkg
      brasero networkmanagerapplet ripgrep inetutils sops ghostscript
-     pciutils btop 
+     pciutils btop swaylock swayidle wl-clipboard grim slurp wf-recorder 
+     brightnessctl playerctl swaynotificationcenter quickshell
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
      (import ./winapps-setup.nix {inherit pkgs;})

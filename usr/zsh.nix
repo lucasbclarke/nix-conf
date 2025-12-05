@@ -11,7 +11,7 @@
     };
 
     shellAliases = {
-      sd = "cd /home && cd \$(find * -type d | fzf) && clear";
+      sd = "cd /home && cd \$(find . -type d | fzf) && clear";
       nix-shell = "nix-shell --run $SHELL";
     };
 
@@ -37,6 +37,9 @@
       zle -N zle-line-init
       zle -N zle-line-finish
       zle -N zle-keymap-select
+
+      bindkey "^P" up-line-or-search
+      bindkey "^N" down-line-or-search
       '';
 
   };

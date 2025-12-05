@@ -6,14 +6,13 @@ in
 {
   home.packages = [ pkgs.sqlite ];
   programs.nixvim = {  
-
+    enable = true;
     lsp.servers.zls.enable = true;
 
     extraPlugins = [
 	pkgs.vimPlugins.rose-pine
 	pkgs.vimPlugins.tokyonight-nvim
 	pkgs.vimPlugins.lsp-zero-nvim
-	pkgs.vimPlugins.lazy-lsp-nvim
 	pkgs.vimPlugins.clangd_extensions-nvim
 	pkgs.vimPlugins.vim-sleuth
 	timeTrackerPlugins.sqlite-nvim
