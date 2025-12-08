@@ -40,8 +40,6 @@
 
       bindkey "^P" up-line-or-search
       bindkey "^N" down-line-or-search
-
-      exec /home/lucas/nix-conf/sway/setup-bar.sh &
       '';
 
   };
