@@ -18,7 +18,8 @@ printer-settings
 nm-connection-editor
 file-roller
 vlc
-lunarclient"
+lunarclient
+steam"
 
 # Show menu and get selection
 selection=$(echo "$apps" | wofi --show dmenu --prompt "Launch:")
@@ -79,5 +80,8 @@ case "$selection" in
         ;;
     "lunarclient")
         exec lunarclient
+        ;;
+    "steam")
+        exec steam
         ;;
 esac

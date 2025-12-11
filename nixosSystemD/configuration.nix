@@ -201,7 +201,7 @@ in
      xwayland ncdu gtk3 libnotify nss xorg.libXtst xdg-utils dpkg
      brasero networkmanagerapplet ripgrep inetutils sops ghostscript
      pciutils btop swaylock swayidle wl-clipboard grim slurp wf-recorder 
-     brightnessctl playerctl swaynotificationcenter quickshell
+     brightnessctl playerctl swaynotificationcenter quickshell mdhtml
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
      (import ./winapps-setup.nix {inherit pkgs;})
@@ -283,6 +283,14 @@ in
   };
 
   programs.ssh.enableAskPassword = false;
+
+  programs.steam = {
+    enable = true; 
+      remotePlay.openFirewall = true;
+      dedicatedServer.openFirewall = true;
+  };
+
+  programs.gamemode.enable = true;
 
   system.stateVersion = "25.11";
 }
