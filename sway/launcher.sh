@@ -19,7 +19,8 @@ nm-connection-editor
 file-roller
 vlc
 lunarclient
-steam"
+steam
+teams"
 
 # Show menu and get selection
 selection=$(echo "$apps" | wofi --show dmenu --prompt "Launch:")
@@ -83,5 +84,8 @@ case "$selection" in
         ;;
     "steam")
         exec steam
+        ;;
+    "teams")
+        exec /usr/bin/teams
         ;;
 esac
