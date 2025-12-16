@@ -126,6 +126,18 @@
       }
     }
     vim.lsp.enable('nil_ls')
+    
+    vim.lsp.config('typescript-language-server', {
+      mason = false,
+      cmd = { "typescript-language-server", "--stdio" }
+    })
+    vim.lsp.enable('typescript-language-server')
+
+    vim.lsp.config('jdtls', {
+      mason = false,
+      cmd = { "jdtls" }
+    })
+    vim.lsp.enable('jdtls')
 
     pcall(require('telescope').load_extension, 'fzf')
   '';

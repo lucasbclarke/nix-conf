@@ -99,7 +99,7 @@
         main.font = "monospace:size=14";
       };
   };
-  
+   
   xdg.configFile."quickshell/shell.qml".source = ./quickshell/shell.qml;
   programs.home-manager.enable = true;
 }

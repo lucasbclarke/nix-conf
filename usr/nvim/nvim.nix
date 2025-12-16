@@ -8,6 +8,8 @@ in
   programs.nixvim = {  
     enable = true;
     lsp.servers.zls.enable = true;
+    lsp.servers.ts_ls.enable = true;
+    lsp.servers.jdtls.enable = true;
 
     extraPlugins = [
 	pkgs.vimPlugins.rose-pine

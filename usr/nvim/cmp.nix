@@ -64,10 +64,9 @@
       { name = "nvim_lsp"; }
       {
         name = "luasnip";
-        option = { show_autosnippets = true; };
+        option = { show_autosnippets = false; };
       }
       { name = "path"; }
-      { name = "buffer"; }
       ];
     };
 
