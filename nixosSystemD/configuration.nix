@@ -202,7 +202,7 @@ in
      brasero networkmanagerapplet ripgrep inetutils sops ghostscript
      pciutils btop swaylock swayidle wl-clipboard grim slurp wf-recorder 
      brightnessctl playerctl swaynotificationcenter quickshell mdhtml
-     typescript-language-server jdk25_headless jdt-language-server
+     typescript-language-server jdt-language-server openjdk
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
      (import ./winapps-setup.nix {inherit pkgs;})
