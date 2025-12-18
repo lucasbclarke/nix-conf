@@ -60,12 +60,29 @@ in
 	      };
 	  };
 	};
+	supermaven = {
+	  enable = true;
+	  settings = {
+	    keymaps = {
+	      accept_suggestion = "<C-k>";
+	      clear_suggestions = "<C-]>";
+	      accept_word = "<C-j>";
+	    };
+	    color = {
+	      cterm = 244;
+	    };
+	    log_level = "info";
+	    disable_inline_completion = false;
+	    disable_keymaps = false;
+	  };
+
+	};
     };
     
     opts = {
       number = true;         
       relativenumber = true;
-      shiftwidth = 2;        
+      shiftwidth = 4;        
     };
   };
 }
