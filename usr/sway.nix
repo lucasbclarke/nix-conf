@@ -15,7 +15,7 @@
           { command = "/usr/bin/win &"; always = true; }
           { command = "ghostty"; }
           { command = "sleep 0.5 && swaymsg workspace number 1"; }
-          { command = "~/nix-conf/sway/setup-bar.sh"; always = true; }
+          { command = "qs &"; }
         ];
 
         # Assign Ghostty windows to workspace 1

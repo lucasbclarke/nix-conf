@@ -20,6 +20,8 @@ in
       };
     };
   };
+  systemd.services.greetd.after = [ "graphical-session.target" ];
+  systemd.services.greetd.wantedBy = [ "graphical-session.target" ];
 
   environment.etc."greetd/environments".text = ''
     sway
