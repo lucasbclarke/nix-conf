@@ -1,16 +1,7 @@
 #!/run/current-system/sw/bin/zsh
 
 # Simple list of applications including our custom scripts
-apps="excel
-word
-powerpoint
-windows
-outlook
-explorer
-notepad
-onedrive
-vivi
-thunar
+apps="thunar
 blueman
 virt-manager
 pavucontrol
@@ -20,40 +11,13 @@ file-roller
 vlc
 lunarclient
 steam
-teams"
+winboat"
 
 # Show menu and get selection
 selection=$(echo "$apps" | wofi --show dmenu --prompt "Launch:")
 
 # Execute based on selection
 case "$selection" in
-    "excel")
-        exec /usr/bin/excel
-        ;;
-    "word")
-        exec /usr/bin/word
-        ;;
-    "powerpoint")
-        exec /usr/bin/powerpoint
-        ;;
-    "windows")
-        exec /usr/bin/windows
-        ;;
-    "outlook")
-        exec /usr/bin/outlook
-        ;;
-    "explorer")
-        exec /usr/bin/explorer
-        ;;
-    "notepad")
-        exec /usr/bin/notepad
-        ;;
-    "onedrive")
-        exec /usr/bin/onedrive
-        ;;
-    "vivi")
-        exec /usr/bin/vivi
-        ;;
     "thunar")
         exec thunar
         ;;
@@ -85,7 +49,7 @@ case "$selection" in
     "steam")
         exec steam
         ;;
-    "teams")
-        exec /usr/bin/teams
+    "winboat")
+        exec winboat
         ;;
 esac

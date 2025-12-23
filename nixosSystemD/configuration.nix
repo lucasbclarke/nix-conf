@@ -204,13 +204,11 @@ in
      brasero networkmanagerapplet ripgrep inetutils sops ghostscript
      pciutils btop swaylock swayidle wl-clipboard grim slurp wf-recorder 
      brightnessctl playerctl swaynotificationcenter quickshell mdhtml
-     typescript-language-server jdt-language-server openjdk
+     typescript-language-server jdt-language-server openjdk dotool 
+     winboat
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
-     (import ./winapps-setup.nix {inherit pkgs;})
      (import ./hm-setup.nix {inherit pkgs;})
-     inputs.winapps.packages."${pkgs.system}".winapps
-     inputs.winapps.packages."${pkgs.system}".winapps-launcher
      inputs.nixd.packages."${pkgs.system}".nixd
      inputs.nil.packages."${pkgs.system}".nil
   ];
@@ -227,12 +225,6 @@ in
   users.groups.libvirtd.members = ["lucas"];
   virtualisation.libvirtd.enable = true;
   virtualisation.spiceUSBRedirection.enable = true;
-
-  nix.settings = {
-    substituters = [ "https://winapps.cachix.org/" ];
-    trusted-public-keys = [ "winapps.cachix.org-1:HI82jWrXZsQRar/PChgIx1unmuEsiQMQq+zt05CD36g=" ];
-    trusted-users = [ "lucas" ]; 
-  };
 
   fonts = {
     fontconfig.enable = true;
