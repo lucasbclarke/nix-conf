@@ -10,6 +10,7 @@ in
     lsp.servers.zls.enable = true;
     lsp.servers.ts_ls.enable = true;
     lsp.servers.jdtls.enable = true;
+    lsp.servers.clangd.enable = true;
 
     extraPlugins = [
 	pkgs.vimPlugins.rose-pine
@@ -77,8 +78,18 @@ in
 	  };
 
 	};
+
+	snacks = {
+	  enable = true;
+	  settings = {
+	    input = { enabled = true; };
+	    picker = { enabled = true; };
+	  };
+	};
     };
+
     
+
     opts = {
       number = true;         
       relativenumber = true;

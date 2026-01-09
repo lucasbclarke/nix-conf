@@ -11,7 +11,7 @@
     };
 
     shellAliases = {
-      sd = "cd /home && cd \$(find . -type d | fzf) && clear";
+      sd = "cd \"\$(find $HOME -type d ! -path '*/.*' 2>/dev/null | fzf)\" && clear";
       nix-shell = "nix-shell --run $SHELL";
     };
 
@@ -40,6 +40,13 @@
 
       bindkey "^P" up-line-or-search
       bindkey "^N" down-line-or-search
+
+      chpwd() {
+        if [[ -f flake.nix ]] && [[ -z "$IN_NIX_SHELL" ]]; then
+          nix develop
+          nix flake update
+        fi
+      }
       '';
 
   };
