@@ -11,7 +11,7 @@ file-roller
 vlc
 lunarclient
 steam
-winboat"
+kiwix"
 
 # Show menu and get selection
 selection=$(echo "$apps" | wofi --show dmenu --prompt "Launch:")
@@ -51,5 +51,8 @@ case "$selection" in
         ;;
     "winboat")
         exec winboat
+        ;;
+    "kiwix")
+        exec kiwix-desktop
         ;;
 esac

@@ -15,7 +15,7 @@ in
     enable = true;
     settings = {
       default_session = {
-        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --remember --time --cmd 'sway --unsupported-gpu'";
+        command = "${pkgs.tuigreet}/bin/tuigreet --remember --time --cmd 'sway --unsupported-gpu'";
         user = "lucas";
       };
     };
@@ -137,7 +137,7 @@ in
   programs.system-config-printer.enable = true;
   services.samba.enable = true;
   services.printing.drivers = [
-    pkgs.cnijfilter2
+    # pkgs.cnijfilter2  # Temporarily disabled due to C23 compilation issues
     pkgs.gutenprint
     pkgs.cups-bjnp
   ];
@@ -158,7 +158,7 @@ in
   users.users.lucas = {
     isNormalUser = true;
     description = "lucas";
-    extraGroups = [ "networkmanager" "wheel" "docker" "kvm" ];
+    extraGroups = [ "networkmanager" "wheel" "docker" "kvm" "libvirtd" ];
     shell = pkgs.zsh;
   };
 
@@ -167,10 +167,10 @@ in
     git.enable = true;
     thunar = {
       enable = true;
-      plugins = with pkgs.xfce; [
-        thunar-archive-plugin
-        thunar-volman
-        thunar-vcs-plugin
+      plugins = [
+        pkgs.thunar-archive-plugin
+        pkgs.thunar-volman
+        pkgs.thunar-vcs-plugin
       ];
     };
     xfconf.enable = true;
@@ -190,12 +190,15 @@ in
     "python-2.7.18.8"
   ];
 
+  # Temporarily remove cnijfilter2 due to C23 compilation issues
+  # Can be re-added once the package is fixed in nixpkgs
+
   environment.systemPackages = with pkgs; [
-     sqlite tealdeer fzf xdotool brave xfce.exo xfce.xfce4-settings
+     sqlite tealdeer fzf xdotool brave xfce4-exo xfce4-settings
      unzip arduino-cli discord gcc cloudflare-warp fastfetch
      pavucontrol vlc usbutils udiskie udisks samba sway wayland-scanner
      libGL libGLU powersupply lunar-client sxiv file-roller jq pulseaudio
-     lua-language-server xfce.xfce4-screenshooter gh cargo gnumake
+     lua-language-server xfce4-screenshooter gh cargo gnumake
      gcc-arm-embedded python3Packages.pip swig file clang-tools
      net-tools iproute2 blueman networkmanager bluez bluez-tools dnsmasq
      sway-launcher-desktop jetbrains-mono dive podman-tui
@@ -205,7 +208,7 @@ in
      pciutils btop swaylock swayidle wl-clipboard grim slurp wf-recorder 
      brightnessctl playerctl swaynotificationcenter quickshell mdhtml
      typescript-language-server jdt-language-server openjdk dotool 
-     winboat lsof opencode
+     lsof opencode kiwix libnotify dialog 
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
      (import ./hm-setup.nix {inherit pkgs;})
