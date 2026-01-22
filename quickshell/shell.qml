@@ -16,13 +16,15 @@ ShellRoot {
     property color colRed: "#f7768e"
     property color colYellow: "#e0af68"
     property color colBlue: "#7aa2f7"
+    property color colGreen: "#9ece6a"
+    property color colOrange: "#ff9e64"
+    property color colPink: "#f2cdcd"
 
     // Font
     property string fontFamily: "JetBrainsMono Nerd Font"
     property int fontSize: 14
 
     // System info properties
-    property string kernelVersion: "Linux"
     property int cpuUsage: 0
     property int memUsage: 0
     property int diskUsage: 0
@@ -31,22 +33,13 @@ ShellRoot {
     property string currentLayout: "Tile"
     property int focusedWorkspace: 1
     property var occupiedWorkspaces: []
+    property int batteryLevel: 0
+    property string networkStatus: "Down"
+    property string systemUptime: "0m"
 
     // CPU tracking
     property var lastCpuIdle: 0
     property var lastCpuTotal: 0
-
-    // Kernel version
-    Process {
-        id: kernelProc
-        command: ["uname", "-r"]
-        stdout: SplitParser {
-            onRead: data => {
-                if (data) kernelVersion = data.trim()
-            }
-        }
-        Component.onCompleted: running = true
-    }
 
     // CPU usage
     Process {
@@ -202,6 +195,48 @@ ShellRoot {
         Component.onCompleted: running = true
     }
 
+    // Battery status
+    Process {
+        id: batteryProc
+        command: ["cat", "/sys/class/power_supply/BAT0/capacity"]
+        stdout: SplitParser {
+            onRead: data => {
+                if (data) batteryLevel = parseInt(data.trim()) || 0
+            }
+        }
+        Component.onCompleted: running = true
+    }
+
+    // Network connection status
+    Process {
+        id: networkProc
+        command: ["sh", "-c", "cat /sys/class/net/*/operstate | grep -m1 up || echo down"]
+        stdout: SplitParser {
+            onRead: data => {
+                if (data && data.trim() === "up") {
+                    networkStatus = "Up"
+                } else {
+                    networkStatus = "Down"
+                }
+            }
+        }
+        Component.onCompleted: running = true
+    }
+
+    // System uptime
+    Process {
+        id: uptimeProc
+        command: ["sh", "-c", "fastfetch | grep 'Uptime:' | sed 's/Uptime: //' | sed 's/\x1b\\[[0-9;]*[A-Za-z]//g'"]
+        stdout: SplitParser {
+            onRead: data => {
+                if (data) systemUptime = data.trim()
+            }
+        }
+        Component.onCompleted: running = true
+    }
+
+    
+
     // Slow timer for system stats
     Timer {
         interval: 2000
@@ -212,7 +247,17 @@ ShellRoot {
             memProc.running = true
             diskProc.running = true
             volProc.running = true
+            batteryProc.running = true
+            networkProc.running = true
         }
+    }
+
+    // Medium timer for uptime
+    Timer {
+        interval: 1000
+        running: true
+        repeat: true
+        onTriggered: uptimeProc.running = true
     }
 
     // Fast timer for window/layout/workspace (sway doesn't have event hooks in quickshell)
@@ -276,7 +321,7 @@ ShellRoot {
                     Item { width: 8 }
 
                     Repeater {
-                        model: 9
+                        model: 10
 
                         Rectangle {
                             Layout.preferredWidth: 20
@@ -323,24 +368,7 @@ ShellRoot {
                         color: root.colMuted
                     }
 
-                    Text {
-                        text: currentLayout
-                        color: root.colFg
-                        font.pixelSize: root.fontSize
-                        font.family: root.fontFamily
-                        font.bold: true
-                        Layout.leftMargin: 5
-                        Layout.rightMargin: 5
-                    }
-
-                    Rectangle {
-                        Layout.preferredWidth: 1
-                        Layout.preferredHeight: 16
-                        Layout.alignment: Qt.AlignVCenter
-                        Layout.leftMargin: 2
-                        Layout.rightMargin: 8
-                        color: root.colMuted
-                    }
+                    
 
                     Text {
                         text: activeWindow
@@ -352,24 +380,6 @@ ShellRoot {
                         Layout.leftMargin: 8
                         elide: Text.ElideRight
                         maximumLineCount: 1
-                    }
-
-                    Text {
-                        text: kernelVersion
-                        color: root.colRed
-                        font.pixelSize: root.fontSize
-                        font.family: root.fontFamily
-                        font.bold: true
-                        Layout.rightMargin: 8
-                    }
-
-                    Rectangle {
-                        Layout.preferredWidth: 1
-                        Layout.preferredHeight: 16
-                        Layout.alignment: Qt.AlignVCenter
-                        Layout.leftMargin: 0
-                        Layout.rightMargin: 8
-                        color: root.colMuted
                     }
 
                     Text {
@@ -445,9 +455,63 @@ ShellRoot {
                     }
 
                     Text {
+                        text: "Bat: " + batteryLevel + "%"
+                        color: batteryLevel > 20 ? root.colGreen : root.colRed
+                        font.pixelSize: root.fontSize
+                        font.family: root.fontFamily
+                        font.bold: true
+                        Layout.rightMargin: 8
+                    }
+
+                    Rectangle {
+                        Layout.preferredWidth: 1
+                        Layout.preferredHeight: 16
+                        Layout.alignment: Qt.AlignVCenter
+                        Layout.leftMargin: 0
+                        Layout.rightMargin: 8
+                        color: root.colMuted
+                    }
+
+                    Text {
+                        text: "Net: " + networkStatus
+                        color: networkStatus === "Up" ? root.colOrange : root.colMuted
+                        font.pixelSize: root.fontSize
+                        font.family: root.fontFamily
+                        font.bold: true
+                        Layout.rightMargin: 8
+                    }
+
+                    Rectangle {
+                        Layout.preferredWidth: 1
+                        Layout.preferredHeight: 16
+                        Layout.alignment: Qt.AlignVCenter
+                        Layout.leftMargin: 0
+                        Layout.rightMargin: 8
+                        color: root.colMuted
+                    }
+
+                    Text {
+                        text: "Up: " + systemUptime
+                        color: root.colFg
+                        font.pixelSize: root.fontSize
+                        font.family: root.fontFamily
+                        font.bold: true
+                        Layout.rightMargin: 8
+                    }
+
+                    Rectangle {
+                        Layout.preferredWidth: 1
+                        Layout.preferredHeight: 16
+                        Layout.alignment: Qt.AlignVCenter
+                        Layout.leftMargin: 0
+                        Layout.rightMargin: 8
+                        color: root.colMuted
+                    }
+
+                    Text {
                         id: clockText
                         text: Qt.formatDateTime(new Date(), "ddd, MMM dd - HH:mm")
-                        color: root.colCyan
+                        color: root.colPink
                         font.pixelSize: root.fontSize
                         font.family: root.fontFamily
                         font.bold: true

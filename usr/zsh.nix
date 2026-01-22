@@ -41,12 +41,7 @@
       bindkey "^P" up-line-or-search
       bindkey "^N" down-line-or-search
 
-      chpwd() {
-        if [[ -f flake.nix ]] && [[ -z "$IN_NIX_SHELL" ]]; then
-          nix develop
-          nix flake update
-        fi
-      }
+      export SWAYSOCK=$(ls /run/user/1000/sway-ipc.*.sock | head -n1)
       '';
 
   };

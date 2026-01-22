@@ -197,7 +197,7 @@ in
      sqlite tealdeer fzf xdotool brave xfce4-exo xfce4-settings
      unzip arduino-cli discord gcc cloudflare-warp fastfetch
      pavucontrol vlc usbutils udiskie udisks samba sway wayland-scanner
-     libGL libGLU powersupply lunar-client sxiv file-roller jq pulseaudio
+     libGL libGLU powersupply lunar-client file-roller jq pulseaudio
      lua-language-server xfce4-screenshooter gh cargo gnumake
      gcc-arm-embedded python3Packages.pip swig file clang-tools
      net-tools iproute2 blueman networkmanager bluez bluez-tools dnsmasq
@@ -208,7 +208,7 @@ in
      pciutils btop swaylock swayidle wl-clipboard grim slurp wf-recorder 
      brightnessctl playerctl swaynotificationcenter quickshell mdhtml
      typescript-language-server jdt-language-server openjdk dotool 
-     lsof opencode kiwix libnotify dialog 
+     lsof opencode kiwix libnotify dialog gimp
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
      (import ./hm-setup.nix {inherit pkgs;})
@@ -227,6 +227,7 @@ in
   programs.virt-manager.enable = true;
   users.groups.libvirtd.members = ["lucas"];
   virtualisation.libvirtd.enable = true;
+  virtualisation.libvirtd.qemu.vhostUserPackages = [ pkgs.virtiofsd ]; # Enables virtiofsd
   virtualisation.spiceUSBRedirection.enable = true;
 
   fonts = {
