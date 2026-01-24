@@ -11,7 +11,8 @@ file-roller
 vlc
 lunarclient
 steam
-kiwix"
+kiwix
+gimp"
 
 # Show menu and get selection
 selection=$(echo "$apps" | wofi --show dmenu --prompt "Launch:")
@@ -54,5 +55,8 @@ case "$selection" in
         ;;
     "kiwix")
         exec kiwix-desktop
+        ;;
+    "gimp")
+        exec gimp
         ;;
 esac
