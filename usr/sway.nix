@@ -109,9 +109,18 @@
 
         # Outputs
         output = {
-          "Virtual-1" = { mode = "1440x900"; };
-          "HDMI-A-1" = { mode = "1920x1080"; };
-          "eDP-1" = { mode = "1440x900"; };
+          "Virtual-1" = {
+            mode = "1440x900";
+            bg = "${../sway/background2.jpg} fill";
+          };
+          "HDMI-A-1" = {
+            mode = "1920x1080";
+            bg = "${../sway/background2.jpg} fill";
+          };
+          "eDP-1" = {
+            mode = "1440x900";
+            bg = "${../sway/background2.jpg} fill";
+          };
         };
 
         # Client colors (approximate mapping from your scheme)
