@@ -27,6 +27,7 @@ in
     };
 
     plugins = {
+	markview.enable = true;
 	treesitter.enable = true;
 	treesitter-textobjects.enable = true;
 	luasnip.enable = true;

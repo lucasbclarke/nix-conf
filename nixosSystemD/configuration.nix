@@ -20,8 +20,11 @@ in
       };
     };
   };
-  systemd.services.greetd.after = [ "graphical-session.target" ];
-  systemd.services.greetd.wantedBy = [ "graphical-session.target" ];
+  systemd.services.greetd = {
+    after = [ "systemd-user-sessions.service" ];
+    before = [ "graphical-session.target" ];
+    wantedBy = [ "graphical-session.target" ];
+  };
 
   environment.etc."greetd/environments".text = ''
     sway
@@ -75,6 +78,18 @@ in
   boot.loader.systemd-boot.enable = lib.mkForce true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.grub.enable = lib.mkForce false;
+
+  # Kernel parameters for quiet boot
+  boot.kernelParams = [
+    "quiet"
+    "loglevel=3"
+    "rd.udev.log-priority=3"
+    "systemd.show_status=false"
+    "vt.global_cursor_default=0"
+  ];
+
+  # Systemd console settings
+  boot.consoleLogLevel = 3;
 
   time.hardwareClockInLocalTime = true;
 
