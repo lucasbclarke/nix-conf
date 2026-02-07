@@ -239,7 +239,7 @@ ShellRoot {
 
     // Slow timer for system stats
     Timer {
-        interval: 2000
+        interval: 200
         running: true
         repeat: true
         onTriggered: {
@@ -456,7 +456,7 @@ ShellRoot {
 
                     Text {
                         text: "Bat: " + batteryLevel + "%"
-                        color: batteryLevel > 20 ? root.colGreen : root.colRed
+                        color: batteryLevel > 40 ? root.colGreen : root.colRed
                         font.pixelSize: root.fontSize
                         font.family: root.fontFamily
                         font.bold: true

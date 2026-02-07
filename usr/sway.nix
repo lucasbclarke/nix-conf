@@ -12,9 +12,8 @@
         # Startup commands (including previous exec_always and exec)
         startup = [
           { command = "~/nix-conf/sway/setup-displays.sh"; always = true; }
-          { command = "/usr/bin/win &"; always = true; }
           { command = "ghostty"; }
-          { command = "sleep 0.5 && swaymsg workspace number 1"; }
+          # { command = "sleep 0.5 && swaymsg workspace number 1"; }
           { command = "qs &"; }
         ];
 

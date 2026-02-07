@@ -12,7 +12,8 @@ vlc
 lunarclient
 steam
 kiwix
-gimp"
+gimp
+firefox"
 
 # Show menu and get selection
 selection=$(echo "$apps" | wofi --show dmenu --prompt "Launch:")
@@ -58,5 +59,8 @@ case "$selection" in
         ;;
     "gimp")
         exec gimp
+        ;;
+    "firefox")
+        exec firefox
         ;;
 esac
