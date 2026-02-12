@@ -223,10 +223,14 @@ in
      pciutils btop swaylock swayidle wl-clipboard grim slurp wf-recorder 
      brightnessctl playerctl swaynotificationcenter quickshell mdhtml
      typescript-language-server jdt-language-server openjdk dotool 
-     lsof opencode kiwix libnotify dialog gimp firefox 
+     lsof kiwix libnotify dialog gimp firefox python314 teams-for-linux
+     opencode
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
      (import ./hm-setup.nix {inherit pkgs;})
+     (import ./winapps-setup.nix {inherit pkgs;})
+     inputs.winapps.packages."${pkgs.system}".winapps
+     inputs.winapps.packages."${pkgs.system}".winapps-launcher
      inputs.nixd.packages."${pkgs.system}".nixd
      inputs.nil.packages."${pkgs.system}".nil
   ];
@@ -272,6 +276,9 @@ in
 
   services.openssh.enable = true;
   services.logind.settings.Login.HandleLidSwitch = "ignore";
+
+  services.xrdp.enable = true;
+  services.xrdp.defaultWindowManager = "sway";
 
   services.thermald.enable = true;
 

@@ -336,14 +336,34 @@
      };
    }
 
-   {
-     mode = "n";
-     key = "<leader>r";
-     action = ":Telescope registers<Enter>";
-     options = {
-       silent = true;
-     };
-   }
+    {
+      mode = "n";
+      key = "<leader>r";
+      action = ":Telescope registers<Enter>";
+      options = {
+        silent = true;
+      };
+    }
+
+    {
+      mode = "v";
+      key = "<leader>9v";
+      action = "<cmd>lua local ok, err = pcall(require('99').visual) if not ok then vim.notify('99: ' .. err, vim.log.levels.WARN) end<cr>";
+      options = {
+        silent = true;
+        desc = "99 visual mode";
+      };
+    }
+
+    {
+      mode = "v";
+      key = "<leader>9s";
+      action = "<cmd>lua require('99').stop_all_requests()<cr>";
+      options = {
+        silent = true;
+        desc = "99 stop all requests";
+      };
+    }
 
    {
      mode = "n";
@@ -471,6 +491,17 @@
      ];
      key = "<Down>";
      action = "<cmd>echo 'Use j to move!!'<CR>";
+     options = {
+       silent = true;
+     };
+   }
+
+   {
+     mode = [
+        "n"
+     ];
+     key = "<leader>m";
+     action = ":Markview toggle<Enter>";
      options = {
        silent = true;
      };

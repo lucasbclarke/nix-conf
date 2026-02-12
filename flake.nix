@@ -34,6 +34,11 @@
     zig = {
       url = "github:mitchellh/zig-overlay";
     };
+
+    winapps = {
+      url = "github:winapps-org/winapps";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = { self, nixpkgs, home-manager, nixvim, nixd, nil, sops-nix, ghostty, ... }@inputs:

@@ -1,8 +1,8 @@
 { config, pkgs, lib, inputs, ... }:
 
-let
-  timeTrackerPlugins = import ./time-tracker.nix { inherit pkgs; };
-in
+ let
+   timeTrackerPlugins = import ./time-tracker.nix { inherit pkgs; };
+ in
 {
   home.packages = [ pkgs.sqlite ];
   programs.nixvim = {  
@@ -11,6 +11,7 @@ in
     lsp.servers.ts_ls.enable = true;
     lsp.servers.jdtls.enable = true;
     lsp.servers.clangd.enable = true;
+    lsp.servers.pyright.enable = true;
 
     extraPlugins = [
 	pkgs.vimPlugins.rose-pine
