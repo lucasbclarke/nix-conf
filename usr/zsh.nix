@@ -16,10 +16,10 @@
     };
 
     initContent = ''
-      if command -v tmux &> /dev/null && [ -n "$PS2" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
+      if command -v tmux &> /dev/null && [ -n "$PS2" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ] && { [ -n "$WAYLAND_DISPLAY" ] || [ "$XDG_VTNR" = "1" ]; }; then
         exec tmux
           fi
-          export PATH="$PATH:/opt/nvim-linux64/bin:/usr/lib:$HOME/.local/bin:/usr/bin:$HOME/zig-latest-linux-x86_64"
+          export PATH="$PATH:/opt/nvim-linux64/bin:/usr/lib:$HOME/.local/bin:/usr/bin:$HOME/zig-latest-linux-x86_64:/run/current-system/sw/bin/"
           export MANPAGER='nvim +Man!'
           export NIXPKGS_ALLOW_UNFREE=1
 

@@ -28,7 +28,6 @@ in
 
   environment.etc."greetd/environments".text = ''
     sway
-    zsh
   '';
 
   environment.variables = {
@@ -52,8 +51,6 @@ in
   nix.extraOptions = ''
     experimental-features = nix-command flakes 
   '';
-
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   imports =
     [ 
@@ -120,7 +117,6 @@ in
 
   security.polkit.enable = true;
 
-  services.xserver.enable = true;
 
   services.xserver.xkb = {
     layout = "au";
@@ -130,15 +126,15 @@ in
   services.xserver.videoDrivers = [ "modesetting" "nvidia" ];
 
   hardware.nvidia = {
-    modesetting.enable = false;
+    modesetting.enable = true;
     powerManagement.finegrained = false;
     open = false;
 
     package = config.boot.kernelPackages.nvidiaPackages.stable;
 
     prime = {
-      intelBusId = "PCI:2@0:0:0";
-      nvidiaBusId = "PCI:0@1:0:0";  
+      intelBusId = "PCI:0:2:0";
+      nvidiaBusId = "PCI:1:0:0";  
 
       offload = {
         enable = true;
@@ -173,7 +169,7 @@ in
   users.users.lucas = {
     isNormalUser = true;
     description = "lucas";
-    extraGroups = [ "networkmanager" "wheel" "docker" "kvm" "libvirtd" ];
+    extraGroups = [ "networkmanager" "wheel" "docker" "kvm" "libvirtd" "tty" ];
     shell = pkgs.zsh;
   };
 
@@ -208,9 +204,9 @@ in
   # Temporarily remove cnijfilter2 due to C23 compilation issues
   # Can be re-added once the package is fixed in nixpkgs
 
-  environment.systemPackages = with pkgs; [
+   environment.systemPackages = with pkgs; [
      sqlite tealdeer fzf xdotool brave xfce4-exo xfce4-settings
-     unzip arduino-cli discord gcc cloudflare-warp fastfetch
+     unzip arduino-cli discord gcc cloudflare-warp fastfetch dmenu
      pavucontrol vlc usbutils udiskie udisks samba sway wayland-scanner
      libGL libGLU powersupply lunar-client file-roller jq pulseaudio
      lua-language-server xfce4-screenshooter gh cargo gnumake
@@ -222,18 +218,15 @@ in
      brasero networkmanagerapplet ripgrep inetutils sops ghostscript
      pciutils btop swaylock swayidle wl-clipboard grim slurp wf-recorder 
      brightnessctl playerctl swaynotificationcenter quickshell mdhtml
-     typescript-language-server jdt-language-server openjdk dotool 
+     typescript-language-server jdt-language-server openjdk dotool opencode
      lsof kiwix libnotify dialog gimp firefox python314 teams-for-linux
-     opencode
+     xorg.xinit
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
      (import ./hm-setup.nix {inherit pkgs;})
-     (import ./winapps-setup.nix {inherit pkgs;})
-     inputs.winapps.packages."${pkgs.system}".winapps
-     inputs.winapps.packages."${pkgs.system}".winapps-launcher
      inputs.nixd.packages."${pkgs.system}".nixd
      inputs.nil.packages."${pkgs.system}".nil
-  ];
+   ];
 
   services.gvfs = {
     enable = true;
