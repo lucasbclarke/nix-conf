@@ -21,7 +21,8 @@ windows
 outlook
 explorer
 notepad
-onedrive"
+onedrive
+qutebrowser"
 
 # Show menu and get selection
 selection=$(echo "$apps" | wofi --show dmenu --prompt "Launch:")
@@ -94,5 +95,8 @@ case "$selection" in
         ;;
     "onedrive")
         exec /usr/bin/onedrive
+        ;;
+    "qutebrowser")
+        exec qutebrowser
         ;;
 esac

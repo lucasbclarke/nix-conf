@@ -162,6 +162,14 @@ in
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
+    wireplumber.enable = true;
+    wireplumber.extraConfig = {
+        "51-bluez-confg" = {
+          "monitor.bluez.properties" = {
+              "bluez5.autoswitch-profile" = false;
+          };
+        };
+    };
     alsa.enable = true;
     alsa.support32Bit = true;
   };
@@ -220,7 +228,7 @@ in
      brightnessctl playerctl swaynotificationcenter quickshell mdhtml
      typescript-language-server jdt-language-server openjdk dotool opencode
      lsof kiwix libnotify dialog gimp firefox python314 teams-for-linux
-     xorg.xinit
+     wiremix qutebrowser
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
      (import ./hm-setup.nix {inherit pkgs;})
