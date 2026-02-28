@@ -208,10 +208,6 @@ in
   nixpkgs.config.permittedInsecurePackages = [
     "python-2.7.18.8"
   ];
-
-  # Temporarily remove cnijfilter2 due to C23 compilation issues
-  # Can be re-added once the package is fixed in nixpkgs
-
    environment.systemPackages = with pkgs; [
      sqlite tealdeer fzf xdotool brave xfce4-exo xfce4-settings
      unzip arduino-cli discord gcc cloudflare-warp fastfetch dmenu
@@ -220,22 +216,22 @@ in
      lua-language-server xfce4-screenshooter gh cargo gnumake
      gcc-arm-embedded python3Packages.pip swig file clang-tools
      net-tools iproute2 blueman networkmanager bluez bluez-tools dnsmasq
-     sway-launcher-desktop jetbrains-mono dive podman-tui
+      sway-launcher-desktop dive podman-tui
      docker-compose freerdp dialog libnotify podman podman-compose
-     xwayland ncdu gtk3 libnotify nss xorg.libXtst xdg-utils dpkg
+     xwayland ncdu gtk3 libnotify nss libxtst xdg-utils dpkg
      brasero networkmanagerapplet ripgrep inetutils sops ghostscript
      pciutils btop swaylock swayidle wl-clipboard grim slurp wf-recorder 
      brightnessctl playerctl swaynotificationcenter quickshell mdhtml
      typescript-language-server jdt-language-server openjdk dotool opencode
      lsof kiwix libnotify dialog gimp firefox python314 teams-for-linux
-     wiremix qutebrowser ciscoPacketTracer8
+      wiremix qutebrowser ciscoPacketTracer9
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
      (import ./hm-setup.nix {inherit pkgs;})
-     inputs.nixd.packages."${pkgs.system}".nixd
-     inputs.nil.packages."${pkgs.system}".nil
+      inputs.nixd.packages.${stdenv.hostPlatform.system}.nixd
+      inputs.nil.packages.${stdenv.hostPlatform.system}.nil
    ];
-
+   
   services.gvfs = {
     enable = true;
     package = pkgs.gvfs;
@@ -252,9 +248,6 @@ in
 
   fonts = {
     fontconfig.enable = true;
-      packages = with pkgs; [
-        nerd-fonts.jetbrains-mono
-      ];
   };
 
   virtualisation.containers.enable = true;
