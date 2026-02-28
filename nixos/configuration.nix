@@ -62,7 +62,7 @@
     lua-language-server xfce4-screenshooter gh cargo gnumake
     gcc-arm-embedded python3Packages.pip swig file clang-tools
     net-tools iproute2 blueman networkmanager bluez bluez-tools 
-    dnsmasq jetbrains-mono dive podman-tui docker-compose freerdp
+    dnsmasq dive podman-tui docker-compose freerdp
     dialog libnotify podman podman-compose ncdu gtk3 nss libxtst
     xdg-utils dpkg brasero networkmanagerapplet ripgrep inetutils
     brightnessctl playerctl quickshell mdhtml maim xclip typescript-language-server
@@ -170,9 +170,6 @@
 
   fonts = {
     fontconfig.enable = true;
-      packages = with pkgs; [
-        nerd-fonts.jetbrains-mono
-      ];
   };
 
   virtualisation.containers.enable = true;

@@ -77,6 +77,6 @@
     };
 
   };
-  xdg.configFile."qutebrowser/rosepine".source = ./qutebrowser/rosepine;
+  xdg.configFile."qutebrowser/rosepine".source = ../qutebrowser/rosepine;
 }
 

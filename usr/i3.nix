@@ -203,7 +203,8 @@ in
       explorer
       notepad
       onedrive
-      win"
+      win
+      packettracer"
 
       selection=$(echo "$apps" | rofi -dmenu -p "🔍 ")
 
@@ -229,6 +230,7 @@ in
         notepad) exec /usr/bin/notepad ;;
         onedrive) exec /usr/bin/onedrive ;;
         win) exec /usr/bin/win ;;
+        packettracker) exec packettracer9 ;;
         *) ;;
       esac
     '';
