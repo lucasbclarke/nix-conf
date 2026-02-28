@@ -9,6 +9,7 @@
     ./usr/nvim/keymaps.nix
     ./usr/nvim/cmp.nix
     ./usr/nvim/extraConfig.nix
+    ./usr/qutebrowser.nix
     inputs.nixvim.homeModules.nixvim
   ];
 
