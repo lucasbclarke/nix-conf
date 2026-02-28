@@ -23,15 +23,15 @@
             if cmp.visible() then
               cmp.select_next_item()
             else
-              local luasnip = require("luasnip")
-                if luasnip and luasnip.expand_or_locally_jumpable() then
-                  luasnip.expand_or_jump()
-                else
-                  fallback()
-                    end
-                    end
-                    end
-                    '';
+            local luasnip = require("luasnip")
+              if luasnip and luasnip.expand_or_locally_jumpable() then
+                luasnip.expand_or_jump()
+              else
+                fallback()
+                  end
+                  end
+                  end
+                  '';
           modes = [ "i" "s" ];
         };
         "<S-Tab>" = {
@@ -40,16 +40,22 @@
             if cmp.visible() then
               cmp.select_prev_item()
             else
-              local luasnip = require("luasnip")
-                if luasnip and luasnip.locally_jumpable(-1) then
-                  luasnip.jump(-1)
-                else
-                  fallback()
-                    end
-                    end
-                    end
-                    '';
+            local luasnip = require("luasnip")
+              if luasnip and luasnip.locally_jumpable(-1) then
+                luasnip.jump(-1)
+              else
+                fallback()
+                  end
+                  end
+                  end
+                  '';
           modes = [ "i" "s" ];
+        };
+        "<C-n>" = {
+          __raw = "cmp.mapping.select_next_item()";
+        };
+        "<C-p>" = {
+          __raw = "cmp.mapping.select_prev_item()";
         };
       };
 

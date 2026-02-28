@@ -41,6 +41,7 @@
       bindkey "^P" up-line-or-search
       bindkey "^N" down-line-or-search
 
+      export SWAYSOCK=$(ls /run/user/1000/sway-ipc.*.sock | head -n1)
       '';
 
   };

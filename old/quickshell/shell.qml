@@ -121,10 +121,10 @@ ShellRoot {
         Component.onCompleted: running = true
     }
 
-    // Active window title (i3)
+    // Active window title (sway)
     Process {
         id: windowProc
-        command: ["sh", "-c", "i3-msg -t get_tree | jq -r '.. | select(.focused? == true and .window != null) | .name // empty' | head -1"]
+        command: ["sh", "-c", "swaymsg -t get_tree | jq -r '.. | select(.focused? == true) | .name // empty' | head -1"]
         stdout: SplitParser {
             onRead: data => {
                 if (data && data.trim()) {
@@ -135,21 +135,22 @@ ShellRoot {
         Component.onCompleted: running = true
     }
 
-    // Current layout (i3: splith, splitv, tabbed, stacked)
+    // Current layout (sway: splith, splitv, tabbed, stacking)
     Process {
         id: layoutProc
-        command: ["sh", "-c", "i3-msg -t get_tree | jq -r '.. | select(.focused? == true) | .layout // empty' | head -1"]
+        command: ["sh", "-c", "swaymsg -t get_tree | jq -r '.. | select(.focused? == true) | .layout // empty' | head -1"]
         stdout: SplitParser {
             onRead: data => {
                 if (data && data.trim()) {
                     var layout = data.trim()
+                    // Convert sway layout names to friendly names
                     if (layout === "splith") {
                         currentLayout = "Horizontal"
                     } else if (layout === "splitv") {
                         currentLayout = "Vertical"
                     } else if (layout === "tabbed") {
                         currentLayout = "Tabbed"
-                    } else if (layout === "stacked" || layout === "stacking") {
+                    } else if (layout === "stacking") {
                         currentLayout = "Stacking"
                     } else if (layout === "output" || layout === "none") {
                         currentLayout = "Tiled"
@@ -162,16 +163,16 @@ ShellRoot {
         Component.onCompleted: running = true
     }
 
-    // Focused workspace (i3) — normalise 0 to 1 so bar shows 1–10
+    // Focused workspace (sway)
     Process {
         id: workspaceProc
-        command: ["sh", "-c", "i3-msg -t get_workspaces | jq -r '.[] | select(.focused == true) | .num'"]
+        command: ["sh", "-c", "swaymsg -t get_workspaces | jq -r '.[] | select(.focused == true) | .num'"]
         stdout: SplitParser {
             onRead: data => {
                 if (data && data.trim()) {
-                    var num = parseInt(data.trim(), 10)
+                    var num = parseInt(data.trim())
                     if (!isNaN(num)) {
-                        focusedWorkspace = (num === 0) ? 1 : num
+                        focusedWorkspace = num
                     }
                 }
             }
@@ -179,22 +180,14 @@ ShellRoot {
         Component.onCompleted: running = true
     }
 
-    // Occupied workspaces (i3) — one-line output, normalise 0 to 1 so bar shows 1–10
+    // Occupied workspaces (sway)
     Process {
         id: occupiedProc
-        command: ["sh", "-c", "i3-msg -t get_workspaces | jq -r '[.[].num] | join(\" \")'"]
+        command: ["sh", "-c", "swaymsg -t get_workspaces | jq -r '.[].num'"]
         stdout: SplitParser {
             onRead: data => {
                 if (data && data.trim()) {
-                    var parts = data.trim().split(/\s+/)
-                    var nums = []
-                    for (var i = 0; i < parts.length; i++) {
-                        var v = parseInt(parts[i], 10)
-                        if (!isNaN(v)) {
-                            v = (v === 0) ? 1 : v
-                            if (nums.indexOf(v) === -1) nums.push(v)
-                        }
-                    }
+                    var nums = data.trim().split('\n').map(n => parseInt(n)).filter(n => !isNaN(n))
                     occupiedWorkspaces = nums
                 }
             }
@@ -267,7 +260,7 @@ ShellRoot {
         onTriggered: uptimeProc.running = true
     }
 
-    // Fast timer for window/layout/workspace (i3)
+    // Fast timer for window/layout/workspace (sway doesn't have event hooks in quickshell)
     Timer {
         interval: 200
         running: true
@@ -328,19 +321,18 @@ ShellRoot {
                     Item { width: 8 }
 
                     Repeater {
-                        model: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+                        model: 10
 
                         Rectangle {
                             Layout.preferredWidth: 20
                             Layout.preferredHeight: parent.height
                             color: "transparent"
 
-                            property int workspaceNum: modelData
-                            property bool isActive: focusedWorkspace === workspaceNum
-                            property bool hasWindows: occupiedWorkspaces.indexOf(workspaceNum) !== -1
+                            property bool isActive: focusedWorkspace === (index + 1)
+                            property bool hasWindows: occupiedWorkspaces.indexOf(index + 1) !== -1
 
                             Text {
-                                text: workspaceNum
+                                text: index + 1
                                 color: parent.isActive ? root.colCyan : (parent.hasWindows ? root.colCyan : root.colMuted)
                                 font.pixelSize: root.fontSize
                                 font.family: root.fontFamily
@@ -360,7 +352,7 @@ ShellRoot {
                                 anchors.fill: parent
                                 onClicked: {
                                     var proc = Qt.createQmlObject('import Quickshell.Io; Process { }', parent)
-                                    proc.command = ["i3-msg", "workspace", "number", String(workspaceNum)]
+                                    proc.command = ["swaymsg", "workspace", String(index + 1)]
                                     proc.running = true
                                 }
                             }
