@@ -6,7 +6,7 @@
     package = pkgs.qutebrowser;
 
     settings = {
-      general = {
+      content = {
         private_browsing = true;
       };
       editor = {
@@ -17,13 +17,13 @@
           preferred_color_scheme = "dark";
         };
       };
-      urls = {
+      url = {
         start_pages = "https://google.com";
       };
     };
 
     keyBindings = {
-      global = {
+      normal = {
         "<ctrl-n>" = "completion-item-focus next";
         "<ctrl-p>" = "completion-item-focus prev";
       };
@@ -32,7 +32,12 @@
     extraConfig = ''
       import rosepine
       config.load_autoconfig(False)
-      rosepine.setup(c, 'rose-pine', True)
+      rosepine.setup(c, True)
+
+      config.bind('<ctrl-n>', 'completion-item-focus next', mode='command')
+      config.bind('<ctrl-p>', 'completion-item-focus prev', mode='command')
+      config.bind('<ctrl-n>', 'completion-item-focus next', mode='prompt')
+      config.bind('<ctrl-p>', 'completion-item-focus prev', mode='prompt')
     '';
 
     quickmarks = {
