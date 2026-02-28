@@ -67,7 +67,7 @@
     xdg-utils dpkg brasero networkmanagerapplet ripgrep inetutils
     brightnessctl playerctl quickshell mdhtml maim xclip typescript-language-server
     jdt-language-server openjdk dotool opencode lsof gimp firefox
-    python314 teams-for-linux sops qutebrowser ciscoPacketTracer8
+    python314 teams-for-linux sops qutebrowser ciscoPacketTracer9
     (import ./git-repos.nix {inherit pkgs;})
     (import ./sud.nix {inherit pkgs;})
     inputs.nixd.packages."${pkgs.stdenv.hostPlatform.system}".nixd
