@@ -22,7 +22,8 @@ outlook
 explorer
 notepad
 onedrive
-qutebrowser"
+qutebrowser
+packet-tracer"
 
 # Show menu and get selection
 selection=$(echo "$apps" | wofi --show dmenu --prompt "Launch:")
@@ -98,5 +99,8 @@ case "$selection" in
         ;;
     "qutebrowser")
         exec qutebrowser
+        ;;
+    "packet-tracer")
+        exec packettracer9
         ;;
 esac
