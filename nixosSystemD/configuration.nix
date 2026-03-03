@@ -224,7 +224,7 @@ in
      brightnessctl playerctl swaynotificationcenter quickshell mdhtml
      typescript-language-server jdt-language-server openjdk dotool opencode
      lsof kiwix libnotify dialog gimp firefox python314 teams-for-linux
-      wiremix qutebrowser ciscoPacketTracer9
+     wiremix qutebrowser ciscoPacketTracer9 virtualbox
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
      (import ./hm-setup.nix {inherit pkgs;})
