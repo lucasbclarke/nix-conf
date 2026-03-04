@@ -12,11 +12,6 @@
       editor = {
         command = [ "ghostty" "-e" "nvim" "{file}" "-c" "normal {line}G{column0}l" ];
       };
-      colors = {
-        webpage = {
-          preferred_color_scheme = "dark";
-        };
-      };
       url = {
         start_pages = "https://google.com";
       };

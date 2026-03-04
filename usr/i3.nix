@@ -20,7 +20,7 @@ in
         { command = "${setupDisplays} &"; always = true; }
         { command = startGhostty; always = false; }
         { command = "qs &"; always = false; }
-        { command = "win &"; always = false; }
+        { command = "/usr/bin/win &"; always = false; }
       ];
 
       # Assign Ghostty to workspace 1 (WM_CLASS is "ghostty" / "com.mitchellh.ghostty")
