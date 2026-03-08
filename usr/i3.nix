@@ -89,6 +89,9 @@ in
         "${modifier}+space" = "exec true";
         "${modifier}+a" = "focus parent";
         "${modifier}+r" = "mode resize";
+
+        "${modifier}+ctrl+1" = "exec /home/lucas/nix-conf/usr/internal-monitor-layout.sh";
+        "${modifier}+ctrl+2" = "exec /home/lucas/nix-conf/usr/external-monitor-layout.sh";
       };
 
       # Resize mode (same as Sway)
@@ -240,111 +243,80 @@ in
   # Display setup (from Sway setup-displays.sh — HDMI vs internal, using xrandr for i3/X11)
   xdg.configFile."i3/setup-displays.sh" = {
     text = ''
-      #!/usr/bin/env bash
-      # Same behaviour as Sway: when HDMI connected use 1920x1080 and disable eDP;
-      # else use internal (eDP/LVDS) 1440x900 and disable HDMI. Poll every 2s.
-      previous_state=""
-      while true; do
-        output_info=$(xrandr --query 2>/dev/null)
-
-        if echo "$output_info" | grep -qE '^HDMI[^ ]* connected'; then
-          current_state="hdmi"
-        else
-          current_state="internal"
-        fi
-
-        if [[ "$current_state" != "$previous_state" ]]; then
-          hdmi_out=$(echo "$output_info" | grep -oE '^HDMI[^ ]*' | head -1)
-          edp_out=$(echo "$output_info" | grep -oE '^eDP[^ ]*|^LVDS[^ ]*' | head -1)
-
-          if [[ "$current_state" == "hdmi" && -n "$hdmi_out" ]]; then
-            xrandr --output "$hdmi_out" --mode 1920x1080 --pos 0 0 --primary
-            [[ -n "$edp_out" ]] && xrandr --output "$edp_out" --off
-          else
-            if [[ -n "$edp_out" ]]; then
-              xrandr --output "$edp_out" --mode 1440x900 --pos 0 0 --primary
-            fi
-            [[ -n "$hdmi_out" ]] && xrandr --output "$hdmi_out" --off
-          fi
-          previous_state="$current_state"
-        fi
-
-        sleep 2
-      done
     '';
     executable = true;
   };
 
   # Rofi: Rose Pine Moon — iris border, surface bg, rose selection, search prompt
-  xdg.configFile."rofi/config.rasi" = {
-    text = ''
-      configuration {
-        modi: "dmenu";
-        show-icons: false;
-        font: "JetBrainsMono Nerd Font 14px";
-        width: 600;
-        padding: 15;
-        border: 0px;
-        lines: 12;
-      }
+  #xdg.configFile."rofi/config.rasi" = {
+  #  text = ''
+  #    configuration {
+  #      modi: "dmenu";
+  #      show-icons: false;
+  #      font: "JetBrainsMono Nerd Font 14px";
+  #      width: 600;
+  #      padding: 15;
+  #      border: 0px;
+  #      lines: 12;
+  #    }
 
-      * {
-        background-color: #2A273F;
-        text-color: #E0DEF4;
-        border-color: #C4A7E7;
-      }
+  #    * {
+  #      background-color: #2A273F;
+  #      text-color: #E0DEF4;
+  #      border-color: #C4A7E7;
+  #    }
 
-      window {
-        background-color: #2A273F;
-        border: 0px;
-        border-color: #C4A7E7;
-        padding: 15px;
-      }
+  #    window {
+  #      background-color: #2A273F;
+  #      border: 0px;
+  #      border-color: #C4A7E7;
+  #      padding: 15px;
+  #    }
 
-      inputbar {
-        background-color: #2A273F;
-        padding: 8px;
-        children: [ prompt, entry ];
-      }
+  #    inputbar {
+  #      background-color: #2A273F;
+  #      padding: 8px;
+  #      children: [ prompt, entry ];
+  #    }
 
-      prompt {
-        text-color: #E0DEF4;
-        padding: 8px;
-      }
+  #    prompt {
+  #      text-color: #E0DEF4;
+  #      padding: 8px;
+  #    }
 
-      entry {
-        text-color: #E0DEF4;
-      }
+  #    entry {
+  #      text-color: #E0DEF4;
+  #    }
 
-      listview {
-        background-color: #2A273F;
-        padding: 4px;
-        lines: 12;
-      }
+  #    listview {
+  #      background-color: #2A273F;
+  #      padding: 4px;
+  #      lines: 12;
+  #    }
 
-      element {
-        padding: 8px;
-        text-color: #E0DEF4;
-      }
+  #    element {
+  #      padding: 8px;
+  #      text-color: #E0DEF4;
+  #    }
 
-      element selected {
-        background-color: #2A273F;
-        text-color: #E0DEF4;
-      }
+  #    element selected {
+  #      background-color: #2A273F;
+  #      text-color: #E0DEF4;
+  #    }
 
-      element-text {
-        text-color: inherit;
-      }
+  #    element-text {
+  #      text-color: inherit;
+  #    }
 
-      element-text selected {
-        background-color: #2A273F;
-        text-color: #E0DEF4;
-      }
+  #    element-text selected {
+  #      background-color: #2A273F;
+  #      text-color: #E0DEF4;
+  #    }
 
-      element-icon {
-        size: 0;
-      }
-    '';
-  };
+  #    element-icon {
+  #      size: 0;
+  #    }
+  #  '';
+  #};
 
 }
