@@ -3,7 +3,7 @@
 previous_state=""
 
 while true; do
-  output_info=$(swaymsg -t get_outputs)
+  output_info=$(wlr-randr)
 
   if echo "$output_info" | grep "HDMI-A-1"; then
     current_state="hdmi"
