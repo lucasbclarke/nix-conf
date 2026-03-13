@@ -69,6 +69,7 @@
       physics-booklet = "https://assets.schools.nsw.gov.au/content/dam/doe/sws/schools/s/sydneyh-d/Enrolment%20Documents/Academic%20Docs/Yr-11-Assessment_Booklet.pdf";
       img-to-pdf = "https://www.mcstumble.com/tools/pdf-images-to-pdf";
       swe-github = "https://github.com/TLCC-AU/term-1-programming-fundamentals-project-lucasbclarke";
+      maths-is-fun = "https://mathsisfun.com/numbers/math-trainer-multiply.html";
     };
 
   };
