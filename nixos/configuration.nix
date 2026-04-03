@@ -11,6 +11,9 @@
   boot.loader.efi.canTouchEfiVariables = true;
   boot.plymouth.enable = true;
 
+  boot.loader.systemd-boot.configurationLimit = 10;
+  system.nixos.label = "Nixos - I3";
+
   networking.hostName = "nixos"; # Define your hostname.
   networking.networkmanager.enable = true;
   programs.nm-applet.enable = true;
