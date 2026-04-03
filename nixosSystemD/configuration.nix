@@ -76,6 +76,9 @@ in
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.grub.enable = lib.mkForce false;
 
+  boot.loader.systemd-boot.configurationLimit = 10;
+  system.nixos.label = "Nixos - Sway";
+
   # Kernel parameters for quiet boot
   boot.kernelParams = [
     "quiet"
@@ -164,7 +167,7 @@ in
     enable = true;
     wireplumber.enable = true;
     wireplumber.extraConfig = {
-        "51-bluez-confg" = {
+        "51-bluez.conf" = {
           "monitor.bluez.properties" = {
               "bluez5.autoswitch-profile" = false;
           };
@@ -172,6 +175,7 @@ in
     };
     alsa.enable = true;
     alsa.support32Bit = true;
+    pulse.enable = true;
   };
 
   users.users.lucas = {
@@ -224,7 +228,8 @@ in
      brightnessctl playerctl swaynotificationcenter quickshell mdhtml
      typescript-language-server jdt-language-server openjdk dotool opencode
      lsof kiwix libnotify dialog gimp firefox python314 teams-for-linux
-     wiremix qutebrowser ciscoPacketTracer9 virtualbox wlr-randr
+     wiremix qutebrowser virtualbox wlr-randr tailscale #ciscoPacketTracer9
+     efibootmgr
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
      (import ./hm-setup.nix {inherit pkgs;})
@@ -305,7 +310,7 @@ in
       dedicatedServer.openFirewall = true;
   };
 
-  programs.gamemode.enable = true;
+programs.gamemode.enable = true;
 
-  system.stateVersion = "25.11";
+system.stateVersion = "26.05";
 }

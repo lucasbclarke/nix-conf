@@ -129,7 +129,8 @@
     
     vim.lsp.config('typescript-language-server', {
       mason = false,
-      cmd = { "typescript-language-server", "--stdio" }
+      cmd = { "typescript-language-server", "--stdio" },
+      filetypes = { "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx" }
     })
     vim.lsp.enable('typescript-language-server')
 

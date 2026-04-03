@@ -15,7 +15,7 @@
 
   home.username = "lucas";
   home.homeDirectory = "/home/lucas";
-  home.stateVersion = "25.05"; 
+  home.stateVersion = "26.05"; 
 
   home.sessionVariables = {
     EDITOR = "nvim";
@@ -480,7 +480,7 @@
         main.font = "monospace:size=14";
       };
   };
-   
+
   xdg.configFile."quickshell/shell.qml".source = ./quickshell/shell.qml;
   programs.home-manager.enable = true;
 }
