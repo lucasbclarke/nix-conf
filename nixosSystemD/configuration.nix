@@ -312,5 +312,7 @@ in
 
 programs.gamemode.enable = true;
 
+services.tailscale.enable = true;
+
 system.stateVersion = "26.05";
 }
