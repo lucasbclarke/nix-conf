@@ -71,7 +71,7 @@
     brightnessctl playerctl quickshell mdhtml maim xclip typescript-language-server
     jdt-language-server openjdk dotool opencode lsof gimp firefox
     python314 teams-for-linux sops qutebrowser ciscoPacketTracer9
-    virtualbox
+    virtualbox tailscale
     (import ./git-repos.nix {inherit pkgs;})
     (import ./sud.nix {inherit pkgs;})
     inputs.nixd.packages."${pkgs.stdenv.hostPlatform.system}".nixd
@@ -215,6 +215,8 @@
   programs.ssh.enableAskPassword = false;
 
   programs.gamemode.enable = true;
+
+  services.tailscale.enable = true;
   
   system.stateVersion = "25.11"; 
 
