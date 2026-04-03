@@ -77,7 +77,7 @@ in
   boot.loader.grub.enable = lib.mkForce false;
 
   boot.loader.systemd-boot.configurationLimit = 10;
-  system.nixos.label = "Nixos - Sway";
+  system.nixos.label = "NixosSway";
 
   # Kernel parameters for quiet boot
   boot.kernelParams = [
