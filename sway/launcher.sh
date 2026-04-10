@@ -22,7 +22,7 @@ outlook
 explorer
 notepad
 onedrive
-packet-tracer"
+obsidian"
 
 # Show menu and get selection
 selection=$(echo "$apps" | wofi --show dmenu --prompt "Launch:")
@@ -96,7 +96,7 @@ case "$selection" in
     "onedrive")
         exec /usr/bin/onedrive
         ;;
-    "packet-tracer")
-        exec packettracer9
+    "obsidian")
+        exec obsidian
         ;;
 esac
