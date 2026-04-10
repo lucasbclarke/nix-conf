@@ -22,7 +22,6 @@ outlook
 explorer
 notepad
 onedrive
-qutebrowser
 packet-tracer"
 
 # Show menu and get selection
@@ -96,9 +95,6 @@ case "$selection" in
         ;;
     "onedrive")
         exec /usr/bin/onedrive
-        ;;
-    "qutebrowser")
-        exec qutebrowser
         ;;
     "packet-tracer")
         exec packettracer9

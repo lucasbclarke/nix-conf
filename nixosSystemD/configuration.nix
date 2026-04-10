@@ -44,6 +44,8 @@ in
     # Additional dark mode settings
     QT_AUTO_SCREEN_SCALE_FACTOR = "1";
     QT_SCALE_FACTOR = "1";
+    CUDA_VISIBLE_DEVICES = "0";
+    __GLX_VENDOR_LIBRARY_NAME = "nvidia";
   };
 
   nixpkgs.config.allowUnsupportedSystem = true;
@@ -228,8 +230,7 @@ in
      brightnessctl playerctl swaynotificationcenter quickshell mdhtml
      typescript-language-server jdt-language-server openjdk dotool opencode
      lsof kiwix libnotify dialog gimp firefox python314 teams-for-linux
-     wiremix qutebrowser virtualbox wlr-randr tailscale #ciscoPacketTracer9
-     efibootmgr
+     wiremix virtualbox wlr-randr tailscale efibootmgr obsidian
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
      (import ./hm-setup.nix {inherit pkgs;})
@@ -264,9 +265,9 @@ in
     };
   };
 
-  boot.blacklistedKernelModules = lib.mkForce [ ];
+  boot.blacklistedKernelModules = lib.mkForce [ "nouveau" ];
   boot.extraModprobeConfig = ''
-    blacklist # cleared by NixOS config
+    blacklist nouveau
   '';
 
   system.activationScripts.removeKvmBlacklist.text = ''
