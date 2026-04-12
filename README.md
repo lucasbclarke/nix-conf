@@ -1,11 +1,3 @@
-### Nixos Configuration
-
-This repository contains all of my configuration of nixos through the use of flakes.
-
-Also in this repository is my configuration for home-manager which manages all programs that were previously managed in the 
-[lucasbclarke/dotfiles](https://github.com/lucasbclarke/dotfiles). These configurations are located in the usr directory.
-
-
 ### NixConf: Declarative System Configuration
 
 Manually configuring a development machine is error-prone, time-consuming, and is not reproducible. A simple change on one machine often requires tedious manual steps to replicate elsewhere.
@@ -16,7 +8,7 @@ Full System Definition: Manages OS packages, services, and user settings declara
 Home-Manager Integration: Provides a consistent, version-controlled experience for user-level applications and configurations.
 Immutability Guarantee: Ensures that system state cannot drift from what is defined.
 
-##TODO Figure out how to use nix run
+## TODO Figure out how to use nix run
 Getting Started:
 1. Prerequisites: A machine running NixOS.
 2. Setup: git clone https://github.com/lucasbclarke/nix-conf
