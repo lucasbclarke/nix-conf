@@ -11,11 +11,6 @@
       url = "github:nix-community/nixvim";
     };
     
-    nixd = {
-      url = "github:nix-community/nixd";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     nil = {
       url= "github:oxalica/nil";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -36,8 +31,7 @@
     };
 
   };
-
-  outputs = { self, nixpkgs, home-manager, nixvim, nixd, nil, sops-nix, ghostty, ... }@inputs:
+  outputs = { self, nixpkgs, home-manager, nixvim, sops-nix, ghostty, ... }@inputs:
   let
     lib = nixpkgs.lib;
     system = "x86_64-linux";

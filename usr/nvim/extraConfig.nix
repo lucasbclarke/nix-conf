@@ -18,6 +18,12 @@
         completeopt = 'menu,menuone,noinsert',
       },
 
+      sources = {
+        { name = "nvim_lsp" },
+        { name = "luasnip"; option = { show_autosnippets = false } },
+        { name = "path" }
+      },
+
       sorting = {
         comparators = {
           cmp.config.compare.offset,
@@ -69,19 +75,19 @@
     -- Configure Lua LS separately to use your custom command
     vim.lsp.config.lua_ls = {
       mason = false,  -- Disable Mason management
-      cmd = { "lua-language-server" },  -- Use your NixOS version
+      cmd = { "lua-language-server" },
       settings = {
         Lua = {
           workspace = {
-            checkThirdParty = false,
+            checkThirdParty = false
           },
           telemetry = {
-            enable = false,
+            enable = false
           },
           diagnostics = {
-            globals = { "vim" },
-          },
-        },
+            globals = { "vim" }
+          }
+        }
       }
     }
     vim.lsp.enable('lua_ls')
@@ -92,7 +98,7 @@
       cmd = { "zls" },
       settings = {
         zls = {
-          completion_label_details = false;
+          completion_label_details = false
         }
       }
     }
@@ -100,7 +106,7 @@
 
     vim.lsp.config.clangd = {
       mason = false,
-      cmd = { "clangd" },
+      cmd = { "clangd" }
     }
     vim.lsp.enable('clangd')
 
@@ -110,7 +116,7 @@
       cmd = { "nixd" },
       settings = {
         nix = {
-          autoArchive = true;
+          autoArchive = true
         }
       }
     }
@@ -121,7 +127,7 @@
       cmd = { "nil" },
       settings = {
         nix = {
-          autoArchive = true;
+          autoArchive = true
         }
       }
     }

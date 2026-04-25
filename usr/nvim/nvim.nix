@@ -4,10 +4,11 @@
    timeTrackerPlugins = import ./time-tracker.nix { inherit pkgs; };
  in
 {
-  home.packages = [ pkgs.sqlite ];
+  home.packages = [ pkgs.sqlite pkgs.tree-sitter pkgs.lua53Packages.tree-sitter-cli ];
   programs.nixvim = {  
     enable = true;
     lsp.servers.zls.enable = true;
+    lsp.servers.nixd.enable = true;
     lsp.servers.ts_ls.enable = true;
     lsp.servers.jdtls.enable = true;
     lsp.servers.clangd.enable = true;
@@ -30,6 +31,7 @@
     plugins = {
 	markview.enable = true;
 	treesitter.enable = true;
+	treesitter.grammars = [ "nix" ];
 	treesitter-textobjects.enable = true;
 	luasnip.enable = true;
 	cmp_luasnip.enable = true;

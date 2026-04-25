@@ -98,7 +98,20 @@ in
   networking.hostName = "nixosSystemD";
   networking.networkmanager.enable = true;
   programs.nm-applet.enable = true;
-  networking.wireless.iwd.enable = true;
+
+  networking.wireless.iwd = {
+    enable = true;
+    settings = {
+      General = {
+        EnableNetworkConfiguration = true;
+      };
+      Settings = {
+        AutoConnect = true;
+      };
+    };
+  };
+
+
   networking.networkmanager.wifi.backend = "iwd";
   networking.firewall.enable = false;
 
@@ -222,7 +235,7 @@ in
      lua-language-server xfce4-screenshooter gh cargo gnumake
      gcc-arm-embedded python3Packages.pip swig file clang-tools
      net-tools iproute2 blueman networkmanager bluez bluez-tools dnsmasq
-      sway-launcher-desktop dive podman-tui
+     sway-launcher-desktop dive podman-tui
      docker-compose freerdp dialog libnotify podman podman-compose
      xwayland ncdu gtk3 libnotify nss libxtst xdg-utils dpkg
      brasero networkmanagerapplet ripgrep inetutils sops ghostscript
@@ -230,13 +243,12 @@ in
      brightnessctl playerctl swaynotificationcenter quickshell mdhtml
      typescript-language-server jdt-language-server openjdk dotool opencode
      lsof kiwix libnotify dialog gimp firefox python314 teams-for-linux
-     wiremix virtualbox wlr-randr tailscale efibootmgr obsidian
+     wiremix virtualbox wlr-randr tailscale efibootmgr appimage-run
+     lmstudio nil
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
      (import ./hm-setup.nix {inherit pkgs;})
-      inputs.nixd.packages.${stdenv.hostPlatform.system}.nixd
-      inputs.nil.packages.${stdenv.hostPlatform.system}.nil
-   ];
+    ];
    
   services.gvfs = {
     enable = true;
