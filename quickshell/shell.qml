@@ -35,6 +35,8 @@ ShellRoot {
     property var occupiedWorkspaces: []
     property int batteryLevel: 0
     property string networkStatus: "Down"
+    property string tailscaleStatus: "Disconnected"
+    property string warpStatus: "Disconnected"
     property string systemUptime: "0m"
 
     // CPU tracking
@@ -223,6 +225,40 @@ ShellRoot {
         Component.onCompleted: running = true
     }
 
+    //Tailscale up
+    Process {
+        id: tailscaleProc
+        command: ["sh", "-c", "tailscale status | grep stopped || echo started"]
+        stdout: SplitParser {
+            onRead: data => {
+                if (data.trim() == "started") {
+                    tailscaleStatus = "Connected"
+                } else {
+                    tailscaleStatus = "Disconnected"
+                }
+            }
+        }
+        Component.onCompleted: running = true
+    }
+
+
+
+    //Warp up
+    Process {
+        id: warpProc
+        command: ["sh", "-c", "warp-cli status | grep Disconnected || echo Connected"]
+        stdout: SplitParser {
+            onRead: data => {
+                if (data.trim() == "Connected") {
+                    warpStatus = "Connected"
+                } else {
+                    warpStatus = "Disconnected"
+                }
+            }
+        }
+        Component.onCompleted: running = true
+    }
+
     // System uptime
     Process {
         id: uptimeProc
@@ -249,6 +285,8 @@ ShellRoot {
             volProc.running = true
             batteryProc.running = true
             networkProc.running = true
+            tailscaleProc.running = true
+            warpProc.running = true
         }
     }
 
@@ -306,17 +344,17 @@ ShellRoot {
 
                     Item { width: 8 }
 
-                    Rectangle {
-                        Layout.preferredWidth: 24
-                        Layout.preferredHeight: 24
-                        color: "transparent"
-
-                        Image {
-                            anchors.fill: parent
-                            source: "file:///home/tony/.config/quickshell/icons/tonybtw.png"
-                            fillMode: Image.PreserveAspectFit
-                        }
-                    }
+                    //Rectangle {
+                    //    Layout.preferredWidth: 24
+                    //    Layout.preferredHeight: 24
+                    //    color: "transparent"
+                    //
+                    //    Image {
+                    //        anchors.fill: parent
+                    //        source: "file:///home/tony/.config/quickshell/icons/tonybtw.png"
+                    //        fillMode: Image.PreserveAspectFit
+                    //    }
+                    //}
 
                     Item { width: 8 }
 
@@ -489,6 +527,43 @@ ShellRoot {
                         Layout.rightMargin: 8
                         color: root.colMuted
                     }
+
+                    Text {
+                        text: "Tailscale: " + tailscaleStatus
+                        color: tailscaleStatus === "Connected" ? root.colOrange : root.colRed
+                        font.pixelSize: root.fontSize
+                        font.family: root.fontFamily
+                        font.bold: true
+                        Layout.rightMargin: 8
+                    }
+                    
+                    Rectangle {
+                        Layout.preferredWidth: 1
+                        Layout.preferredHeight: 16
+                        Layout.alignment: Qt.AlignVCenter
+                        Layout.leftMargin: 0
+                        Layout.rightMargin: 8
+                        color: root.colMuted
+                    }
+
+                    Text {
+                        text: "Warp: " + warpStatus
+                        color: warpStatus === "Connected" ? root.colYellow : root.colRed
+                        font.pixelSize: root.fontSize
+                        font.family: root.fontFamily
+                        font.bold: true
+                        Layout.rightMargin: 8
+                    }
+
+                    Rectangle {
+                        Layout.preferredWidth: 1
+                        Layout.preferredHeight: 16
+                        Layout.alignment: Qt.AlignVCenter
+                        Layout.leftMargin: 0
+                        Layout.rightMargin: 8
+                        color: root.colMuted
+                    }
+
 
                     Text {
                         text: "Up: " + systemUptime

@@ -18,7 +18,7 @@
         bind-key -T copy-mode-vi y send -X copy-pipe-and-cancel 'xclip -in -selection clipboard'
         set -g base-index 1
         setw -g pane-base-index 1
-        set -g status-right ' #{?client_prefix,#[reverse]🗸#[noreverse] ,}"#{=21:pane_title}" %H:%M %d-%b-%y'
+        set -g status-right ' #{?client_prefix,#[reverse]🗸#[noreverse] ,}"#{pane_title}" %H:%M %d-%b-%y'
         set -ga terminal-overrides ',*:Ss=\E[%p1%d q:Se=\E[2 q'
       '';
 
