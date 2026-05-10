@@ -84,8 +84,6 @@
           "offset"
           "exact"
           "recently_used"
-          # For external plugins like clangd_extensions, 
-          # we use raw Lua since it's not a default cmp comparator
           "require('clangd_extensions.cmp_scores')"
           "kind"
           "sort_text"
