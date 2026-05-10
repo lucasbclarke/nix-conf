@@ -67,13 +67,32 @@
           '';
       };
       sources = [
-      { name = "nvim_lsp"; }
-      {
-        name = "luasnip";
-        option = { show_autosnippets = false; };
-      }
-      { name = "path"; }
+        { name = "nvim_lsp"; }
+        {
+          name = "luasnip";
+          option = { show_autosnippets = false; };
+        }
+        { name = "path"; }
       ];
+      
+      completion = {
+          completeopt = "menu,menuone,noinsert";
+      };
+
+      sorting = {
+        comparators = [
+          "offset"
+          "exact"
+          "recently_used"
+          # For external plugins like clangd_extensions, 
+          # we use raw Lua since it's not a default cmp comparator
+          "require('clangd_extensions.cmp_scores')"
+          "kind"
+          "sort_text"
+          "length"
+          "order"
+        ];
+      };
     };
 
   };

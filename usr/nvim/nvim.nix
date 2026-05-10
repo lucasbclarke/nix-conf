@@ -7,12 +7,85 @@
   home.packages = [ pkgs.sqlite pkgs.tree-sitter pkgs.lua53Packages.tree-sitter-cli ];
   programs.nixvim = {  
     enable = true;
-    lsp.servers.zls.enable = true;
-    lsp.servers.nixd.enable = true;
-    lsp.servers.ts_ls.enable = true;
-    lsp.servers.jdtls.enable = true;
-    lsp.servers.clangd.enable = true;
-    lsp.servers.pyright.enable = true;
+
+    lsp = {
+      enable = true;
+      servers.clangd.enable = true;
+      servers.pyright.enable = true;
+
+      servers.lua_ls = {
+	enable = true;
+
+	config = {
+          Lua = {
+            workspace = {
+              checkThirdParty = false;
+            };
+            telemetry = {
+              enable = false;
+            };
+            diagnostics = {
+              globals = [ "vim" ];
+            };
+          };
+        };
+      };
+
+      servers.zls = {
+	  enable = true;
+	  config = {
+	    zls = {
+	      completion_label_details = false;
+	    };
+	  };
+      };
+
+      servers.nixd = {
+	enable = true;
+        config = {
+	  nix = {
+            autoArchive = true;
+          };
+        };
+      };
+
+      servers.nil_ls = {
+	enable = true;
+	config = {
+          nil = { 
+	    autoArchive = true;
+          };
+        };
+      };
+
+      servers.ts_ls = {
+	enable = true;
+	package = pkgs.typescript-language-server;
+      };
+
+      setup = {
+        ts_ls = {
+          cmd = [ "typescript-language-server" "--stdio" ];
+          filetypes = [
+            "javascript"
+            "javascriptreact"
+            "javascript.jsx"
+            "typescript"
+            "typescriptreact"
+            "typescript.tsx"
+          ];
+        };
+      };
+
+      servers.jdtls = {
+	enable = true;
+	package = pkgs.jdt-language-server;
+      };
+
+      onAttach = ''
+        local options = { buffer = bufnr }
+      '';
+    };
 
     extraPlugins = [
 	pkgs.vimPlugins.rose-pine
@@ -33,7 +106,6 @@
 	treesitter.enable = true;
 	treesitter.grammars = [ "nix" ];
 	treesitter-textobjects.enable = true;
-	luasnip.enable = true;
 	cmp_luasnip.enable = true;
 	cmp-nvim-lsp.enable = true;
 	cmp-path.enable = true;
@@ -52,6 +124,18 @@
 	  };
 	};
 
+	luasnip = {
+	  enable = true;
+	  settings = {
+	    history = true;
+	    updateevents = "TextChanged,TextChangedI";
+            # Note: Nix uses snake_case for most plugin options to match the Lua API
+            auto_archive = true;
+
+	    fromVscode = [{}];
+	  };
+	};
+
 	gitsigns = {
 	  enable = true;
 	  settings = {
@@ -65,6 +149,7 @@
 	      };
 	  };
 	};
+
 	snacks = {
 	  enable = true;
 	  settings = {
@@ -72,14 +157,42 @@
 	    picker = { enabled = true; };
 	  };
 	};
-    };
-
-    
+	
+	lsp-zero = {
+	  enable = true;
+	  settings = {
+	    sign_text = true;
+	  };
+	};
 
     opts = {
-      number = true;         
-      relativenumber = true;
       shiftwidth = 4;        
+      statusline = "%f %=%c,%l";
+      scrolloff = 23;
+      clipboard = "unnamedplus";
+      signcolumn = true;
+    };
+
+    globals = {
+      zig_fmt_autosave = 0;
+    };
+
+    autoGroups = {
+      YankHighlight = {
+        clear = true;
+      };
+    };
+
+    autoCmd = [{
+      event = [ "TextYankPost" ];
+      group = "YankHighlight";
+      pattern = "*";
+      callback.__raw = ''
+        function()
+          vim.highlight.on_yank()
+        end
+      '';
+      }];
     };
   };
 }

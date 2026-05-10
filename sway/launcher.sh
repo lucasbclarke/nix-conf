@@ -65,6 +65,6 @@ case "$selection" in
         exec firefox
         ;;
     "lmstudio")
-        exec appimage-run ~/Downloads/LM-Studio-0.4.11-1-x64.AppImage
+        exec appimage-run ~/Downloads/LM-Studio-0.4.12-1-x64.AppImage
         ;;
 esac
