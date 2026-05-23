@@ -1,8 +1,8 @@
 { config, pkgs, lib, inputs, ... }:
 
- let
-   timeTrackerPlugins = import ./time-tracker.nix { inherit pkgs; };
- in
+let
+    timeTrackerPlugins = import ./time-tracker.nix { inherit pkgs; };
+  in
 {
   home.packages = [ pkgs.sqlite pkgs.tree-sitter pkgs.lua53Packages.tree-sitter-cli pkgs.harper ];
   programs.nixvim = {  
