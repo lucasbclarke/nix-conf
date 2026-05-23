@@ -51,6 +51,34 @@
         };
       };
 
+      servers.harper_ls = {
+        enable = true;
+        config = {
+          settings = {
+            "harper-ls" = {
+              linters = {
+                SpellCheck = true;
+                SentenceCapitalization = true;
+                UnclosedQuotes = true;
+                LongSentences = true;
+                RepeatedWords = true;
+                Spaces = true;
+                CorrectNumberSuffix = true;
+                SpelledNumbers = false;
+                WrongApostrophe = false;
+              };
+              codeActions = {
+                ForceStable = false;
+              };
+              diagnosticSeverity = "hint";
+              dialect = "Australian";
+              isolateEnglish = false;
+              maxFileLength = 120000;
+            };
+          };
+        };
+      };
+
       servers.ts_ls = {
 	enable = true;
 	package = pkgs.typescript-language-server;

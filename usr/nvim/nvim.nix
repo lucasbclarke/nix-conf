@@ -4,7 +4,7 @@
    timeTrackerPlugins = import ./time-tracker.nix { inherit pkgs; };
  in
 {
-  home.packages = [ pkgs.sqlite pkgs.tree-sitter pkgs.lua53Packages.tree-sitter-cli ];
+  home.packages = [ pkgs.sqlite pkgs.tree-sitter pkgs.lua53Packages.tree-sitter-cli pkgs.harper ];
   programs.nixvim = {  
     enable = true;
 
@@ -98,22 +98,18 @@
       zig_fmt_autosave = 0;
     };
 
-    autoGroups = {
-      YankHighlight = {
-        clear = true;
-      };
-    };
-
-    autoCmd = [{
-      event = [ "TextYankPost" ];
-      group = "YankHighlight";
-      pattern = "*";
-      callback.__raw = ''
-        function()
-          vim.highlight.on_yank()
-        end
-      '';
-      }];
+    extraConfigLua = ''
+      vim.api.nvim_create_autocmd('TextYankPost', {
+        group = vim.api.nvim_create_augroup('YankHighlight', { clear = true }),
+        pattern = '*',
+        callback = function()
+          local ok, err = pcall(vim.highlight.on_yank, { higroup = 'Visual', timeout = 300 })
+          if not ok then
+            vim.notify('yank highlight err: ' .. tostring(err), vim.log.levels.WARN)
+          end
+        end,
+      })
+    '';
     };
   };
 }

@@ -243,7 +243,7 @@ in
      brightnessctl playerctl swaynotificationcenter quickshell mdhtml
      typescript-language-server jdt-language-server openjdk dotool opencode
      lsof kiwix libnotify dialog gimp firefox python314 virtualbox wlr-randr 
-     tailscale efibootmgr appimage-run lmstudio nil
+     tailscale efibootmgr appimage-run lmstudio nil vial
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
      (import ./hm-setup.nix {inherit pkgs;})
@@ -322,9 +322,20 @@ in
       dedicatedServer.openFirewall = true;
   };
 
-programs.gamemode.enable = true;
-
-services.tailscale.enable = true;
-
-system.stateVersion = "26.05";
+  programs.gamemode.enable = true;
+  
+  services.tailscale.enable = true;
+  
+  system.stateVersion = "26.05";
+  services.udev = {
+  
+    packages = with pkgs; [
+      qmk
+      qmk-udev-rules # the only relevant
+      qmk_hid
+      via
+      vial
+    ]; # packages
+  
+  }; # udev
 }
