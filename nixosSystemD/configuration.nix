@@ -244,9 +244,9 @@ in
      typescript-language-server jdt-language-server openjdk dotool opencode
      lsof kiwix libnotify dialog gimp firefox python314 virtualbox wlr-randr 
      tailscale efibootmgr appimage-run lmstudio nil vial todoist
-     (import ./git-repos.nix {inherit pkgs;})
-     (import ./sud.nix {inherit pkgs;})
-     (import ./hm-setup.nix {inherit pkgs;})
+      (import ./git-repos.nix {inherit pkgs;})
+      (import ./sud.nix {inherit pkgs;})
+      (import ./hm-setup.nix {inherit pkgs;})
     ];
    
   services.gvfs = {
