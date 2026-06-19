@@ -243,7 +243,7 @@ in
      brightnessctl playerctl swaynotificationcenter quickshell mdhtml
      typescript-language-server jdt-language-server openjdk dotool opencode
      lsof kiwix libnotify dialog gimp firefox python314 virtualbox wlr-randr 
-     tailscale efibootmgr appimage-run lmstudio nil vial todoist
+     tailscale efibootmgr appimage-run lmstudio nil vial todoist blender
       (import ./git-repos.nix {inherit pkgs;})
       (import ./sud.nix {inherit pkgs;})
       (import ./hm-setup.nix {inherit pkgs;})

@@ -25,7 +25,7 @@ let
     plugins = {
 	markview.enable = true;
 	treesitter.enable = true;
-	treesitter.grammars = [ "nix" ];
+	treesitter.nixGrammars = true;
 	treesitter-textobjects.enable = true;
 	cmp_luasnip.enable = true;
 	cmp-nvim-lsp.enable = true;
@@ -50,7 +50,6 @@ let
 	  settings = {
 	    history = true;
 	    updateevents = "TextChanged,TextChangedI";
-            # Note: Nix uses snake_case for most plugin options to match the Lua API
             auto_archive = true;
 
 	    fromVscode = [{}];
@@ -78,20 +77,14 @@ let
 	    picker = { enabled = true; };
 	  };
 	};
-	
-	lsp-zero = {
-	  enable = true;
-	  settings = {
-	    sign_text = true;
-	  };
-	};
+    };
 
     opts = {
       shiftwidth = 4;        
       statusline = "%f %=%c,%l";
       scrolloff = 23;
       clipboard = "unnamedplus";
-      signcolumn = true;
+      signcolumn = "yes";
     };
 
     globals = {
@@ -110,6 +103,5 @@ let
         end,
       })
     '';
-    };
   };
 }

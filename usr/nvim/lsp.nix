@@ -2,7 +2,6 @@
 
 {
   programs.nixvim.lsp = {
-      enable = true;
       servers.clangd.enable = true;
       servers.pyright.enable = true;
 
@@ -82,20 +81,17 @@
       servers.ts_ls = {
 	enable = true;
 	package = pkgs.typescript-language-server;
-      };
-
-      setup = {
-        ts_ls = {
-          cmd = [ "typescript-language-server" "--stdio" ];
-          filetypes = [
-            "javascript"
-            "javascriptreact"
-            "javascript.jsx"
-            "typescript"
-            "typescriptreact"
-            "typescript.tsx"
-          ];
-        };
+	config = {
+	  cmd = [ "typescript-language-server" "--stdio" ];
+	  filetypes = [
+	    "javascript"
+	    "javascriptreact"
+	    "javascript.jsx"
+	    "typescript"
+	    "typescriptreact"
+	    "typescript.tsx"
+	  ];
+	};
       };
 
       servers.jdtls = {

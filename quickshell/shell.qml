@@ -262,10 +262,22 @@ ShellRoot {
     // System uptime
     Process {
         id: uptimeProc
-        command: ["sh", "-c", "fastfetch | grep 'Uptime:' | sed 's/Uptime: //' | sed 's/\x1b\\[[0-9;]*[A-Za-z]//g'"]
+        command: ["sh", "-c", "cat /proc/uptime"]
         stdout: SplitParser {
             onRead: data => {
-                if (data) systemUptime = data.trim()
+                if (data) {
+                    var seconds = parseFloat(data.trim().split(/\s+/)[0])
+                    var days = Math.floor(seconds / 86400)
+                    var hours = Math.floor((seconds % 86400) / 3600)
+                    var minutes = Math.floor((seconds % 3600) / 60)
+                    if (days > 0) {
+                        systemUptime = days + "days " + hours + "hours " + minutes + "mins"
+                    } else if (hours > 0) {
+                        systemUptime = hours + "hours " + minutes + "mins"
+                    } else {
+                        systemUptime = minutes + "mins"
+                    }
+                }
             }
         }
         Component.onCompleted: running = true
