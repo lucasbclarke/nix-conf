@@ -38,14 +38,17 @@ in
     QT_STYLE_OVERRIDE = "gtk2";
     # Set color scheme preference to dark
     COLORTERM = "truecolor";
+    # Steam audio: use PipeWire SDL backend instead of broken bundled libaudio.so
+    SDL_AUDIODRIVER = "pipewire";
     # Additional dark mode environment variables
     GTK_APPLICATION_PREFER_DARK_THEME = "1";
     QT_QPA_PLATFORMTHEME = "gtk2";
     # Additional dark mode settings
     QT_AUTO_SCREEN_SCALE_FACTOR = "1";
     QT_SCALE_FACTOR = "1";
-    CUDA_VISIBLE_DEVICES = "0";
-    __GLX_VENDOR_LIBRARY_NAME = "nvidia";
+    # These are set per-application via nvidia-offload or similar wrappers, not globally
+    # CUDA_VISIBLE_DEVICES = "0";
+    # __GLX_VENDOR_LIBRARY_NAME = "nvidia";
   };
 
   nixpkgs.config.allowUnsupportedSystem = true;
@@ -66,6 +69,9 @@ in
       libva-vdpau-driver
       nvidia-vaapi-driver
       intel-media-driver
+    ];
+    extraPackages32 = with pkgs; [
+      driversi686Linux.intel-vaapi-driver
     ];
   };
 
@@ -113,7 +119,11 @@ in
 
 
   networking.networkmanager.wifi.backend = "iwd";
-  networking.firewall.enable = false;
+  networking.firewall = {
+    enable = true;
+    allowedUDPPorts = [ 41641 ]; # Default Tailscale port
+    trustedInterfaces = [ "tailscale0" ]; # Trust Tailscale traffic natively
+  };
 
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
@@ -201,6 +211,27 @@ in
   };
 
   programs = {
+    nix-ld = {
+      enable = true;
+      libraries = with pkgs; [
+        glib
+        zlib
+        gtk3
+        libX11
+        libXext
+        libXcursor
+        libXrandr
+        libXi
+        libXinerama
+        libXScrnSaver
+        libXtst
+        fontconfig
+        freetype
+        libgcc
+        pipewire
+        libpulseaudio
+      ];
+    };
     zsh.enable = true;
     git.enable = true;
     thunar = {
@@ -244,6 +275,7 @@ in
      typescript-language-server jdt-language-server openjdk dotool opencode
      lsof kiwix libnotify dialog gimp firefox python314 virtualbox wlr-randr 
      tailscale efibootmgr appimage-run lmstudio nil vial todoist blender
+     uv delta python314Packages.pynvim zip
       (import ./git-repos.nix {inherit pkgs;})
       (import ./sud.nix {inherit pkgs;})
       (import ./hm-setup.nix {inherit pkgs;})
@@ -316,15 +348,44 @@ in
 
   programs.ssh.enableAskPassword = false;
 
+  # Remove Steam's broken bundled libaudio.so that segfaults with PipeWire/PulseAudio.
+  # Steam may restore this file on update; if so, remove it again or run:
+  #   rm ~/.local/share/Steam/ubuntu12_32/libaudio.so
+  systemd.tmpfiles.rules = [
+    "r /home/lucas/.local/share/Steam/ubuntu12_32/libaudio.so"
+  ];
+
   programs.steam = {
-    enable = true; 
-      remotePlay.openFirewall = true;
-      dedicatedServer.openFirewall = true;
+    enable = true;
+    remotePlay.openFirewall = true;
+    dedicatedServer.openFirewall = true;
+    extraPackages = with pkgs; [
+      libgcc
+      glib
+      pipewire
+      libpulseaudio
+      libX11
+      libXext
+      libXfixes
+      libXrandr
+      libXrender
+      libXtst
+      libXcursor
+      libXi
+      libXinerama
+      libXScrnSaver
+      fontconfig
+      freetype
+      pango
+      cairo
+      gtk3
+    ];
   };
 
   programs.gamemode.enable = true;
   
   services.tailscale.enable = true;
+  services.tailscale.useRoutingFeatures = "client";
   
   system.stateVersion = "26.05";
   services.udev = {

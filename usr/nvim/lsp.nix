@@ -2,11 +2,23 @@
 
 {
   programs.nixvim.lsp = {
-      servers.clangd.enable = true;
-      servers.pyright.enable = true;
+      servers.clangd = {
+        enable = true;
+        package = pkgs.clang-tools;
+      };
+      servers.pyright = {
+        enable = true;
+        config = {
+          python.pythonPath = "${pkgs.python3.withPackages (ps: [ ps.pynvim ps.debugpy ])}/bin/python";
+          python.analysis.extraPaths = [
+            "${pkgs.python3.withPackages (ps: [ ps.pynvim ps.debugpy ])}/${pkgs.python3.sitePackages}"
+          ];
+        };
+      };
 
       servers.lua_ls = {
 	enable = true;
+	package = pkgs.lua-language-server;
 
 	config = {
           Lua = {
@@ -25,6 +37,7 @@
 
       servers.zls = {
 	  enable = true;
+	  package = pkgs.zls;
 	  config = {
 	    zls = {
 	      completion_label_details = false;
@@ -34,6 +47,7 @@
 
       servers.nixd = {
 	enable = true;
+	package = pkgs.nixd;
         config = {
 	  nix = {
             autoArchive = true;
@@ -43,6 +57,7 @@
 
       servers.nil_ls = {
 	enable = true;
+	package = pkgs.nil;
 	config = {
           nil = { 
 	    autoArchive = true;
@@ -52,6 +67,7 @@
 
       servers.harper_ls = {
         enable = true;
+        package = pkgs.harper;
         config = {
           settings = {
             "harper-ls" = {

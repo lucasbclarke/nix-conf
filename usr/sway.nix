@@ -20,6 +20,7 @@
         # Assign Ghostty windows to workspace 1
         assigns = {
           "1" = [ { app_id = "ghostty"; } ];
+          "3" = [ { app_id = "blender"; } ];
         };
 
         # Workspaces and window management keybindings

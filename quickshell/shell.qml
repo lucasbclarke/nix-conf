@@ -271,11 +271,11 @@ ShellRoot {
                     var hours = Math.floor((seconds % 86400) / 3600)
                     var minutes = Math.floor((seconds % 3600) / 60)
                     if (days > 0) {
-                        systemUptime = days + "days " + hours + "hours " + minutes + "mins"
+                        systemUptime = days + "d " + hours + "h " + minutes + "m"
                     } else if (hours > 0) {
-                        systemUptime = hours + "hours " + minutes + "mins"
+                        systemUptime = hours + "h " + minutes + "m"
                     } else {
-                        systemUptime = minutes + "mins"
+                        systemUptime = minutes + "m"
                     }
                 }
             }

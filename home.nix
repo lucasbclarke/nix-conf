@@ -22,9 +22,10 @@
     GTK_THEME = "Adwaita-dark";
     COLORTERM = "truecolor";
     GTK_APPLICATION_PREFER_DARK_THEME = "1";
-    QT_QPA_PLATFORMTHEME = "gtk2";
     QT_AUTO_SCREEN_SCALE_FACTOR = "1";
     QT_SCALE_FACTOR = "1";
+    # Steam audio: use PipeWire instead of bundled libaudio.so
+    SDL_AUDIODRIVER = "pipewire";
   };
 
   programs.wofi = {
@@ -467,7 +468,7 @@
 
   qt = {
     enable = true;
-    platformTheme.name = "gtk";
+    platformTheme.name = "gtk2";
     style = {
       name = "adwaita-dark";
       package = pkgs.adwaita-qt;

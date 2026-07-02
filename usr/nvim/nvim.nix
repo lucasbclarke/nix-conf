@@ -2,11 +2,14 @@
 
 let
     timeTrackerPlugins = import ./time-tracker.nix { inherit pkgs; };
+    blenderPlugins = import ./blender.nix { inherit pkgs; };
+    blenderPythonEnv = pkgs.python3.withPackages (ps: [ ps.pynvim ps.debugpy ]);
   in
 {
   home.packages = [ pkgs.sqlite pkgs.tree-sitter pkgs.lua53Packages.tree-sitter-cli pkgs.harper ];
   programs.nixvim = {  
     enable = true;
+    nixpkgs.source = inputs.nixpkgs;
 
     extraPlugins = [
 	pkgs.vimPlugins.rose-pine
@@ -14,9 +17,16 @@ let
 	pkgs.vimPlugins.lsp-zero-nvim
 	pkgs.vimPlugins.clangd_extensions-nvim
 	pkgs.vimPlugins.vim-sleuth
+	pkgs.vimPlugins.nui-nvim
+	pkgs.vimPlugins.nvim-dap
 	timeTrackerPlugins.sqlite-nvim
 	timeTrackerPlugins.time-tracker-nvim
+	blenderPlugins.blender-nvim
+	blenderPlugins.nui-components-nvim
+	blenderPlugins.nvim-dap-repl-highlights
     ];
+
+    env.PYTHONPATH = "${blenderPythonEnv}/${pkgs.python3.sitePackages}";
 
     colorschemes.rose-pine = {
       enable = true;
@@ -26,6 +36,12 @@ let
 	markview.enable = true;
 	treesitter.enable = true;
 	treesitter.nixGrammars = true;
+	treesitter.settings = {
+	  ensure_installed = [ "dap_repl" ];
+	};
+	treesitter.luaConfig.pre = ''
+	  require('nvim-dap-repl-highlights').setup()
+	'';
 	treesitter-textobjects.enable = true;
 	cmp_luasnip.enable = true;
 	cmp-nvim-lsp.enable = true;
@@ -80,6 +96,7 @@ let
     };
 
     opts = {
+      exrc = true;
       shiftwidth = 4;        
       statusline = "%f %=%c,%l";
       scrolloff = 23;
@@ -92,6 +109,8 @@ let
     };
 
     extraConfigLua = ''
+      require('blender').setup()
+
       vim.api.nvim_create_autocmd('TextYankPost', {
         group = vim.api.nvim_create_augroup('YankHighlight', { clear = true }),
         pattern = '*',
