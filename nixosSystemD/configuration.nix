@@ -275,7 +275,7 @@ in
      typescript-language-server jdt-language-server openjdk dotool opencode
      lsof kiwix libnotify dialog gimp firefox python314 virtualbox wlr-randr 
      tailscale efibootmgr appimage-run lmstudio nil vial todoist blender
-     uv delta python314Packages.pynvim zip
+     uv delta python314Packages.pynvim zip nodejs_26
       (import ./git-repos.nix {inherit pkgs;})
       (import ./sud.nix {inherit pkgs;})
       (import ./hm-setup.nix {inherit pkgs;})
@@ -296,7 +296,10 @@ in
   virtualisation.spiceUSBRedirection.enable = true;
 
   fonts = {
-    fontconfig.enable = true;
+  fontconfig.enable = true;
+    packages = with pkgs; [
+      nerd-fonts.jetbrains-mono
+    ];
   };
 
   virtualisation.containers.enable = true;

@@ -2,18 +2,18 @@
 
 {
   programs.nixvim.lsp = {
+      servers.jsonls = {
+        enable = true;
+      };
+      servers.html = {
+        enable = true;
+      };
       servers.clangd = {
         enable = true;
         package = pkgs.clang-tools;
       };
       servers.pyright = {
         enable = true;
-        config = {
-          python.pythonPath = "${pkgs.python3.withPackages (ps: [ ps.pynvim ps.debugpy ])}/bin/python";
-          python.analysis.extraPaths = [
-            "${pkgs.python3.withPackages (ps: [ ps.pynvim ps.debugpy ])}/${pkgs.python3.sitePackages}"
-          ];
-        };
       };
 
       servers.lua_ls = {

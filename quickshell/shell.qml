@@ -29,6 +29,7 @@ ShellRoot {
     property int memUsage: 0
     property int diskUsage: 0
     property int volumeLevel: 0
+    property int brightnessLevel: 0
     property string activeWindow: "Window"
     property string currentLayout: "Tile"
     property int focusedWorkspace: 1
@@ -122,6 +123,23 @@ ShellRoot {
         }
         Component.onCompleted: running = true
     }
+
+    // Brightness level
+    Process {
+        id: brightProc
+        command: ["sh", "-c", "echo $(( $(brightnessctl get) * 100 / $(brightnessctl max) ))"]
+        stdout: SplitParser {
+            onRead: data => {
+                if (!data) return
+                var val = parseInt(data.trim())
+                if (!isNaN(val)) {
+                    brightnessLevel = val
+                }
+            }
+        }
+        Component.onCompleted: running = true
+    }
+
 
     // Active window title (sway)
     Process {
@@ -295,6 +313,7 @@ ShellRoot {
             memProc.running = true
             diskProc.running = true
             volProc.running = true
+            brightProc.running = true
             batteryProc.running = true
             networkProc.running = true
             tailscaleProc.running = true
@@ -471,6 +490,24 @@ ShellRoot {
                     Text {
                         text: "Disk: " + diskUsage + "%"
                         color: root.colBlue
+                        font.pixelSize: root.fontSize
+                        font.family: root.fontFamily
+                        font.bold: true
+                        Layout.rightMargin: 8
+                    }
+
+                    Rectangle {
+                        Layout.preferredWidth: 1
+                        Layout.preferredHeight: 16
+                        Layout.alignment: Qt.AlignVCenter
+                        Layout.leftMargin: 0
+                        Layout.rightMargin: 8
+                        color: root.colMuted
+                    }
+
+                    Text {
+                        text: "Bright: " + brightnessLevel + "%"
+                        color: root.colYellow
                         font.pixelSize: root.fontSize
                         font.family: root.fontFamily
                         font.bold: true
