@@ -105,17 +105,17 @@ in
   networking.networkmanager.enable = true;
   programs.nm-applet.enable = true;
 
-  networking.wireless.iwd = {
-    enable = true;
-    settings = {
-      General = {
-        EnableNetworkConfiguration = true;
-      };
-      Settings = {
-        AutoConnect = true;
-      };
-    };
-  };
+   networking.wireless.iwd = {
+     enable = true;
+     settings = {
+       General = {
+         EnableNetworkConfiguration = true;
+       };
+       Settings = {
+         AutoConnect = true;
+       };
+     };
+   };
 
 
   networking.networkmanager.wifi.backend = "iwd";
@@ -275,7 +275,7 @@ in
      typescript-language-server jdt-language-server openjdk dotool opencode
      lsof kiwix libnotify dialog gimp firefox python314 virtualbox wlr-randr 
      tailscale efibootmgr appimage-run lmstudio nil vial todoist blender
-     uv delta python314Packages.pynvim zip nodejs_26
+     uv delta python314Packages.pynvim zip nodejs_26 wakeonlan rustdesk-flutter
       (import ./git-repos.nix {inherit pkgs;})
       (import ./sud.nix {inherit pkgs;})
       (import ./hm-setup.nix {inherit pkgs;})
