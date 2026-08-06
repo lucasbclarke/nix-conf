@@ -13,6 +13,7 @@
     shellAliases = {
       sd = "cd \"\$(find $HOME -type d ! -path '*/.*' 2>/dev/null | fzf)\" && clear";
       nix-shell = "nix-shell --run $SHELL";
+      wake = "wakeonlan 10:FF:E0:A2:8C:75 -i $(nslookup dwelling.tplinkdns.com | grep -v '127' | grep 'Address: ' | sed 's/Address: //')";
     };
 
     initContent = ''

@@ -85,6 +85,7 @@ in
   boot.loader.grub.enable = lib.mkForce false;
 
   boot.loader.systemd-boot.configurationLimit = 10;
+  boot.loader.systemd-boot.graceful = true;
   system.nixos.label = "NixosSway";
 
   # Kernel parameters for quiet boot
@@ -276,6 +277,7 @@ in
      lsof kiwix libnotify dialog gimp firefox python314 virtualbox wlr-randr 
      tailscale efibootmgr appimage-run lmstudio nil vial todoist blender
      uv delta python314Packages.pynvim zip nodejs_26 wakeonlan rustdesk-flutter
+     dig
       (import ./git-repos.nix {inherit pkgs;})
       (import ./sud.nix {inherit pkgs;})
       (import ./hm-setup.nix {inherit pkgs;})
