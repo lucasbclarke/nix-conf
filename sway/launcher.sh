@@ -14,7 +14,8 @@ steam
 kiwix
 gimp
 firefox
-lmstudio"
+lmstudio
+rustdesk"
 
 # Show menu and get selection
 selection=$(echo "$apps" | wofi --show dmenu --prompt "Launch:")
@@ -66,5 +67,8 @@ case "$selection" in
         ;;
     "lmstudio")
         exec appimage-run ~/Downloads/LM-Studio-0.4.12-1-x64.AppImage
+        ;;
+    "rustdesk")
+        exec rustdesk
         ;;
 esac
