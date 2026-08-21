@@ -63,6 +63,17 @@
           "${modifier}+9" = "workspace number 9";
           "${modifier}+0" = "workspace number 10";
 
+          "${modifier}+KP_1" = "workspace number 1";
+          "${modifier}+KP_2" = "workspace number 2";
+          "${modifier}+KP_3" = "workspace number 3";
+          "${modifier}+KP_4" = "workspace number 4";
+          "${modifier}+KP_5" = "workspace number 5";
+          "${modifier}+KP_6" = "workspace number 6";
+          "${modifier}+KP_7" = "workspace number 7";
+          "${modifier}+KP_8" = "workspace number 8";
+          "${modifier}+KP_9" = "workspace number 9";
+          "${modifier}+KP_0" = "workspace number 10";
+
           # Move container to workspaces
           "${modifier}+Shift+1" = "move container to workspace number 1";
           "${modifier}+Shift+2" = "move container to workspace number 2";
@@ -74,6 +85,17 @@
           "${modifier}+Shift+8" = "move container to workspace number 8";
           "${modifier}+Shift+9" = "move container to workspace number 9";
           "${modifier}+Shift+0" = "move container to workspace number 10";
+
+          "${modifier}+Shift+KP_1" = "move container to workspace number 1";
+          "${modifier}+Shift+KP_2" = "move container to workspace number 2";
+          "${modifier}+Shift+KP_3" = "move container to workspace number 3";
+          "${modifier}+Shift+KP_4" = "move container to workspace number 4";
+          "${modifier}+Shift+KP_5" = "move container to workspace number 5";
+          "${modifier}+Shift+KP_6" = "move container to workspace number 6";
+          "${modifier}+Shift+KP_7" = "move container to workspace number 7";
+          "${modifier}+Shift+KP_8" = "move container to workspace number 8";
+          "${modifier}+Shift+KP_9" = "move container to workspace number 9";
+          "${modifier}+Shift+KP_0" = "move container to workspace number 10";
 
           # Layout and modes
           "${modifier}+g" = "splith";
@@ -158,6 +180,8 @@
       };
       # Extra lines for settings not directly mapped by HM options
       extraConfig = ''
+        input type:keyboard xkb_numlock enable
+
         titlebar_padding 5 1
 
         # Media and brightness keys (need --locked flag)

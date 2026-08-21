@@ -80,12 +80,21 @@ in
   sops.age.keyFile = "/home/lucas/.config/sops/age/keys.txt";
   sops.secrets.example-key = { };
 
-  boot.loader.systemd-boot.enable = lib.mkForce true;
-  boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.grub.enable = lib.mkForce false;
+  boot.loader = {
+      efi.canTouchEfiVariables = true;
+      grub.enable = lib.mkForce false;
 
-  boot.loader.systemd-boot.configurationLimit = 10;
-  boot.loader.systemd-boot.graceful = true;
+      systemd-boot = {
+          enable = lib.mkForce true;
+          configurationLimit = 1;
+          graceful = true;              
+          extraInstallCommands = ''
+            echo 'auto-entries 0' >> /boot/loader/loader.conf
+            ${pkgs.gnused}/bin/sed -i 's/^title NixOS$/title   "Nixos  "/' /boot/loader/entries/nixos-*.conf
+          '';
+      };
+  };
+
   system.nixos.label = "NixosSway";
 
   # Kernel parameters for quiet boot
@@ -207,7 +216,7 @@ in
   users.users.lucas = {
     isNormalUser = true;
     description = "lucas";
-    extraGroups = [ "networkmanager" "wheel" "docker" "kvm" "libvirtd" "tty" ];
+    extraGroups = [ "networkmanager" "wheel" "docker" "kvm" "libvirtd" "tty" "dialout" ];
     shell = pkgs.zsh;
   };
 
@@ -261,7 +270,7 @@ in
   ];
    environment.systemPackages = with pkgs; [
      sqlite tealdeer fzf xdotool brave xfce4-exo xfce4-settings
-     unzip arduino-cli discord gcc cloudflare-warp fastfetch dmenu
+     unzip arduino-cli arduino-ide discord gcc cloudflare-warp fastfetch dmenu
      pavucontrol vlc usbutils udiskie udisks samba sway wayland-scanner
      libGL libGLU powersupply lunar-client file-roller jq pulseaudio
      lua-language-server xfce4-screenshooter gh cargo gnumake
@@ -271,13 +280,13 @@ in
      docker-compose freerdp dialog libnotify podman podman-compose
      xwayland ncdu gtk3 libnotify nss libxtst xdg-utils dpkg
      brasero networkmanagerapplet ripgrep inetutils sops ghostscript
-     pciutils btop swaylock swayidle wl-clipboard grim slurp wf-recorder 
+     pciutils btop swaylock swayidle wl-clipboard grim slurp (wf-recorder.override { ffmpeg_8 = ffmpeg_8; })
      brightnessctl playerctl swaynotificationcenter quickshell mdhtml
      typescript-language-server jdt-language-server openjdk dotool opencode
      lsof kiwix libnotify dialog gimp firefox python314 virtualbox wlr-randr 
      tailscale efibootmgr appimage-run lmstudio nil vial todoist blender
      uv delta python314Packages.pynvim zip nodejs_26 wakeonlan rustdesk-flutter
-     dig
+     dig kdePackages.gwenview wev qemu
       (import ./git-repos.nix {inherit pkgs;})
       (import ./sud.nix {inherit pkgs;})
       (import ./hm-setup.nix {inherit pkgs;})
@@ -407,4 +416,18 @@ in
     ]; # packages
   
   }; # udev
+
+  systemd.services.numlock-tty = {
+  description = "Enable NumLock on TTYs";
+  wantedBy = [ "multi-user.target" ];
+  serviceConfig = {
+    Type = "oneshot";
+    ExecStart = pkgs.writeShellScript "numlock-tty" ''
+      for tty in /dev/tty{1..6}; do
+        ${pkgs.kbd}/bin/setleds -D +num < "$tty"
+      done
+    '';
+  };
+};
+
 }

@@ -37,7 +37,7 @@
 
       servers.zls = {
 	  enable = true;
-	  package = pkgs.zls;
+	  package = pkgs.zls_0_14;
 	  config = {
 	    zls = {
 	      completion_label_details = false;
