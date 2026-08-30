@@ -21,6 +21,7 @@
         assigns = {
           "1" = [ { app_id = "ghostty"; } ];
           "3" = [ { app_id = "blender"; } ];
+          "4" = [ { app_id = "md.Obsidian"; } ];
         };
 
         # Workspaces and window management keybindings
@@ -33,6 +34,7 @@
           "${modifier}+b" = "exec brave";
           "${modifier}+Shift+b" = "exec blender";
           "${modifier}+Shift+d" = "exec Discord";
+          "${modifier}+o" = "exec obsidian";
           "${modifier}+Shift+e" = "exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'";
           "${modifier}+p" = "exec powersupply";
           "${modifier}+Shift+p" = "exec poweroff";

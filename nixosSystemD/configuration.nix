@@ -286,7 +286,7 @@ in
      lsof kiwix libnotify dialog gimp firefox python314 virtualbox wlr-randr 
      tailscale efibootmgr appimage-run lmstudio nil vial todoist blender
      uv delta python314Packages.pynvim zip nodejs_26 wakeonlan rustdesk-flutter
-     dig kdePackages.gwenview wev qemu
+     dig kdePackages.gwenview wev qemu obsidian wshowkeys
       (import ./git-repos.nix {inherit pkgs;})
       (import ./sud.nix {inherit pkgs;})
       (import ./hm-setup.nix {inherit pkgs;})
@@ -420,14 +420,21 @@ in
   systemd.services.numlock-tty = {
   description = "Enable NumLock on TTYs";
   wantedBy = [ "multi-user.target" ];
-  serviceConfig = {
-    Type = "oneshot";
-    ExecStart = pkgs.writeShellScript "numlock-tty" ''
-      for tty in /dev/tty{1..6}; do
-        ${pkgs.kbd}/bin/setleds -D +num < "$tty"
-      done
-    '';
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = pkgs.writeShellScript "numlock-tty" ''
+        for tty in /dev/tty{1..6}; do
+          ${pkgs.kbd}/bin/setleds -D +num < "$tty"
+        done
+      '';
+    };
   };
-};
+
+  services.syncthing = {
+    enable = true;
+    user = "lucas";
+    dataDir = "/home/lucas/.local/state/syncthing/";
+    configDir = "/home/lucas/.config/syncthing";
+  };
 
 }
