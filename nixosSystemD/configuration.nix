@@ -115,20 +115,6 @@ in
   networking.networkmanager.enable = true;
   programs.nm-applet.enable = true;
 
-   networking.wireless.iwd = {
-     enable = true;
-     settings = {
-       General = {
-         EnableNetworkConfiguration = true;
-       };
-       Settings = {
-         AutoConnect = true;
-       };
-     };
-   };
-
-
-  networking.networkmanager.wifi.backend = "iwd";
   networking.firewall = {
     enable = true;
     allowedUDPPorts = [ 41641 ]; # Default Tailscale port
