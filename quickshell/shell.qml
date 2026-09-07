@@ -39,6 +39,7 @@ ShellRoot {
     property string tailscaleStatus: "Disconnected"
     property string warpStatus: "Disconnected"
     property string systemUptime: "0m"
+    property bool inResizeMode: false
 
     // CPU tracking
     property var lastCpuIdle: 0
@@ -183,6 +184,18 @@ ShellRoot {
         Component.onCompleted: running = true
     }
 
+    // Resize mode
+    Process {
+        id: modeProc
+        command: ["sh" , "-c", "swaymsg -t get_binding_state -r | jq -r '.name'"]
+        stdout: SplitParser {
+            onRead: data => {
+                inResizeMode = data.trim() === "resize"
+            }
+        }
+        Component.onCompleted: running = true
+    }
+
     // Focused workspace (sway)
     Process {
         id: workspaceProc
@@ -203,13 +216,16 @@ ShellRoot {
     // Occupied workspaces (sway)
     Process {
         id: occupiedProc
-        command: ["sh", "-c", "swaymsg -t get_workspaces | jq -r '.[].num'"]
+        command: ["sh", "-c", "swaymsg -t get_workspaces | jq -c '[.[].num]'"]
         stdout: SplitParser {
             onRead: data => {
-                if (data && data.trim()) {
-                    var nums = data.trim().split('\n').map(n => parseInt(n)).filter(n => !isNaN(n))
-                    occupiedWorkspaces = nums
-                }
+                if (!data) return
+                try {
+                    var arr = JSON.parse(data)
+                    if (Array.isArray(arr)) {
+                        occupiedWorkspaces = arr
+                    }
+                } catch (e) {}
             }
         }
         Component.onCompleted: running = true
@@ -318,6 +334,7 @@ ShellRoot {
             networkProc.running = true
             tailscaleProc.running = true
             warpProc.running = true
+            modeProc.running = true
         }
     }
 
@@ -437,7 +454,24 @@ ShellRoot {
                         color: root.colMuted
                     }
 
-                    
+                    Rectangle {
+                        visible: inResizeMode
+                        radius: 4
+                        color: root.colRed
+                        Layout.preferredHeight: 22
+                        Layout.preferredWidth: resizeLabel.implicitWidth + 8
+                        Layout.alignment: Qt.AlignVCenter
+                        Layout.margins: 4
+                        Text {
+                            id: resizeLabel
+                            anchors.centerIn: parent
+                            text: " RESIZE "
+                            color: root.colBg
+                            font.pixelSize: root.fontSize
+                            font.family: root.fontFamily
+                            font.bold: true
+                        }
+                    }
 
                     Text {
                         text: activeWindow

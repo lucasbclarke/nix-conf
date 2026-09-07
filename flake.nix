@@ -12,18 +12,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     
-    nil = {
-      url= "github:oxalica/nil";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     sops-nix = {
       url = "github:Mic92/sops-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    ghostty = {
-      url = "github:ghostty-org/ghostty";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -32,7 +22,7 @@
     };
 
   };
-  outputs = { self, nixpkgs, home-manager, nixvim, sops-nix, ghostty, ... }@inputs:
+  outputs = { self, nixpkgs, home-manager, nixvim, sops-nix, ... }@inputs:
   let
     lib = nixpkgs.lib;
     system = "x86_64-linux";
@@ -43,22 +33,18 @@
         modules = [
           ./nixosSystemD/configuration.nix
             sops-nix.nixosModules.sops
-            ({ pkgs, ... }: {
-                environment.systemPackages = [
-                  ghostty.packages.${pkgs.stdenv.hostPlatform.system}.default
-                ];
-            })  
+            home-manager.nixosModules.home-manager
+            {
+              home-manager = {
+                  useGlobalPkgs = true;
+                  useUserPackages = true;
+                  extraSpecialArgs = { inherit inputs; };
+                  users.lucas = import ./home.nix;
+              };
+            }
         ];
         specialArgs = { inherit inputs; };
       };
 
-      homeConfigurations = {
-          lucas = home-manager.lib.homeManagerConfiguration {
-              inherit pkgs;
-              modules = [ ./home.nix ];
-              extraSpecialArgs = { inherit inputs; };
-          };
-      };
-      home-manager.extraSpecialArgs = { inherit inputs; };
   };
 }

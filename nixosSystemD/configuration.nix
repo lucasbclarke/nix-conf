@@ -31,24 +31,8 @@ in
   '';
 
   environment.variables = {
-    EDITOR = "nvim";
-    # Force dark mode for GTK applications
-    GTK_THEME = "Adwaita-dark";
-    # Force dark mode for Qt applications
     QT_STYLE_OVERRIDE = "gtk2";
-    # Set color scheme preference to dark
-    COLORTERM = "truecolor";
-    # Steam audio: use PipeWire SDL backend instead of broken bundled libaudio.so
-    SDL_AUDIODRIVER = "pipewire";
-    # Additional dark mode environment variables
-    GTK_APPLICATION_PREFER_DARK_THEME = "1";
     QT_QPA_PLATFORMTHEME = "gtk2";
-    # Additional dark mode settings
-    QT_AUTO_SCREEN_SCALE_FACTOR = "1";
-    QT_SCALE_FACTOR = "1";
-    # These are set per-application via nvidia-offload or similar wrappers, not globally
-    # CUDA_VISIBLE_DEVICES = "0";
-    # __GLX_VENDOR_LIBRARY_NAME = "nvidia";
   };
 
   nixpkgs.config.allowUnsupportedSystem = true;
@@ -60,7 +44,6 @@ in
   imports =
     [ 
       /etc/nixos/hardware-configuration.nix
-      inputs.sops-nix.nixosModules.sops
     ];
 
   hardware.graphics = {
@@ -263,19 +246,18 @@ in
      gcc-arm-embedded python3Packages.pip swig file clang-tools
      net-tools iproute2 blueman networkmanager bluez bluez-tools dnsmasq
      sway-launcher-desktop dive podman-tui
-     docker-compose freerdp dialog libnotify podman podman-compose
-     xwayland ncdu gtk3 libnotify nss libxtst xdg-utils dpkg
+     docker-compose freerdp dialog podman podman-compose
+     xwayland ncdu gtk3 nss libxtst xdg-utils dpkg
      brasero networkmanagerapplet ripgrep inetutils sops ghostscript
      pciutils btop swaylock swayidle wl-clipboard grim slurp (wf-recorder.override { ffmpeg_8 = ffmpeg_8; })
      brightnessctl playerctl swaynotificationcenter quickshell mdhtml
      typescript-language-server jdt-language-server openjdk dotool opencode
-     lsof kiwix libnotify dialog gimp firefox python314 virtualbox wlr-randr 
+     lsof kiwix libnotify gimp firefox python314 virtualbox wlr-randr 
      tailscale efibootmgr appimage-run lmstudio nil vial todoist blender
      uv delta python314Packages.pynvim zip nodejs_26 wakeonlan rustdesk-flutter
-     dig kdePackages.gwenview wev qemu obsidian wshowkeys
+     dig kdePackages.gwenview wev qemu wshowkeys ghostty
       (import ./git-repos.nix {inherit pkgs;})
       (import ./sud.nix {inherit pkgs;})
-      (import ./hm-setup.nix {inherit pkgs;})
     ];
    
   services.gvfs = {

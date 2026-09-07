@@ -1,4 +1,4 @@
-{ config, pkgs, lib, inputs, ... }:
+{ config, pkgs, lib, inputs, osConfig, ... }:
 
 {
   imports = [
@@ -24,7 +24,6 @@
     GTK_APPLICATION_PREFER_DARK_THEME = "1";
     QT_AUTO_SCREEN_SCALE_FACTOR = "1";
     QT_SCALE_FACTOR = "1";
-    # Steam audio: use PipeWire instead of bundled libaudio.so
     SDL_AUDIODRIVER = "pipewire";
   };
 
@@ -483,7 +482,6 @@
   };
 
   programs.obsidian.enable = true;
-  nixpkgs.config.allowUnfree = true;
   xdg.configFile."quickshell/shell.qml".source = ./quickshell/shell.qml;
-  programs.home-manager.enable = true;
+  #programs.home-manager.enable = true;
 }
