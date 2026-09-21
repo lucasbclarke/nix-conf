@@ -61,7 +61,8 @@ in
   sops.defaultSopsFile = /home/lucas/nix-conf/secrets/secrets.yaml;
   sops.defaultSopsFormat = "yaml";
   sops.age.keyFile = "/home/lucas/.config/sops/age/keys.txt";
-  sops.secrets.example-key = { };
+  sops.secrets."fileshare/username" = {};
+  sops.secrets."fileshare/password" = {};
 
   boot.loader = {
       efi.canTouchEfiVariables = true;
@@ -237,7 +238,8 @@ in
   nixpkgs.config.permittedInsecurePackages = [
     "python-2.7.18.8"
   ];
-   environment.systemPackages = with pkgs; [
+
+  environment.systemPackages = with pkgs; [
      sqlite tealdeer fzf xdotool brave xfce4-exo xfce4-settings
      unzip arduino-cli arduino-ide discord gcc cloudflare-warp fastfetch dmenu
      pavucontrol vlc usbutils udiskie udisks samba sway wayland-scanner
@@ -255,11 +257,12 @@ in
      lsof kiwix libnotify gimp firefox python314 virtualbox wlr-randr 
      tailscale efibootmgr appimage-run lmstudio nil vial todoist blender
      uv delta python314Packages.pynvim zip nodejs_26 wakeonlan rustdesk-flutter
-     dig kdePackages.gwenview wev qemu wshowkeys ghostty
-      (import ./git-repos.nix {inherit pkgs;})
-      (import ./sud.nix {inherit pkgs;})
-    ];
-   
+     dig kdePackages.gwenview wev qemu wshowkeys ghostty inputs.devenv.packages.${pkgs.system}.devenv
+     yazi cifs-utils kdePackages.qtdeclarative
+     (import ./git-repos.nix {inherit pkgs;})
+     (import ./sud.nix {inherit pkgs;})
+  ];
+
   services.gvfs = {
     enable = true;
     package = pkgs.gvfs;
@@ -403,6 +406,31 @@ in
     user = "lucas";
     dataDir = "/home/lucas/.local/state/syncthing/";
     configDir = "/home/lucas/.config/syncthing";
+  };
+  
+    
+  sops.templates."smb-dwelling-creds" = {
+    content = ''
+      username=${config.sops.placeholder."fileshare/username"}
+      password=${config.sops.placeholder."fileshare/password"}
+    '';
+    path = "/etc/nixos/smb-secrets";
+    owner = "root";
+    group = "root";
+    mode = "0600";
+  };
+
+  boot.supportedFilesystems = [ "cifs" ];
+
+  fileSystems."/mnt/fileshare" = {
+    device = "//dwelling.tplinkdns.com/g";
+    fsType = "cifs";
+    options = let
+      automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s";
+    in [
+      "${automount_opts},credentials=/etc/nixos/smb-secrets,uid=1000,gid=100,vers=1.0"
+    ];
+
   };
 
 }

@@ -56,13 +56,9 @@
       };
 
       servers.nil_ls = {
-	enable = true;
-	package = pkgs.nil;
-	config = {
-          nil = { 
-	    autoArchive = true;
-          };
-        };
+        enable = true;
+        package = pkgs.nil;
+        config.settings.nil.nix.flake.autoArchive = true;
       };
 
       servers.harper_ls = {

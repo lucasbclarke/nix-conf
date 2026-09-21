@@ -120,6 +120,7 @@
             "l" = "resize grow width 10px";
             "Return" = "mode default";
             "Escape" = "mode default";
+            "${modifier}+r" = "mode default";
           };
         };
 

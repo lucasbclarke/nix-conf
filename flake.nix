@@ -17,8 +17,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    zig = {
-      url = "github:mitchellh/zig-overlay";
+    devenv = {
+      url = "github:cachix/devenv/v2.3";
     };
 
   };
@@ -35,7 +35,7 @@
             sops-nix.nixosModules.sops
             home-manager.nixosModules.home-manager
             {
-              home-manager = {
+             home-manager = {
                   useGlobalPkgs = true;
                   useUserPackages = true;
                   extraSpecialArgs = { inherit inputs; };

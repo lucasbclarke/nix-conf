@@ -13,13 +13,16 @@
       ];
       extraConfig = ''
         set-window-option -g mode-keys vi
-        bind-key -T copy-mode-vi v send -X begin-selection
+        set-window-option -g mode-style "bg=#26233a,fg=#c4a7e7"
+        bind-key -T copy-mode-vi v if -F '#{selection_active}' 'send -X clear-selection' 'send -X begin-selection'
         bind-key -T copy-mode-vi V send -X select-line
         bind-key -T copy-mode-vi y send -X copy-pipe-and-cancel 'xclip -in -selection clipboard'
         set -g base-index 1
         setw -g pane-base-index 1
         set -g status-right ' #{?client_prefix,#[reverse]🗸#[noreverse] ,}"#{pane_title}" %H:%M %d-%b-%y'
         set -ga terminal-overrides ',*:Ss=\E[%p1%d q:Se=\E[2 q'
+        set -Fg 'status-format[1]' '#{status-format[0]}'
+        set -g status-position bottom
       '';
 
   };
@@ -31,6 +34,16 @@
         window-decoration = false;
         font-family = "JetBrainsMono NF Medium";
         cursor-style = "block";
+
+        background = 191724;
+
+        # Remove the gap under the tmux status bar
+        window-padding-x = 0;
+        window-padding-y = 0;
+        window-padding-balance = true;
+        #window-padding-color = "extend";
+        window-step-resize = true;
+
         keybind = [
             "ctrl+x=copy_to_clipboard"
             "ctrl+shift+v=unbind"

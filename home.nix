@@ -5,6 +5,8 @@
     ./usr/zsh.nix
     ./usr/sway.nix
     ./usr/terminal.nix
+    ./usr/yazi.nix
+    ./usr/devenv.nix
     ./usr/nvim/nvim.nix
     ./usr/nvim/keymaps.nix
     ./usr/nvim/cmp.nix
@@ -483,5 +485,4 @@
 
   programs.obsidian.enable = true;
   xdg.configFile."quickshell/shell.qml".source = ./quickshell/shell.qml;
-  #programs.home-manager.enable = true;
 }
