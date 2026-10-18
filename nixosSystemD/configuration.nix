@@ -31,8 +31,8 @@ in
   '';
 
   environment.variables = {
-    QT_STYLE_OVERRIDE = "gtk2";
-    QT_QPA_PLATFORMTHEME = "gtk2";
+    QT_STYLE_OVERRIDE = "gtk3";
+    QT_QPA_PLATFORMTHEME = "gtk3";
   };
 
   nixpkgs.config.allowUnsupportedSystem = true;
@@ -258,7 +258,8 @@ in
      tailscale efibootmgr appimage-run lmstudio nil vial todoist blender
      uv delta python314Packages.pynvim zip nodejs_26 wakeonlan rustdesk-flutter
      dig kdePackages.gwenview wev qemu wshowkeys ghostty inputs.devenv.packages.${pkgs.system}.devenv
-     yazi cifs-utils kdePackages.qtdeclarative
+     yazi cifs-utils kdePackages.qtdeclarative onlyoffice-desktopeditors
+     bluetui pulsemixer
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
   ];

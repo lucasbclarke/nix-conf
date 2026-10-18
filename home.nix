@@ -6,7 +6,8 @@
     ./usr/sway.nix
     ./usr/terminal.nix
     ./usr/yazi.nix
-    ./usr/devenv.nix
+    ./usr/deven.nix
+    ./usr/ai.nix
     ./usr/nvim/nvim.nix
     ./usr/nvim/keymaps.nix
     ./usr/nvim/cmp.nix
@@ -469,7 +470,7 @@
 
   qt = {
     enable = true;
-    platformTheme.name = "gtk2";
+    platformTheme.name = "gtk3";
     style = {
       name = "adwaita-dark";
       package = pkgs.adwaita-qt;

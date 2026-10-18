@@ -21,6 +21,10 @@
       url = "github:cachix/devenv/v2.3";
     };
 
+    pi = {
+      url = "github:earendil-works/pi/stable";
+    };
+
   };
   outputs = { self, nixpkgs, home-manager, nixvim, sops-nix, ... }@inputs:
   let
