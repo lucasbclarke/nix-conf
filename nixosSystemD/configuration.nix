@@ -254,12 +254,18 @@ in
      pciutils btop swaylock swayidle wl-clipboard grim slurp (wf-recorder.override { ffmpeg_8 = ffmpeg_8; })
      brightnessctl playerctl swaynotificationcenter quickshell mdhtml
      typescript-language-server jdt-language-server openjdk dotool opencode
-     lsof kiwix libnotify gimp firefox python314 virtualbox wlr-randr 
+     lsof kiwix libnotify gimp firefox virtualbox wlr-randr 
      tailscale efibootmgr appimage-run lmstudio nil vial todoist blender
-     uv delta python314Packages.pynvim zip nodejs_26 wakeonlan rustdesk-flutter
+     uv delta zip nodejs_26 wakeonlan rustdesk-flutter
      dig kdePackages.gwenview wev qemu wshowkeys ghostty inputs.devenv.packages.${pkgs.system}.devenv
      yazi cifs-utils kdePackages.qtdeclarative onlyoffice-desktopeditors
-     bluetui pulsemixer
+     bluetui pulsemixer onlyoffice-desktopeditors go
+     (python314.withPackages (ps: with ps; [
+        notify2
+        pynvim
+        todoist-api-python
+        schedule
+     ]))
      (import ./git-repos.nix {inherit pkgs;})
      (import ./sud.nix {inherit pkgs;})
   ];

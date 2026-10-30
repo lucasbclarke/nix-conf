@@ -65,6 +65,7 @@
         enable = true;
         package = pkgs.harper;
         config = {
+	  filetypes = [ "markdown" ];
           settings = {
             "harper-ls" = {
               linters = {
